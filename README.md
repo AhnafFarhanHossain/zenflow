@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌿 ZenFlow – Your Calm Companion for Daily Productivity
 
-## Getting Started
+**ZenFlow** is a minimalist, modern, and productivity-focused task management platform designed to help users manage tasks, track progress, take notes, and plan schedules — all in a calming, distraction-free environment.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🎯 Core Purpose
+ZenFlow exists to reduce the chaos of task management by combining a simple interface with essential productivity tools — fostering focus, clarity, and flow.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## ✅ Core Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Task Management
+- Create, update, and delete tasks
+- Task difficulty rating (Easy, Medium, Hard)
+- Track progress with status updates (To-do, In Progress, Done)
+- Add detailed descriptions to each task
 
-## Learn More
+### 2. Todo List
+- A dedicated section for daily to-dos
+- Check off completed items
+- Option to pin important tasks
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Notes System
+- Write down quick thoughts or detailed notes
+- Organize and pin notes for easy access
+- Fast search to find what you’ve written
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Schedule Planner
+- Visual calendar to assign tasks to specific dates
+- Daily and weekly view for better planning
+- Tasks for selected dates appear contextually
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 5. Task Analytics
+- Visual charts to track task completion over time
+- View daily and weekly productivity trends
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ➕ Additional Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Add tags to categorize and filter tasks
+- Pin important notes and tasks
+- Quick search across all content
+- Light/Dark mode toggle
+- Set reminders for upcoming tasks
+- Export tasks and notes for backup
+- Quick-add button for seamless creation
+- Sort tasks by date, difficulty, or status
+
+---
+
+> ZenFlow is more than a todo app. It's a peaceful digital space for clarity, consistency, and progress.
