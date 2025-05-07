@@ -1,7 +1,7 @@
 // Components Import
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import Button from "./components/Button";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import Button from "@/components/Button";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -57,7 +57,7 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button href="/login" variant="primary" size="lg">
+                <Button href="/signup" variant="primary" size="lg">
                   Get Started Free
                   <svg
                     className="ml-2 w-5 h-5"
@@ -514,7 +514,7 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button href="/login" variant="white" size="lg">
+                  <Button href="/signup" variant="white" size="lg">
                     Get Started Free
                   </Button>
                   <Button href="/contact" variant="ghost" size="lg">

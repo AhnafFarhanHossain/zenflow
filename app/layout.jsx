@@ -1,5 +1,6 @@
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -15,7 +16,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${plusJakartaSans.variable} antialiased`}>{children}</body>
+      <ClerkProvider>
+        <body className={`${plusJakartaSans.variable} antialiased`}>
+          {children}
+        </body>
+      </ClerkProvider>
     </html>
   );
 }

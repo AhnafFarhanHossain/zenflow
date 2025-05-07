@@ -4,8 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Button from "./Button";
+import { SignIn, useUser } from "@clerk/nextjs"; // Import useUser
 
 const Navbar = () => {
+  const { isSignedIn } = useUser(); // Get isSignedIn status
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -90,10 +92,14 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="h-6 w-px bg-gray-200 mx-2" />
-          <Button href="/login" variant="secondary" size="sm">
+          <Button
+            href={isSignedIn ? "/dashboard" : "/login"}
+            variant="secondary"
+            size="sm"
+          >
             Sign in
           </Button>
-          <Button href="/get-started" variant="primary" size="sm">
+          <Button href="/signup" variant="primary" size="sm">
             Get Started
           </Button>
         </div>
@@ -117,7 +123,7 @@ const Navbar = () => {
             ))}
             <div className="h-px bg-gray-100 my-2" />
             <Button
-              href="/login"
+              href={isSignedIn ? "/dashboard" : "/login"}
               variant="secondary"
               size="sm"
               className="w-full justify-start my-1"
@@ -126,7 +132,7 @@ const Navbar = () => {
               Sign in
             </Button>
             <Button
-              href="/get-started"
+              href="/signup"
               variant="primary"
               size="sm"
               className="w-full justify-start my-1"

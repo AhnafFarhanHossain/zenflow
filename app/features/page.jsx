@@ -1,8 +1,8 @@
 "use client";
 
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Button from "../components/Button";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import Button from "@/components/Button";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -271,7 +271,7 @@ export default function Features() {
               digital space.
             </p>
             <div className="flex justify-center gap-4">
-              <Button href="/login" variant="primary" size="lg">
+              <Button href="/signup" variant="primary" size="lg">
                 Get Started Free
               </Button>
               <Button href="/contact" variant="secondary" size="lg">
@@ -370,7 +370,7 @@ export default function Features() {
               productivity in a calm, mindful environment.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button href="/login" variant="white" size="lg">
+              <Button href="/signup" variant="white" size="lg">
                 Get Started Free
               </Button>
               <Button href="/contact" variant="ghost" size="lg">

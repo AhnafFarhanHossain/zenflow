@@ -1,7 +1,7 @@
 "use client";
 
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -469,7 +469,7 @@ export default function About() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <a
-                href="/login"
+                href="/signup"
                 className="px-8 py-4 bg-white text-[#15803d] font-medium rounded-lg hover:bg-gray-100 transition-colors duration-200"
               >
                 Get Started Free
