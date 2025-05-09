@@ -14,15 +14,15 @@ const Button = ({
   // Define base styles based on variant
   const baseStyles = {
     primary:
-      "bg-[#15803d] text-white hover:bg-[#15803d]/90 border border-[#15803d] hover:border-[#15803d]/80 hover:shadow-lg hover:shadow-[#15803d]/20",
+      "bg-[#15803d] text-white hover:bg-[#15803d]/90 border border-[#15803d] hover:border-[#15803d]/80 hover:shadow-lg hover:shadow-[#15803d]/20 dark:bg-green-600 dark:hover:bg-green-700 dark:border-green-600 dark:hover:border-green-700",
     secondary:
-      "bg-white text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-gray-300 hover:shadow-md",
+      "bg-white text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-gray-300 hover:shadow-md dark:bg-zinc-800 dark:text-gray-300 dark:hover:text-white dark:border-zinc-800 dark:hover:border-zinc-700",
     outline:
-      "bg-transparent text-[#15803d] border border-[#15803d] hover:bg-[#15803d]/5",
+      "bg-transparent text-[#15803d] border border-[#15803d] hover:bg-[#15803d]/5 dark:text-green-400 dark:border-green-700 dark:hover:bg-green-900/10",
     ghost:
-      "bg-transparent text-white border border-white/30 hover:border-white/50 hover:bg-white/10 hover:shadow-lg hover:shadow-black/5",
+      "bg-transparent text-white border border-white/30 hover:border-white/50 hover:bg-white/10 hover:shadow-lg hover:shadow-black/5 dark:border-white/20 dark:hover:border-white/30 dark:hover:bg-white/5",
     white:
-      "bg-white text-[#15803d] hover:bg-gray-50 hover:shadow-lg hover:shadow-white/10",
+      "bg-white text-[#15803d] hover:bg-gray-50 hover:shadow-lg hover:shadow-white/10 dark:bg-zinc-800 dark:text-green-400 dark:hover:bg-zinc-700",
   };
 
   // Define size variants

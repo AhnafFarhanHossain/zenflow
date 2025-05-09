@@ -115,20 +115,20 @@ const SignUp = () => {
           </div>
 
           {/* Form section */}
-          <div className="w-full md:w-1/2 flex items-center justify-center p-8">
+          <div className="w-full md:w-1/2 flex items-center justify-center p-8 dark:bg-black">
             <div className="w-full max-w-md">
               <div className="text-center mb-10">
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                   Create Account
                 </h1>
-                <p className="mt-2 text-gray-600">
+                <p className="mt-2 text-gray-600 dark:text-gray-400">
                   Start your journey with ZenFlow today
                 </p>
               </div>
 
               <form className="space-y-6" onSubmit={handleSignUp}>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Email
                   </label>
                   <input
@@ -136,7 +136,7 @@ const SignUp = () => {
                     name="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition disabled:bg-gray-100 disabled:cursor-not-allowed dark:bg-zinc-900 dark:border-zinc-800 dark:text-white dark:focus:border-green-500 dark:disabled:bg-zinc-800"
                     placeholder="your@email.com"
                     required
                     disabled={isLoading}
@@ -144,7 +144,7 @@ const SignUp = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Password
                   </label>
                   <input
@@ -152,7 +152,7 @@ const SignUp = () => {
                     name="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition disabled:bg-gray-100 disabled:cursor-not-allowed dark:bg-zinc-900 dark:border-zinc-800 dark:text-white dark:focus:border-green-500 dark:disabled:bg-zinc-800"
                     placeholder="••••••••"
                     required
                     disabled={isLoading}
@@ -166,7 +166,7 @@ const SignUp = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition duration-200 disabled:bg-green-400 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition duration-200 disabled:bg-green-400 disabled:cursor-not-allowed flex items-center justify-center dark:bg-green-600 dark:hover:bg-green-700 dark:disabled:bg-green-800/50"
                 >
                   {isLoading ? (
                     <svg
@@ -195,11 +195,11 @@ const SignUp = () => {
                 </button>
               </form>
 
-              <div className="text-center text-sm text-gray-500 mt-6">
+              <div className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
                 Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="font-medium text-green-600 hover:text-green-500"
+                  className="font-medium text-green-600 hover:text-green-500 dark:text-green-500 dark:hover:text-green-400"
                 >
                   Log in
                 </Link>
@@ -208,27 +208,27 @@ const SignUp = () => {
           </div>
         </>
       ) : (
-        <div className="w-full flex items-center justify-center p-8">
+        <div className="w-full flex items-center justify-center p-8 dark:bg-black">
           <div className="w-full max-w-md">
             <div className="text-center mb-10">
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Verify Your Email
               </h1>
-              <p className="mt-2 text-gray-600">
+              <p className="mt-2 text-gray-600 dark:text-gray-400">
                 We've sent a verification code to {email}
               </p>
             </div>
 
             <form className="space-y-6" onSubmit={handleVerify}>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Verification Code
                 </label>
                 <input
                   type="text"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition disabled:bg-gray-100 disabled:cursor-not-allowed dark:bg-zinc-900 dark:border-zinc-800 dark:text-white dark:focus:border-green-500 dark:disabled:bg-zinc-800"
                   placeholder="Enter code"
                   required
                   disabled={isLoading}
@@ -240,7 +240,7 @@ const SignUp = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition duration-200 disabled:bg-green-400 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition duration-200 disabled:bg-green-400 disabled:cursor-not-allowed flex items-center justify-center dark:bg-green-600 dark:hover:bg-green-700 dark:disabled:bg-green-800/50"
               >
                 {isLoading ? (
                   <svg

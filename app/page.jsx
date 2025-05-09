@@ -8,12 +8,10 @@ import Link from "next/link";
 export default function Home() {
   return (
     <>
-      <Navbar />
-
-      {/* Hero Section */}
-      <section className="relative pt-36 pb-24 overflow-hidden bg-white">
+      <Navbar /> {/* Hero Section */}
+      <section className="relative pt-36 pb-24 overflow-hidden bg-white dark:bg-gray-900">
         <div
-          className="absolute inset-0 bg-texture opacity-80 pointer-events-none"
+          className="absolute inset-0 bg-texture opacity-80 dark:opacity-60 pointer-events-none"
           style={{ zIndex: 0 }}
         />
         <div
@@ -23,16 +21,17 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="space-y-8">
               <div className="space-y-5">
-                <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium text-[#15803d] bg-[#15803d]/10 rounded-full">
+                {" "}
+                <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium text-[#15803d] bg-[#15803d]/10 dark:text-[#bbf7d0] dark:bg-[#bbf7d0]/10 rounded-full">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#15803d] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#15803d]"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#15803d] dark:bg-[#bbf7d0] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#15803d] dark:bg-[#bbf7d0]"></span>
                   </span>
                   New Features Released
-                </span>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight">
+                </span>{" "}
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight tracking-tight">
                   Organize your tasks with{" "}
-                  <span className="text-[#15803d] relative">
+                  <span className="text-[#15803d] dark:text-[#bbf7d0] relative">
                     ZenFlow
                     <svg
                       className="absolute -bottom-2 left-0 w-full"
@@ -45,11 +44,12 @@ export default function Home() {
                         stroke="#15803d"
                         strokeWidth="2"
                         strokeLinecap="round"
+                        className="dark:stroke-[#bbf7d0]"
                       />
                     </svg>
                   </span>
-                </h1>
-                <p className="text-lg text-gray-600 max-w-lg leading-relaxed">
+                </h1>{" "}
+                <p className="text-lg text-gray-600 dark:text-gray-300 max-w-lg leading-relaxed">
                   Stay organized, focused, and in control. The modern task
                   management app designed to help you achieve more with less
                   stress.
@@ -94,8 +94,9 @@ export default function Home() {
               </div>
 
               <div className="flex items-center gap-3">
+                {" "}
                 <div className="flex -space-x-2">
-                  <div className="inline-block h-10 w-10 rounded-full ring-2 ring-white overflow-hidden">
+                  <div className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-gray-800 overflow-hidden">
                     <Image
                       src="/person-1.jpg"
                       alt="User Avatar"
@@ -104,7 +105,7 @@ export default function Home() {
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="inline-block h-10 w-10 rounded-full ring-2 ring-white overflow-hidden">
+                  <div className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-gray-800 overflow-hidden">
                     <Image
                       src="/person-2.jpg"
                       alt="User Avatar"
@@ -113,7 +114,7 @@ export default function Home() {
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="inline-block h-10 w-10 rounded-full ring-2 ring-white overflow-hidden">
+                  <div className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-gray-800 overflow-hidden">
                     <Image
                       src="/person-3.jpg"
                       alt="User Avatar"
@@ -124,10 +125,14 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="text-sm">
-                  <span className="font-semibold text-gray-900">4,000+</span>
-                  <span className="text-gray-500 ml-1">happy users</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    4,000+
+                  </span>
+                  <span className="text-gray-500 dark:text-gray-400 ml-1">
+                    happy users
+                  </span>
                 </div>
-                <div className="h-4 w-px bg-gray-200 mx-2" />
+                <div className="h-4 w-px bg-gray-200 dark:bg-gray-700 mx-2" />
                 <div className="flex items-center">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <svg
@@ -140,29 +145,29 @@ export default function Home() {
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                     </svg>
                   ))}
-                  <span className="ml-1 text-sm text-gray-500">4.9/5</span>
+                  <span className="ml-1 text-sm text-gray-500">4.9/5</span>{" "}
                 </div>
               </div>
             </div>
 
             {/* Simplified Image Section */}
             <div className="flex justify-center lg:justify-end">
+              {" "}
               <div className="relative w-full max-w-lg">
                 <Image
                   src="/homepage.jpeg"
                   alt="ZenFlow Dashboard"
                   width={500}
                   height={400}
-                  className="w-full h-auto rounded-xl shadow-lg border border-gray-200 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
+                  className="w-full h-auto rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
                   priority
                 />
               </div>
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#15803d]/10 to-transparent pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#15803d]/10 dark:from-[#bbf7d0]/10 to-transparent pointer-events-none"></div>
       </section>
-
       {/* Features Section */}
       <section
         id="how-it-works"
@@ -324,17 +329,16 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
-
+      </section>{" "}
       {/* Testimonials */}
-      <section className="py-24 bg-white">
-        <div className="absolute inset-0 bg-texture z-0 opacity-80" />
+      <section className="py-24 bg-white dark:bg-gray-900">
+        <div className="absolute inset-0 bg-texture z-0 opacity-80 dark:opacity-60" />
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5 tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-5 tracking-tight">
               What our customers say
             </h2>
-            <p className="text-gray-600 text-lg">
+            <p className="text-gray-600 dark:text-gray-300 text-lg">
               Thousands of teams use ZenFlow to improve their productivity.
             </p>
           </div>
@@ -365,7 +369,7 @@ export default function Home() {
             ].map((testimonial, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-xl border border-gray-200 shadow-xl shadow-gray-100/80 hover:shadow-2xl hover:shadow-gray-200/50 transition-all duration-300 relative"
+                className="bg-white dark:bg-gray-900 p-8 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl shadow-gray-100/80 dark:shadow-gray-900/80 hover:shadow-2xl hover:shadow-gray-200/50 dark:hover:shadow-gray-900/50 transition-all duration-300 relative"
               >
                 <div className="flex items-center mb-5">
                   {[1, 2, 3, 4, 5].map((i) => (
@@ -379,11 +383,11 @@ export default function Home() {
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                     </svg>
                   ))}
-                </div>
-                <div className="absolute top-5 right-5 opacity-10 text-8xl font-serif text-[#15803d]">
+                </div>{" "}
+                <div className="absolute top-5 right-5 opacity-10 text-8xl font-serif text-[#15803d] dark:text-[#bbf7d0]">
                   "
-                </div>
-                <p className="text-gray-700 mb-8 text-lg italic leading-relaxed relative z-10">
+                </div>{" "}
+                <p className="text-gray-700 dark:text-gray-300 mb-8 text-lg italic leading-relaxed relative z-10">
                   "{testimonial.quote}"
                 </p>
                 <div className="flex items-center">
@@ -391,26 +395,26 @@ export default function Home() {
                     {testimonial.avatar}
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900">
+                    <p className="font-semibold text-gray-900 dark:text-white">
                       {testimonial.author}
                     </p>
-                    <p className="text-gray-500 text-sm">{testimonial.role}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
+                      {testimonial.role}
+                    </p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
-
+      </section>{" "}
       {/* FAQ Section */}
-      <section className="py-24 relative overflow-hidden">
+      <section className="py-24 relative overflow-hidden dark:bg-gray-900">
         {/* Background with grid pattern */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white to-[#15803d]/10 z-0"></div>
-
+        <div className="absolute inset-0 bg-gradient-to-b from-white dark:from-gray-900 to-[#15803d]/10 dark:to-[#bbf7d0]/5 z-0"></div>
         {/* Grid pattern overlay */}
         <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute inset-0 bg-[#15803d]"></div>
+          <div className="absolute inset-0 bg-[#15803d] dark:bg-[#bbf7d0]"></div>
           <div
             className="h-full w-full"
             style={{
@@ -420,21 +424,18 @@ export default function Home() {
             }}
           ></div>
         </div>
-
         {/* Top masking effect */}
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white to-transparent z-0"></div>
-
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white dark:from-gray-900 to-transparent z-0"></div>
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5 tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-5 tracking-tight">
               Frequently asked questions
             </h2>
-            <p className="text-gray-600 text-lg">
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
               Can't find the answer you're looking for? Contact our support
               team.
             </p>
-          </div>
-
+          </div>{" "}
           <div className="max-w-3xl mx-auto space-y-6">
             {[
               {
@@ -467,23 +468,21 @@ export default function Home() {
                 key={index}
                 className={`p-8 rounded-xl border shadow-lg hover:shadow-xl transition-all duration-300 ${
                   index % 2 === 0
-                    ? "bg-white border-gray-200 hover:border-[#15803d]/20"
-                    : "bg-[#15803d]/5 border-[#15803d]/10 hover:border-[#15803d]/30"
+                    ? "bg-white border-gray-200 hover:border-[#15803d]/20 dark:bg-gray-900 dark:border-gray-700 dark:hover:border-[#bbf7d0]/20"
+                    : "bg-[#15803d]/5 border-[#15803d]/10 hover:border-[#15803d]/30 dark:bg-[#bbf7d0]/5 dark:border-[#bbf7d0]/10 dark:hover:border-[#bbf7d0]/20"
                 }`}
               >
                 <div className="flex items-start">
                   <span
-                    className={`text-2xl font-bold mr-4 ${
-                      index % 2 === 0 ? "text-[#15803d]" : "text-[#15803d]"
-                    }`}
+                    className={`text-2xl font-bold mr-4 text-[#15803d] dark:text-[#bbf7d0]`}
                   >
                     Q.
                   </span>
                   <div>
-                    <div className="font-semibold text-xl text-gray-900 mb-3">
+                    <div className="font-semibold text-xl text-gray-900 dark:text-white mb-3">
                       {faq.question}
                     </div>
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>
@@ -491,12 +490,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-
+        </div>{" "}
         {/* Bottom masking effect */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent z-0"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white dark:from-gray-900 to-transparent z-0"></div>
       </section>
-
       {/* CTA Section */}
       <section className="py-24 bg-gradient-to-br from-[#15803d] to-[#166534]">
         <div className="absolute inset-0 bg-texture-white z-0 opacity-10" />
@@ -537,7 +534,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       <Footer />
     </>
   );

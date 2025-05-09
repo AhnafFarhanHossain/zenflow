@@ -8,12 +8,10 @@ import Link from "next/link";
 export default function About() {
   return (
     <>
-      <Navbar />
-
-      {/* Hero Section */}
-      <section className="relative pt-36 pb-24 overflow-hidden bg-white">
+      <Navbar /> {/* Hero Section */}
+      <section className="relative pt-36 pb-24 overflow-hidden bg-white dark:bg-gray-900">
         <div
-          className="absolute inset-0 bg-texture opacity-80 pointer-events-none"
+          className="absolute inset-0 bg-texture opacity-80 pointer-events-none dark:opacity-60"
           style={{ zIndex: 0 }}
         />
         <div
@@ -21,84 +19,53 @@ export default function About() {
           style={{ zIndex: 1 }}
         >
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight tracking-tight">
-              About <span className="text-[#15803d]">ZenFlow</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
+              About{" "}
+              <span className="text-[#15803d] dark:text-[#bbf7d0]">
+                ZenFlow
+              </span>
             </h1>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              Your calm companion for daily productivity in a chaotic digital
-              world.
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+              Discover our mission, philosophy, and the team values that drive
+              ZenFlow to help you achieve mindful productivity.
             </p>
           </div>
         </div>
-      </section>
-
+      </section>{" "}
       {/* Mission Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-16 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
                 Our Mission
               </h2>
-              <div className="text-lg text-gray-600 space-y-4">
-                <p>
-                  ZenFlow exists to reduce the chaos of task management by
-                  combining a simple interface with essential productivity tools
-                  — fostering focus, clarity, and flow.
-                </p>
-                <p>
-                  In today's fast-paced digital environment, we believe
-                  productivity shouldn't come at the cost of your peace of mind.
-                  ZenFlow is more than a todo app. It's a peaceful digital space
-                  for clarity, consistency, and progress.
-                </p>
-              </div>
-              <div className="mt-8">
-                <Link
-                  href="/features"
-                  className="px-6 py-3 bg-[#15803d] text-white font-medium rounded-lg hover:bg-[#15803d]/90 transition-colors duration-200 inline-flex items-center"
-                >
-                  Explore Our Features
-                  <svg
-                    className="ml-2 w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    ></path>
-                  </svg>
-                </Link>
-              </div>
+              <p className="text-gray-600 dark:text-gray-300 mb-8">
+                ZenFlow is dedicated to creating a calm, focused digital space
+                for productivity. We believe in simplicity, clarity, and
+                empowering users to do their best work without digital chaos.
+              </p>
             </div>
-            <div className="relative">
-              <div className="absolute -z-10 inset-0 bg-[#15803d]/5 rounded-full blur-3xl transform -translate-x-10 translate-y-10"></div>
+            <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-lg">
               <Image
                 src="/homepage.jpeg"
-                alt="ZenFlow Interface"
-                width={600}
-                height={450}
-                className="rounded-xl shadow-xl border border-gray-200 w-full h-auto"
+                alt="ZenFlow Mission"
+                width={500}
+                height={350}
+                className="w-full h-auto object-cover"
               />
-              <div className="absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-tr from-[#15803d]/20 to-transparent opacity-60 rounded-xl"></div>
             </div>
           </div>
         </div>
-      </section>
-
+      </section>{" "}
       {/* Core Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-white dark:bg-gray-900">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               Core Features
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-600 dark:text-gray-400">
               ZenFlow combines essential productivity tools in a
               distraction-free environment
             </p>
@@ -240,113 +207,44 @@ export default function About() {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:translate-y-[-5px]"
+                className="bg-white p-8 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:translate-y-[-5px] dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-green-900/30 dark:shadow-zinc-900/80 dark:hover:shadow-green-900/50"
               >
-                <div className="bg-[#15803d]/10 text-[#15803d] p-3.5 rounded-xl w-14 h-14 flex items-center justify-center mb-5">
+                <div className="bg-[#15803d]/10 text-[#15803d] p-3.5 rounded-xl w-14 h-14 flex items-center justify-center mb-5 dark:bg-green-900/20 dark:text-green-400">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
-
       {/* Philosophy Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 bg-gradient-to-b from-white to-gray-50 dark:from-black dark:to-green-900/20">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div className="p-10 md:p-16 flex flex-col justify-center">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                  Our Philosophy
-                </h2>
-                <div className="space-y-4 text-lg text-gray-600">
-                  <p>
-                    In today's high-distraction digital environment, finding
-                    focus is increasingly difficult. ZenFlow was created on the
-                    principle that productivity tools should reduce chaos, not
-                    add to it.
-                  </p>
-                  <p>
-                    We believe that a calm environment fosters better thinking,
-                    more intentional work, and ultimately, greater satisfaction.
-                    Our minimalist design strips away unnecessary features and
-                    noise, leaving only what helps you move forward.
-                  </p>
-                  <p>
-                    ZenFlow is more than a todo app. It's a peaceful digital
-                    space for clarity, consistency, and progress.
-                  </p>
-                </div>
-                <div className="mt-8 flex items-center">
-                  <div className="h-12 w-12 rounded-full bg-[#15803d] flex items-center justify-center text-white mr-4">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                  </div>
-                  <p className="font-medium text-xl text-gray-900">
-                    Calm productivity for the modern world
-                  </p>
-                </div>
-              </div>
-              <div className="bg-gradient-to-br from-[#15803d]/90 to-[#15803d] p-10 md:p-16 flex items-center justify-center">
-                <div className="text-white space-y-6 max-w-lg">
-                  <h3 className="text-2xl font-bold">Designed for Focus</h3>
-                  <div className="space-y-4">
-                    {[
-                      "Minimalist interface reduces decision fatigue",
-                      "Calm color scheme prevents visual overwhelm",
-                      "Thoughtful organization keeps everything in its place",
-                      "Logical workflows align with how your brain works",
-                      "Quick-add features capture thoughts before they're lost",
-                    ].map((point, index) => (
-                      <div key={index} className="flex items-start">
-                        <svg
-                          className="w-5 h-5 text-white shrink-0 mt-1 mr-3"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        <span>{point}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              Our Philosophy
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              Mindful productivity is at the heart of ZenFlow. We design tools
+              that help you focus, reduce stress, and achieve more with less.
+            </p>
           </div>
         </div>
       </section>
-
       {/* Team Values Section */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-white dark:bg-black">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               Our Core Values
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-600 dark:text-gray-400">
               The principles that guide our product development and company
               culture
             </p>
@@ -441,31 +339,33 @@ export default function About() {
             ].map((value, index) => (
               <div
                 key={index}
-                className="text-center p-8 rounded-xl bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="text-center p-8 rounded-xl bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 dark:bg-gray-900 dark:border-gray-700"
               >
-                <div className="bg-[#15803d]/10 p-5 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 text-[#15803d]">
+                <div className="bg-[#15803d]/10 p-5 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 text-[#15803d] dark:bg-[#bbf7d0]/10 dark:text-[#bbf7d0]">
                   {value.icon}
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                </div>{" "}
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                   {value.title}
                 </h3>
-                <p className="text-gray-600">{value.description}</p>
+                <p className="text-gray-600 dark:text-gray-300">
+                  {value.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
-
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-[#15803d] to-[#166534] text-white">
+      <section className="py-20 bg-gradient-to-br from-[#15803d] to-[#166534] dark:from-[#166534] dark:to-[#15803d] text-white">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
           <div className="text-center max-w-3xl mx-auto">
+            {" "}
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to experience calm productivity?
+              Join ZenFlow and experience mindful productivity
             </h2>
-            <p className="text-xl text-[#dcfce7] mb-8">
-              Join thousands who have transformed their task management
-              experience. Start your free trial today.
+            <p className="text-lg text-[#dcfce7] dark:text-[#bbf7d0] mb-8">
+              Start your journey to a calmer, more productive digital life
+              today.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <a
@@ -484,7 +384,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       <Footer />
     </>
   );

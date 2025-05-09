@@ -47,12 +47,10 @@ export default function Contact() {
 
   return (
     <>
-      <Navbar />
-
-      {/* Hero Section */}
-      <section className="relative pt-36 pb-24 overflow-hidden bg-white">
+      <Navbar /> {/* Hero Section */}
+      <section className="relative pt-36 pb-24 overflow-hidden bg-white dark:bg-gray-900">
         <div
-          className="absolute inset-0 bg-texture opacity-80 pointer-events-none"
+          className="absolute inset-0 bg-texture opacity-80 pointer-events-none dark:opacity-60"
           style={{ zIndex: 0 }}
         />
         <div
@@ -60,34 +58,34 @@ export default function Contact() {
           style={{ zIndex: 1 }}
         >
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight tracking-tight">
-              Get in <span className="text-[#15803d]">Touch</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
+              Get in{" "}
+              <span className="text-[#15803d] dark:text-[#bbf7d0]">Touch</span>{" "}
             </h1>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
               Have questions about ZenFlow? Want to learn more about our
               services? We're here to help and would love to hear from you.
             </p>
           </div>
         </div>
       </section>
-
       {/* Contact Section */}
-      <section className="py-16 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-16 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              {" "}
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
                 Contact Information
               </h2>
-              <p className="text-gray-600 mb-8">
+              <p className="text-gray-600 dark:text-gray-300 mb-8">
                 Feel free to reach out to us using the contact form or through
                 any of our contact channels below. We'll get back to you as soon
                 as possible.
               </p>
-
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="bg-[#15803d]/10 p-3 rounded-full text-[#15803d]">
+                  <div className="bg-[#15803d]/10 p-3 rounded-full text-[#15803d] dark:bg-[#bbf7d0]/10 dark:text-[#bbf7d0]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -104,23 +102,24 @@ export default function Contact() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    {" "}
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       Email
                     </h3>
                     <a
                       href="mailto:ahnaffarhanhossain@gmail.com"
-                      className="text-[#15803d] hover:underline"
+                      className="text-[#15803d] hover:underline dark:text-[#bbf7d0] dark:hover:text-[#86efac]"
                     >
+                      {" "}
                       ahnaffarhossain@gmail.com
                     </a>
-                    <p className="text-gray-500 text-sm mt-1">
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
                       We'll respond as quickly as possible
                     </p>
                   </div>
-                </div>
-
+                </div>{" "}
                 <div className="flex items-start space-x-4">
-                  <div className="bg-[#15803d]/10 p-3 rounded-full text-[#15803d]">
+                  <div className="bg-[#15803d]/10 p-3 rounded-full text-[#15803d] dark:bg-[#bbf7d0]/10 dark:text-[#bbf7d0]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -142,10 +141,10 @@ export default function Contact() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       Office
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 dark:text-gray-300">
                       Free School Street, Pukurpar
                       <br />
                       Dhanmondi, Dhaka, Bangladesh
@@ -153,10 +152,9 @@ export default function Contact() {
                       Bangladesh
                     </p>
                   </div>
-                </div>
-
+                </div>{" "}
                 <div className="flex items-start space-x-4">
-                  <div className="bg-[#15803d]/10 p-3 rounded-full text-[#15803d]">
+                  <div className="bg-[#15803d]/10 p-3 rounded-full text-[#15803d] dark:bg-[#bbf7d0]/10 dark:text-[#bbf7d0]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -173,19 +171,20 @@ export default function Contact() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       Phone
                     </h3>
-                    <p className="text-gray-600">+880 1886 155 446</p>
-                    <p className="text-gray-500 text-sm mt-1">
+                    <p className="text-gray-600 dark:text-gray-300">
+                      +880 1886 155 446
+                    </p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
                       Mon-Fri from 8am to 5pm PST
                     </p>
                   </div>
                 </div>
-              </div>
-
+              </div>{" "}
               <div className="mt-10">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                   Connect with us
                 </h3>
                 <div className="flex space-x-4">
@@ -194,7 +193,7 @@ export default function Contact() {
                       <a
                         key={social}
                         href="#"
-                        className="bg-white p-3 rounded-full shadow-md text-gray-600 hover:text-[#15803d] hover:shadow-lg transition-all duration-200"
+                        className="bg-white p-3 rounded-full shadow-md text-gray-600 hover:text-[#15803d] hover:shadow-lg transition-all duration-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:text-[#bbf7d0] dark:shadow-gray-900/80 dark:hover:shadow-[#bbf7d0]/20"
                         aria-label={social}
                       >
                         {social === "Twitter" && (
@@ -238,18 +237,18 @@ export default function Contact() {
                   )}
                 </div>
               </div>
-            </div>
-
-            <div className="bg-white p-8 rounded-xl shadow-xl border border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            </div>{" "}
+            <div className="bg-white p-8 rounded-xl shadow-xl border border-gray-200 dark:bg-gray-900 dark:border-gray-700 dark:shadow-gray-900/80">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                 Send us a message
               </h2>
               {isSubmitted ? (
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200 mb-6">
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200 mb-6 dark:bg-[#bbf7d0]/10 dark:border-[#bbf7d0]/20">
                   <div className="flex">
                     <div className="flex-shrink-0">
+                      {" "}
                       <svg
-                        className="h-5 w-5 text-green-400"
+                        className="h-5 w-5 text-green-400 dark:text-[#bbf7d0]"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
                         fill="currentColor"
@@ -263,10 +262,10 @@ export default function Contact() {
                       </svg>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-medium text-green-800">
+                      <h3 className="text-sm font-medium text-green-800 dark:text-[#bbf7d0]">
                         Message sent!
                       </h3>
-                      <div className="mt-2 text-sm text-green-700">
+                      <div className="mt-2 text-sm text-green-700 dark:text-[#d1fae5]">
                         <p>
                           Thank you for contacting us. We'll get back to you
                           shortly.
@@ -281,10 +280,10 @@ export default function Contact() {
                     <div>
                       <label
                         htmlFor="name"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                       >
                         Name
-                      </label>
+                      </label>{" "}
                       <input
                         type="text"
                         id="name"
@@ -292,17 +291,17 @@ export default function Contact() {
                         value={formState.name}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#15803d] focus:border-[#15803d] transition-colors duration-200"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#15803d] focus:border-[#15803d] transition-colors duration-200 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-[#bbf7d0] dark:focus:border-[#bbf7d0]"
                         placeholder="Your name"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="email"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                       >
                         Email
-                      </label>
+                      </label>{" "}
                       <input
                         type="email"
                         id="email"
@@ -310,7 +309,7 @@ export default function Contact() {
                         value={formState.email}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#15803d] focus:border-[#15803d] transition-colors duration-200"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#15803d] focus:border-[#15803d] transition-colors duration-200 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-[#bbf7d0] dark:focus:border-[#bbf7d0]"
                         placeholder="Your email"
                       />
                     </div>
@@ -318,10 +317,10 @@ export default function Contact() {
                   <div>
                     <label
                       htmlFor="subject"
-                      className="block text-sm font-medium text-gray-700 mb-1"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                     >
                       Subject
-                    </label>
+                    </label>{" "}
                     <input
                       type="text"
                       id="subject"
@@ -329,17 +328,17 @@ export default function Contact() {
                       value={formState.subject}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#15803d] focus:border-[#15803d] transition-colors duration-200"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#15803d] focus:border-[#15803d] transition-colors duration-200 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-[#bbf7d0] dark:focus:border-[#bbf7d0]"
                       placeholder="How can we help you?"
                     />
                   </div>
                   <div>
                     <label
                       htmlFor="message"
-                      className="block text-sm font-medium text-gray-700 mb-1"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                     >
                       Message
-                    </label>
+                    </label>{" "}
                     <textarea
                       id="message"
                       name="message"
@@ -347,7 +346,7 @@ export default function Contact() {
                       onChange={handleChange}
                       rows="5"
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#15803d] focus:border-[#15803d] transition-colors duration-200"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#15803d] focus:border-[#15803d] transition-colors duration-200 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-[#bbf7d0] dark:focus:border-[#bbf7d0]"
                       placeholder="Your message"
                     ></textarea>
                   </div>
@@ -392,15 +391,14 @@ export default function Contact() {
             </div>
           </div>
         </div>
-      </section>
-
+      </section>{" "}
       {/* Map Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white dark:bg-gray-900">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
-          <div className="rounded-xl overflow-hidden h-96 border border-gray-200 shadow-lg">
-            <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+          <div className="rounded-xl overflow-hidden h-96 border border-gray-200 dark:border-gray-700 shadow-lg dark:shadow-gray-900/80">
+            <div className="w-full h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
               <div className="text-center">
-                <div className="bg-[#15803d]/10 p-3 rounded-full text-[#15803d] inline-block mb-4">
+                <div className="bg-[#15803d]/10 p-3 rounded-full text-[#15803d] dark:bg-[#bbf7d0]/10 dark:text-[#bbf7d0] inline-block mb-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -415,27 +413,26 @@ export default function Contact() {
                       d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"
                     />
                   </svg>
-                </div>
-                <h4 className="text-gray-900 font-medium mb-1">
+                </div>{" "}
+                <h4 className="text-gray-900 dark:text-white font-medium mb-1">
                   Interactive Map
                 </h4>
-                <p className="text-gray-500 text-sm">
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
                   Map would appear here in a production environment
                 </p>
               </div>
             </div>
           </div>
         </div>
-      </section>
-
+      </section>{" "}
       {/* FAQ Section */}
-      <section className="py-16 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-16 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Find quick answers to common questions about contacting us
             </p>
           </div>
@@ -461,17 +458,19 @@ export default function Contact() {
             ].map((faq, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-[#15803d]/20"
+                className="bg-white p-6 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-[#15803d]/20 dark:bg-gray-900 dark:border-gray-700 dark:hover:border-[#bbf7d0]/20 dark:shadow-gray-900/80 dark:hover:shadow-[#bbf7d0]/10"
               >
                 <div className="flex items-start">
-                  <span className="text-[#15803d] text-2xl font-bold mr-4">
+                  <span className="text-[#15803d] dark:text-[#bbf7d0] text-2xl font-bold mr-4">
                     Q.
                   </span>
                   <div>
-                    <div className="font-semibold text-lg text-gray-900 mb-2">
+                    <div className="font-semibold text-lg text-gray-900 dark:text-white mb-2">
                       {faq.question}
                     </div>
-                    <p className="text-gray-600">{faq.answer}</p>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      {faq.answer}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -479,7 +478,6 @@ export default function Contact() {
           </div>
         </div>
       </section>
-
       <Footer />
     </>
   );

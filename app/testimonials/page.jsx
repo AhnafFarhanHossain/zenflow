@@ -138,9 +138,9 @@ export default function Testimonials() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-36 pb-24 overflow-hidden bg-white">
+      <section className="relative pt-36 pb-24 overflow-hidden bg-white dark:bg-gray-900">
         <div
-          className="absolute inset-0 bg-texture opacity-80 pointer-events-none"
+          className="absolute inset-0 bg-texture opacity-80 pointer-events-none dark:opacity-60"
           style={{ zIndex: 0 }}
         />
         <div
@@ -148,17 +148,18 @@ export default function Testimonials() {
           style={{ zIndex: 1 }}
         >
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight tracking-tight">
-              Finding <span className="text-[#15803d]">Calm</span> in the
-              Digital Chaos
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
+              Finding{" "}
+              <span className="text-[#15803d] dark:text-[#bbf7d0]">Calm</span>{" "}
+              in the Digital Chaos
             </h1>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
               Discover how people are using ZenFlow to reduce digital noise,
               find focus, and create space for what truly matters in their work
               and lives.
             </p>
 
-            <div className="bg-gray-100 p-4 rounded-xl max-w-2xl mx-auto">
+            <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-xl max-w-2xl mx-auto">
               <div className="flex flex-wrap justify-center gap-2">
                 {testimonialCategories.map((category) => (
                   <button
@@ -166,8 +167,8 @@ export default function Testimonials() {
                     onClick={() => setActiveCategory(category.id)}
                     className={`px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
                       activeCategory === category.id
-                        ? "bg-[#15803d] text-white"
-                        : "bg-white text-gray-700 hover:bg-gray-200"
+                        ? "bg-[#15803d] dark:bg-[#bbf7d0] text-white dark:text-gray-900"
+                        : "bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
                     }`}
                   >
                     {category.name}
@@ -180,9 +181,9 @@ export default function Testimonials() {
       </section>
 
       {/* Featured Testimonial */}
-      <section className="py-16 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-16 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 mb-20">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 mb-20">
             <div className="grid grid-cols-1 lg:grid-cols-2">
               <div className="p-10 md:p-16 flex flex-col justify-center">
                 <div className="flex items-center mb-6">
@@ -197,28 +198,28 @@ export default function Testimonials() {
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                     </svg>
                   ))}
-                  <span className="ml-2 text-gray-500 text-sm">
+                  <span className="ml-2 text-gray-500 dark:text-gray-400 text-sm">
                     April 15, 2025
                   </span>
                 </div>
 
                 <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-6 relative">
-                    <span className="text-6xl absolute -left-6 top-0 text-[#15803d]/10 font-serif">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 relative">
+                    <span className="text-6xl absolute -left-6 top-0 text-[#15803d]/10 dark:text-[#bbf7d0]/10 font-serif">
                       "
                     </span>
                     Finding focus in a world of constant distraction
-                    <span className="text-6xl absolute -right-6 bottom-0 text-[#15803d]/10 font-serif">
+                    <span className="text-6xl absolute -right-6 bottom-0 text-[#15803d]/10 dark:text-[#bbf7d0]/10 font-serif">
                       "
                     </span>
                   </h2>
-                  <p className="text-xl text-gray-600 leading-relaxed mb-6">
+                  <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
                     After years of digital burnout from notifications, complex
                     apps, and constant switching between tools, ZenFlow became
                     my digital sanctuary. Its minimalist design isn't about
                     lacking features—it's about intentionally creating space.
                   </p>
-                  <p className="text-xl text-gray-600 leading-relaxed">
+                  <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
                     My mind feels clearer, my work more intentional, and I've
                     cut down on digital distraction by 70%. ZenFlow doesn't just
                     help me manage tasks—it helps me manage my attention, which
@@ -235,20 +236,22 @@ export default function Testimonials() {
                     className="rounded-full object-cover mr-4"
                   />
                   <div>
-                    <h3 className="font-bold text-gray-900">Katherine Lee</h3>
-                    <p className="text-gray-600">
+                    <h3 className="font-bold text-gray-900 dark:text-white">
+                      Katherine Lee
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
                       Author & Digital Wellness Advocate
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#15803d]/5 p-10 md:p-16 flex items-center justify-center">
-                <div className="bg-white rounded-xl shadow-lg p-6 max-w-md">
+              <div className="bg-[#15803d]/5 dark:bg-[#bbf7d0]/10 p-10 md:p-16 flex items-center justify-center">
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 max-w-md border border-gray-200 dark:border-gray-700">
                   <div className="flex items-center mb-4">
-                    <div className="w-10 h-10 rounded-full bg-[#15803d] flex items-center justify-center mr-3">
+                    <div className="w-10 h-10 rounded-full bg-[#15803d] dark:bg-[#bbf7d0] flex items-center justify-center mr-3">
                       <svg
-                        className="w-5 h-5 text-white"
+                        className="w-5 h-5 text-white dark:text-[#15803d]"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -262,7 +265,7 @@ export default function Testimonials() {
                         />
                       </svg>
                     </div>
-                    <h3 className="font-bold text-gray-900">
+                    <h3 className="font-bold text-gray-900 dark:text-white">
                       My ZenFlow Experience
                     </h3>
                   </div>
@@ -276,7 +279,7 @@ export default function Testimonials() {
                     ].map((stat, index) => (
                       <li key={index} className="flex items-start">
                         <svg
-                          className="w-5 h-5 text-[#15803d] mt-1 mr-3"
+                          className="w-5 h-5 text-[#15803d] dark:text-[#bbf7d0] mt-1 mr-3"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                           xmlns="http://www.w3.org/2000/svg"
@@ -287,7 +290,9 @@ export default function Testimonials() {
                             clipRule="evenodd"
                           />
                         </svg>
-                        <span className="text-gray-700">{stat}</span>
+                        <span className="text-gray-700 dark:text-gray-200">
+                          {stat}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -299,13 +304,13 @@ export default function Testimonials() {
       </section>
 
       {/* Testimonial Grid */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white dark:bg-gray-900">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             {filteredTestimonials.map((testimonial) => (
               <div
                 key={testimonial.id}
-                className="bg-white rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
+                className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
               >
                 <div className="p-8">
                   <div className="flex items-center justify-between mb-4">
@@ -316,7 +321,7 @@ export default function Testimonials() {
                           className={`w-5 h-5 ${
                             i < testimonial.rating
                               ? "text-yellow-400"
-                              : "text-gray-300"
+                              : "text-gray-300 dark:text-gray-700"
                           }`}
                           fill="currentColor"
                           viewBox="0 0 20 20"
@@ -326,16 +331,16 @@ export default function Testimonials() {
                         </svg>
                       ))}
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
                       {testimonial.date}
                     </span>
                   </div>
 
                   <div className="relative mb-8">
-                    <p className="text-gray-700 mb-4 leading-relaxed">
+                    <p className="text-gray-700 dark:text-gray-200 mb-4 leading-relaxed">
                       "{testimonial.quote}"
                     </p>
-                    <div className="absolute top-0 right-0 text-8xl opacity-10 text-[#15803d] font-serif -z-10">
+                    <div className="absolute top-0 right-0 text-8xl opacity-10 text-[#15803d] dark:text-[#bbf7d0] font-serif -z-10">
                       "
                     </div>
                   </div>
@@ -349,17 +354,17 @@ export default function Testimonials() {
                       className="rounded-full mr-4 object-cover"
                     />
                     <div>
-                      <h3 className="font-bold text-gray-900">
+                      <h3 className="font-bold text-gray-900 dark:text-white">
                         {testimonial.name}
                       </h3>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-gray-600 dark:text-gray-300 text-sm">
                         {testimonial.role}, {testimonial.company}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="h-2 w-full bg-gradient-to-r from-[#15803d]/70 via-[#15803d] to-[#15803d]/70 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div className="h-2 w-full bg-gradient-to-r from-[#15803d]/70 via-[#15803d] to-[#15803d]/70 dark:from-[#bbf7d0]/70 dark:via-[#bbf7d0] dark:to-[#bbf7d0]/70 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
               </div>
             ))}
           </div>
@@ -367,26 +372,26 @@ export default function Testimonials() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-[#15803d] to-[#166534] text-white">
+      <section className="py-16 bg-gradient-to-r from-[#15803d] to-[#166534] dark:from-[#166534] dark:to-[#15803d] text-white">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Rediscover calm in your digital life
             </h2>
-            <p className="text-xl text-[#dcfce7] mb-8">
+            <p className="text-xl text-[#dcfce7] dark:text-[#bbf7d0] mb-8">
               Join thousands who have found focus and flow with ZenFlow's
               mindful productivity approach.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <a
                 href="/login"
-                className="px-8 py-4 bg-white text-[#15803d] font-medium rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                className="px-8 py-4 bg-white dark:bg-gray-900 text-[#15803d] dark:text-[#bbf7d0] font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 border border-transparent dark:border-[#bbf7d0]/30"
               >
                 Start Free Trial
               </a>
               <a
                 href="/contact"
-                className="px-8 py-4 bg-transparent border border-white text-white font-medium rounded-lg hover:bg-white/10 transition-colors duration-200"
+                className="px-8 py-4 bg-transparent border border-white dark:border-[#bbf7d0] text-white dark:text-[#bbf7d0] font-medium rounded-lg hover:bg-white/10 dark:hover:bg-[#bbf7d0]/10 transition-colors duration-200"
               >
                 Schedule a Demo
               </a>

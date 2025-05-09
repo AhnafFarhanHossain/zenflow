@@ -250,9 +250,9 @@ export default function Features() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-36 pb-24 overflow-hidden bg-white">
+      <section className="relative pt-36 pb-24 overflow-hidden bg-white dark:bg-gray-900">
         <div
-          className="absolute inset-0 bg-texture opacity-80 pointer-events-none"
+          className="absolute inset-0 bg-texture opacity-80 pointer-events-none dark:opacity-60"
           style={{ zIndex: 0 }}
         />
         <div
@@ -260,11 +260,14 @@ export default function Features() {
           style={{ zIndex: 1 }}
         >
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight tracking-tight">
-              Your <span className="text-[#15803d]">Calm Companion</span> for
-              Daily Productivity
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
+              Your{" "}
+              <span className="text-[#15803d] dark:text-[#bbf7d0]">
+                Calm Companion
+              </span>{" "}
+              for Daily Productivity
             </h1>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
               ZenFlow combines essential productivity tools in a
               distraction-free environment, helping you manage tasks, track
               progress, take notes, and plan schedules — all in one peaceful
@@ -283,17 +286,17 @@ export default function Features() {
       </section>
 
       {/* Features Tabs Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
-          <div className="flex flex-wrap justify-center mb-12 border-b border-gray-200">
+          <div className="flex flex-wrap justify-center mb-12 border-b border-gray-200 dark:border-gray-700">
             {featureTabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-8 py-4 font-medium text-base transition-all duration-200 ${
                   activeTab === tab.id
-                    ? "text-[#15803d] border-b-2 border-[#15803d]"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "text-[#15803d] dark:text-[#bbf7d0] border-b-2 border-[#15803d] dark:border-[#bbf7d0] bg-gray-50 dark:bg-gray-800"
+                    : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                 }`}
               >
                 {tab.name}
@@ -303,10 +306,10 @@ export default function Features() {
 
           <div className="mt-12">
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                 {currentTabContent.name}
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-gray-600 dark:text-gray-300">
                 {currentTabContent.description}
               </p>
             </div>
@@ -315,16 +318,18 @@ export default function Features() {
               {currentTabContent.features.map((feature, idx) => (
                 <div
                   key={idx}
-                  className="bg-white p-8 rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="bg-white dark:bg-gray-900 p-8 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
-                  <div className="bg-[#15803d]/10 p-3 rounded-full w-12 h-12 flex items-center justify-center text-[#15803d] mb-6">
+                  <div className="bg-[#15803d]/10 dark:bg-[#bbf7d0]/10 p-3 rounded-full w-12 h-12 flex items-center justify-center text-[#15803d] dark:text-[#bbf7d0] mb-6">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-600 mb-6">{feature.description}</p>
-                  <div className="rounded-lg overflow-hidden border border-gray-200">
+                  <p className="text-gray-600 dark:text-gray-300 mb-6">
+                    {feature.description}
+                  </p>
+                  <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
                     <Image
                       src={feature.image}
                       alt={feature.title}
@@ -341,17 +346,17 @@ export default function Features() {
       </section>
 
       {/* Feature Quote Section */}
-      <section className="py-16 bg-[#15803d]/5 border-y border-[#15803d]/10">
+      <section className="py-16 bg-[#15803d]/5 dark:bg-[#bbf7d0]/10 border-y border-[#15803d]/10 dark:border-[#bbf7d0]/20">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
           <div className="text-center">
-            <div className="inline-block text-5xl text-[#15803d] opacity-30 font-serif">
+            <div className="inline-block text-5xl text-[#15803d] dark:text-[#bbf7d0] opacity-30 font-serif">
               "
             </div>
-            <blockquote className="text-2xl md:text-3xl font-medium text-gray-800 max-w-3xl mx-auto my-6 leading-relaxed">
+            <blockquote className="text-2xl md:text-3xl font-medium text-gray-800 dark:text-gray-100 max-w-3xl mx-auto my-6 leading-relaxed">
               ZenFlow is more than a todo app. It's a peaceful digital space for
               clarity, consistency, and progress.
             </blockquote>
-            <div className="inline-block text-5xl text-[#15803d] opacity-30 font-serif">
+            <div className="inline-block text-5xl text-[#15803d] dark:text-[#bbf7d0] opacity-30 font-serif">
               "
             </div>
           </div>
@@ -359,13 +364,13 @@ export default function Features() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#15803d] to-[#166534] text-white">
+      <section className="py-20 bg-gradient-to-br from-[#15803d] to-[#166534] dark:from-[#166534] dark:to-[#15803d] text-white">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Ready to find focus and flow?
             </h2>
-            <p className="text-lg text-[#dcfce7] mb-8">
+            <p className="text-lg text-[#dcfce7] dark:text-[#bbf7d0] mb-8">
               Join thousands already using ZenFlow to reduce chaos and boost
               productivity in a calm, mindful environment.
             </p>
