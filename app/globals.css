@@ -44,13 +44,13 @@
   font-family: var(--font-sans), sans-serif;
 }
 
-.font-archivo {
-  font-family: var(--font-archivo), sans-serif !important;
+.font-hubot {
+  font-family: var(--font-hubot), sans-serif !important;
 }
 
 /* Dashboard specific fonts */
 .dashboard-container * {
-  font-family: var(--font-archivo), sans-serif !important;
+  font-family: var(--font-hubot), sans-serif !important;
 }
 
 html,

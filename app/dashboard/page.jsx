@@ -15,7 +15,7 @@ const Dashboard = () => {
   return (
     <div
       className="space-y-6 max-w-6xl mx-auto"
-      style={{ fontFamily: "var(--font-archivo)" }}
+      style={{ fontFamily: "var(--font-hubot)" }}
     >
       {/* Welcome section */}
       <header className="bg-white border border-gray-200 rounded-sm p-4 dark:bg-[#0a0a0a] dark:border-zinc-800">

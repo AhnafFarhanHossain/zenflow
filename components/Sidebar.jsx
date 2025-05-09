@@ -58,14 +58,19 @@ const Sidebar = ({ activePath }) => {
     <div
       className={`h-screen ${
         collapsed ? "w-20" : "w-56"
-      } bg-white border-r border-gray-200 flex flex-col transition-all duration-200 dark:bg-black dark:border-zinc-800`}
+      } bg-white border-r border-gray-200 flex flex-col transition-all duration-200 dark:bg-black dark:border-zinc-800 py-3`}
       style={{
         boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
-        fontFamily: "var(--font-archivo)",
+        fontFamily: "var(--font-hubot)",
       }}
     >
-      <div className={`mb-6 pt-3 ${collapsed ? "px-3" : "px-4"}`}>
-        <Link href="/dashboard" className="flex items-center space-x-2 group">
+      <div className={`mb-6 pt-3 ${collapsed ? "px-2" : "px-4"}`}>
+        <Link
+          href="/dashboard"
+          className={`flex items-center group ${
+            collapsed ? "justify-center px-2" : "space-x-2"
+          }`}
+        >
           {/* The logo placeholder */}
           <div className="w-7 h-7 bg-gray-800 dark:bg-green-600 rounded flex items-center justify-center text-white text-xs font-bold">
             Z
