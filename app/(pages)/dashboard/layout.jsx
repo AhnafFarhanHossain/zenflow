@@ -10,7 +10,9 @@ export default function DashboardLayout({ children }) {
       <Sidebar activePath={pathname} />
       <div className="flex flex-col h-screen w-full">
         <ActivityBar />
-        <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
+        <main className="flex-1 overflow-auto p-4 md:p-6 text-sm md:text-base">
+          {children}
+        </main>
       </div>
     </div>
   );

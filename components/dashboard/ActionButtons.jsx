@@ -7,13 +7,13 @@ export const NotificationBell = ({ className = "", ...props }) => {
   const [count, setCount] = useState(3); // Just a dummy value for demonstration
   return (
     <button
-      className={`relative p-2 rounded-md hover:bg-gray-100 dark:hover:bg-black transition-colors ${className}`}
+      className={`relative p-2 rounded-md hover:bg-gray-100 dark:hover:bg-black transition-colors cursor-pointer ${className}`}
       aria-label="Notifications"
       {...props}
     >
-      <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+      <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />{" "}
       {count > 0 && (
-        <span className="absolute top-1 right-1 flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-gray-700 dark:bg-white dark:text-black rounded-full">
+        <span className="absolute top-1 right-1 flex items-center justify-center w-4 h-4 text-xs md:text-[10px] font-bold text-white bg-gray-700 dark:bg-white dark:text-black rounded-full">
           {count}
         </span>
       )}
@@ -24,7 +24,7 @@ export const NotificationBell = ({ className = "", ...props }) => {
 export const HelpButton = ({ className = "", ...props }) => {
   return (
     <button
-      className={`p-2 rounded-md hover:bg-gray-100 dark:hover:bg-black transition-colors ${className}`}
+      className={`p-2 rounded-md hover:bg-gray-100 dark:hover:bg-black transition-colors cursor-pointer ${className}`}
       aria-label="Help"
       {...props}
     >
@@ -42,7 +42,7 @@ export const ActionButton = ({
   ...props
 }) => {
   const baseClasses =
-    "flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-colors";
+    "flex items-center gap-1.5 px-3 py-1.5 text-sm md:text-base font-medium rounded-md transition-colors";
   const variants = {
     primary:
       "bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-200 dark:text-black dark:hover:bg-white",
@@ -53,7 +53,7 @@ export const ActionButton = ({
   return (
     <button
       onClick={onClick}
-      className={`${baseClasses} ${variants[variant]} ${className}`}
+      className={`${baseClasses} ${variants[variant]} ${className} cursor-pointer`}
       {...props}
     >
       {icon && icon}

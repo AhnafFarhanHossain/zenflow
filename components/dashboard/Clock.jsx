@@ -29,14 +29,14 @@ export const Clock = ({ className = "" }) => {
   if (!mounted) {
     return (
       <div
-        className={`text-sm font-medium text-gray-600 dark:text-gray-300 ${className}`}
+        className={`text-sm md:text-base font-medium text-gray-600 dark:text-gray-300 ${className}`}
       ></div>
     );
   }
 
   return (
     <div
-      className={`text-sm font-medium text-gray-600 dark:text-gray-300 ${className}`}
+      className={`text-sm md:text-base font-medium text-gray-600 dark:text-gray-300 ${className}`}
     >
       {formattedTime}
     </div>

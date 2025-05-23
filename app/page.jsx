@@ -3,7 +3,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Home() {
   return (

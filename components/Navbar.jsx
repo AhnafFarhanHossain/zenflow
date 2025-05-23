@@ -99,8 +99,9 @@ const Navbar = () => {
               onMouseEnter={() => setHoveredItem(index)}
               onMouseLeave={() => setHoveredItem(null)}
             >
+              {" "}
               <span
-                className={`text-sm font-medium text-gray-700 transition-all duration-300 dark:text-gray-300 ${
+                className={`text-sm md:text-base font-medium text-gray-700 transition-all duration-300 dark:text-gray-300 ${
                   hoveredItem === index ? "text-gray-900 dark:text-white" : ""
                 }`}
               >
@@ -152,7 +153,7 @@ const Navbar = () => {
               <Link
                 key={item}
                 href={`/${item.toLowerCase()}`}
-                className="block px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 border border-transparent hover:text-gray-900 hover:border-[#15803d]/20 hover:bg-[#15803d]/5 dark:hover:text-white dark:hover:border-[#bbf7d0]/20 dark:hover:bg-[#bbf7d0]/10 rounded-lg transition-all duration-200"
+                className="block px-4 py-2.5 text-sm md:text-base font-medium text-gray-700 dark:text-gray-300 border border-transparent hover:text-gray-900 hover:border-[#15803d]/20 hover:bg-[#15803d]/5 dark:hover:text-white dark:hover:border-[#bbf7d0]/20 dark:hover:bg-[#bbf7d0]/10 rounded-lg transition-all duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item}

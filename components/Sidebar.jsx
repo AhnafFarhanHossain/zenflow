@@ -56,7 +56,7 @@ const Sidebar = ({ activePath }) => {
   return (
     <div
       className={`h-screen ${
-        collapsed ? "w-20" : "w-56"
+        collapsed ? "w-24" : "w-64"
       } bg-white border-r border-gray-200 flex flex-col transition-all duration-200 dark:bg-black dark:border-gray-800 py-3`}
       style={{
         boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
@@ -109,10 +109,14 @@ const Sidebar = ({ activePath }) => {
                         ? "text-gray-900 dark:text-white"
                         : "text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300"
                     }`}
-                  />
+                  />{" "}
                   {!collapsed && (
                     <span
-                      className={`${isDashboard ? "text-[13px]" : "text-xs"}`}
+                      className={`${
+                        isDashboard
+                          ? "text-[13px] md:text-sm"
+                          : "text-xs md:text-sm"
+                      }`}
                     >
                       {item.name}
                     </span>
@@ -133,8 +137,9 @@ const Sidebar = ({ activePath }) => {
           } px-2 py-1.5 rounded-sm text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-colors duration-150 border border-transparent dark:text-gray-400 dark:hover:bg-zinc-900 dark:hover:text-white`}
           title={collapsed ? "Settings" : ""}
         >
+          {" "}
           <Settings className="h-4 w-4" />
-          {!collapsed && <span className="text-xs">Settings</span>}
+          {!collapsed && <span className="text-xs md:text-sm">Settings</span>}
         </Link>
 
         {/* Footer with profile, theme toggle, and sidebar toggle */}
