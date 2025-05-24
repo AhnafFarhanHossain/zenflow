@@ -32,10 +32,10 @@ export const PageHeader = ({ title, className = "" }) => {
         {title}
       </h1>
       {breadcrumbs.length > 0 && (
-        <div className="flex items-center flex-wrap space-x-1 text-sm md:text-base text-gray-500 dark:text-gray-500">
+        <div className="flex items-center flex-wrap space-x-1 text-sm md:text-base text-gray-500 dark:text-gray-400">
           <Link
             href="/"
-            className="hover:text-gray-700 dark:hover:text-gray-400 transition-colors whitespace-nowrap"
+            className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors whitespace-nowrap"
           >
             Home
           </Link>
@@ -44,13 +44,13 @@ export const PageHeader = ({ title, className = "" }) => {
             <div key={index} className="flex items-center">
               <ChevronRight className="w-3 h-3 mx-1 flex-shrink-0" />{" "}
               {breadcrumb.isLast ? (
-                <span className="text-gray-700 dark:text-gray-400 truncate max-w-[150px] sm:max-w-none">
+                <span className="text-gray-700 dark:text-gray-300 truncate max-w-[150px] sm:max-w-none">
                   {breadcrumb.label}
                 </span>
               ) : (
                 <Link
                   href={breadcrumb.href}
-                  className="hover:text-gray-700 dark:hover:text-gray-400 transition-colors truncate max-w-[120px] sm:max-w-none"
+                  className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors truncate max-w-[120px] sm:max-w-none"
                 >
                   {breadcrumb.label}
                 </Link>

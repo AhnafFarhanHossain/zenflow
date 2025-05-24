@@ -56,11 +56,11 @@ const Sidebar = ({ activePath }) => {
   return (
     <div
       className={`h-screen ${
-        collapsed ? "w-24" : "w-64"
-      } bg-white border-r border-gray-200 flex flex-col transition-all duration-200 dark:bg-black dark:border-gray-800 py-3`}
+        collapsed ? "w-16 lg:w-20" : "w-64 lg:w-64"
+      } bg-white border-r border-gray-200 flex flex-col transition-all duration-200 dark:bg-gray-900 dark:border-gray-700 py-3`}
       style={{
         boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
-        fontFamily: "var(--font-chakra)",
+        fontFamily: "var(--font-baiJamjuree)",
       }}
     >
       <div className={`mb-6 pt-3 ${collapsed ? "px-2" : "px-4"}`}>
@@ -70,12 +70,13 @@ const Sidebar = ({ activePath }) => {
             collapsed ? "justify-center px-2" : "space-x-2"
           }`}
         >
+          {" "}
           {/* The logo placeholder */}{" "}
-          <div className="w-7 h-7 bg-gray-800 dark:bg-gray-200 rounded flex items-center justify-center text-white dark:text-gray-900 text-xs font-bold">
+          <div className="w-7 h-7 bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center text-gray-900 dark:text-gray-100 text-xs font-bold">
             Z
           </div>
           {!collapsed && (
-            <span className="text-sm font-semibold text-gray-800 dark:text-white">
+            <span className="text-sm font-semibold text-gray-900 dark:text-white">
               ZenFlow
             </span>
           )}
@@ -95,19 +96,20 @@ const Sidebar = ({ activePath }) => {
                   href={item.href}
                   className={`flex items-center ${
                     collapsed ? "justify-center" : "space-x-3"
-                  } px-2 py-1.5 rounded transition-colors duration-150 group border
+                  } px-2 py-1.5 rounded-md transition-colors duration-150 group border
                     ${
                       isActive
                         ? "bg-gray-100 text-gray-900 border-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-700"
-                        : "text-gray-500 border-transparent hover:bg-gray-50 hover:text-gray-800 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                        : "text-gray-600 border-transparent hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
                     }`}
                   title={collapsed ? item.name : ""}
                 >
+                  {" "}
                   <Icon
                     className={`h-4 w-4 ${
                       isActive
                         ? "text-gray-900 dark:text-white"
-                        : "text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300"
+                        : "text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300"
                     }`}
                   />{" "}
                   {!collapsed && (
@@ -128,13 +130,13 @@ const Sidebar = ({ activePath }) => {
         </ul>
       </nav>
 
-      <div className="mt-auto border-t border-gray-200 pt-4 px-2 space-y-2 dark:border-zinc-800">
+      <div className="mt-auto border-t border-gray-200 pt-4 px-2 space-y-2 dark:border-gray-700">
         {/* Settings link */}
         <Link
           href="/dashboard/settings"
           className={`flex items-center ${
             collapsed ? "justify-center" : "space-x-3"
-          } px-2 py-1.5 rounded-sm text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-colors duration-150 border border-transparent dark:text-gray-400 dark:hover:bg-zinc-900 dark:hover:text-white`}
+          } px-2 py-1.5 rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-150 border border-transparent dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white`}
           title={collapsed ? "Settings" : ""}
         >
           {" "}
@@ -166,7 +168,7 @@ const Sidebar = ({ activePath }) => {
               onClick={() =>
                 mounted && setTheme(theme === "dark" ? "light" : "dark")
               }
-              className="p-1 rounded-sm border border-gray-200 hover:bg-gray-100 text-gray-400 hover:text-gray-700 dark:border-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 dark:hover:text-white"
+              className="p-1 rounded-md border border-gray-200 hover:bg-gray-50 text-gray-600 hover:text-gray-900 dark:border-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 dark:hover:text-white"
               title="Toggle theme"
               aria-label="Toggle theme"
             >
@@ -180,7 +182,7 @@ const Sidebar = ({ activePath }) => {
             {/* Sidebar toggle */}{" "}
             <button
               onClick={() => setCollapsed(!collapsed)}
-              className="p-1 rounded-sm border border-gray-200 hover:bg-gray-100 text-gray-400 hover:text-gray-700 dark:border-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 dark:hover:text-white"
+              className="p-1 rounded-md border border-gray-200 hover:bg-gray-50 text-gray-600 hover:text-gray-900 dark:border-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 dark:hover:text-white"
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
               title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >

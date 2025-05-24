@@ -1,4 +1,4 @@
-import { Plus_Jakarta_Sans, Chakra_Petch } from "next/font/google";
+import { Plus_Jakarta_Sans, Bai_Jamjuree } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
@@ -9,8 +9,8 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
 });
 
-const chakraSans = Chakra_Petch({
-  variable: "--font-chakra",
+const baiJamjuree = Bai_Jamjuree({
+  variable: "--font-baiJamjuree",
   subsets: ["latin"],
   weight: ["400"],
 });
@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <ClerkProvider>
         <body
-          className={`${plusJakartaSans.variable} ${chakraSans.variable} antialiased`}
+          className={`${plusJakartaSans.variable} ${baiJamjuree.variable} antialiased`}
         >
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {children}

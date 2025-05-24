@@ -27,7 +27,7 @@ const ActivityBar = ({ className = "" }) => {
   }, [pathname]);
   return (
     <div
-      className={`py-4 px-4 md:px-6 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-black ${className}`}
+      className={`py-4 px-4 md:px-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 ${className}`}
     >
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         {/* Left side - Page title and breadcrumbs */}
@@ -38,11 +38,12 @@ const ActivityBar = ({ className = "" }) => {
           <div className="hidden md:flex">
             <Clock />
           </div>
-          <div className="h-6 mx-1 border-l border-gray-200 dark:border-gray-800 hidden md:block" />
+          <div className="h-6 mx-1 border-l border-gray-200 dark:border-gray-700 hidden md:block" />{" "}
           <ActionButton
             variant="primary"
             icon={<Plus className="w-4 h-4" />}
             className="hidden sm:flex"
+            onClick={() => setShowForm(true)}
           >
             Create Task
           </ActionButton>
@@ -65,7 +66,7 @@ const ActivityBar = ({ className = "" }) => {
             className="sm:hidden"
             aria-label="Create Note"
           />
-          <div className="h-6 mx-1 border-l border-gray-200 dark:border-gray-800 hidden md:block" />
+          <div className="h-6 mx-1 border-l border-gray-200 dark:border-gray-700 hidden md:block" />
           <NotificationBell />
           <HelpButton className="hidden sm:block" />
         </div>

@@ -5,9 +5,10 @@ import { ActionButton } from "@/components/dashboard/ActionButtons";
 import { Plus, Trash2 } from "lucide-react"; // Added Trash2 import
 import { getTasks } from "@/utils/getTasks";
 import TaskForm from "@/components/dashboard/Taskform";
-import { supabase } from "@/utils/supabase"; // Added Supabase client import
-import { toast } from "sonner"; // Added toast import
-import { updateTaskStatus } from "@/utils/updateTaskStatus"; // Added import
+import { supabase } from "@/utils/supabase";
+import { toast } from "sonner";
+import { updateTaskStatus } from "@/utils/updateTaskStatus";
+import { deleteTask } from "@/utils/deleteTask"; // Import deleteTask
 
 const Tasks = () => {
   const [sorting, setSorting] = useState({ field: "title", direction: "asc" });
@@ -15,20 +16,22 @@ const Tasks = () => {
   const [showForm, setShowForm] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchTasks = async () => {
       setLoading(true);
       try {
         const fetchedTasks = await getTasks();
         const processedTasks = (fetchedTasks || []).map((task) => {
-          const priorityValue =
-            task.priority &&
-            ["high", "medium", "low"].includes(
-              String(task.priority).toLowerCase()
-            )
-              ? String(task.priority).toLowerCase()
-              : "low"; // Default to 'low'
+          const priorityString = String(task.priority || "").trim(); // Trim once
+          let priorityValue = "Easy"; // Default to 'Easy'
+
+          if (priorityString === "Extreme") {
+            priorityValue = "Extreme";
+          } else if (priorityString === "Medium") {
+            priorityValue = "Medium";
+          } else if (priorityString === "Easy") {
+            priorityValue = "Easy";
+          }
 
           // Ensure status has a default value if undefined/null
           const currentStatus = task.status || "todo";
@@ -81,14 +84,31 @@ const Tasks = () => {
             ? {
                 ...task,
                 status: data.status, // Update status from response
-                completed: data.status === "done", // Re-derive completed
-                // Ensure priority is preserved or defaulted if not in `data`
-                priority: data.priority || taskToUpdate.priority || "low",
+                completed: data.status === "done", // Re-derive completed                // Ensure priority is preserved or defaulted if not in `data`
+                priority: data.priority || taskToUpdate.priority || "Easy",
               }
             : task
         )
       );
       // toast.success("Task status updated!"); // Optional: Consider if needed, as util might show toast
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    // Optimistically update UI or show a confirmation dialog first (optional)
+    // For example, you could set a temporary state to indicate deletion
+
+    const { error } = await deleteTask(taskId);
+
+    if (error) {
+      // Error toast is handled in deleteTask, but you can add more specific UI updates here
+      // For example, re-enable a delete button if it was disabled
+    } else {
+      // Remove the task from the local state to update the UI
+      setTasks((currentTasks) =>
+        currentTasks.filter((task) => task.id !== taskId)
+      );
+      toast.success("Task deleted successfully!");
     }
   };
 
@@ -126,19 +146,20 @@ const Tasks = () => {
   return (
     <div className="w-full">
       <div className="mb-6">
-        <h1 className="font-bold text-2xl md:text-3xl mb-1">Tasks</h1>
-        <p className="text-sm md:text-base text-gray-500 dark:text-gray-400">
+        <h1 className="font-bold text-2xl md:text-3xl mb-1 text-gray-900 dark:text-white">
+          Tasks
+        </h1>
+        <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
           Organize and track your daily work
         </p>
       </div>
-
       {/* Task Management Controls */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative">
             <select
-              className="h-9 appearance-none bg-transparent border border-gray-200 dark:border-gray-700 rounded-md py-1 pl-2 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer dark:bg-gray-900 dark:text-gray-100"
-              style={{ fontFamily: "var(--font-chakra)" }}
+              className="h-9 appearance-none bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md py-1 pl-2 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-gray-500 cursor-pointer text-gray-900 dark:text-gray-100"
+              style={{ fontFamily: "var(--font-baiJamjuree)" }}
               value={filters.status}
               onChange={(e) =>
                 setFilters({ ...filters, status: e.target.value })
@@ -166,21 +187,20 @@ const Tasks = () => {
               </svg>
             </div>
           </div>
-
           <div className="relative">
             <select
-              className="h-9 appearance-none bg-transparent border border-gray-200 dark:border-gray-700 rounded-md py-1 pl-2 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer dark:bg-gray-900 dark:text-gray-100"
-              style={{ fontFamily: "var(--font-chakra)" }}
+              className="h-9 appearance-none bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-md py-1 pl-2 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-gray-500 cursor-pointer text-gray-900 dark:text-gray-100"
+              style={{ fontFamily: "var(--font-baiJamjuree)" }}
               value={filters.priority}
               onChange={(e) =>
                 setFilters({ ...filters, priority: e.target.value })
               }
             >
+              {" "}
               <option value="all">Priority</option>
-              <option value="high">Extreme</option>{" "}
-              {/* Changed from High to Extreme */}
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
+              <option value="Extreme">Extreme</option>
+              <option value="Medium">Medium</option>
+              <option value="Easy">Easy</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
               <svg
@@ -200,7 +220,6 @@ const Tasks = () => {
             </div>
           </div>
         </div>
-
         <ActionButton
           variant="primary"
           icon={<Plus className="w-4 h-4" />}
@@ -210,18 +229,17 @@ const Tasks = () => {
           New Task
         </ActionButton>
         <button
-          className="sm:hidden p-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-full shadow-sm"
+          className="sm:hidden p-2 bg-gray-900 hover:bg-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700 text-white shadow-sm border border-gray-700 dark:border-gray-600 rounded-md"
           onClick={() => setShowForm(true)}
           aria-label="New Task"
         >
           <Plus className="w-4 h-4" />
         </button>
       </div>
-
       {/* Task Form Modal */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-black dark:bg-opacity-60 z-40 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-xl relative overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-gray-900 shadow-xl w-full max-w-xl relative overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
             <TaskForm
               onClose={() => setShowForm(false)}
               handleClose={() => setShowForm(false)}
@@ -229,24 +247,21 @@ const Tasks = () => {
           </div>
         </div>
       )}
-
       {/* Tasks Table */}
-      <div className="bg-transparent rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-700/50">
-              <tr>
-                <th scope="col" className="w-12 px-4 py-3">
-                  {" "}
-                  {/* Added width for checkbox column */}
-                  {/* Empty header for checkbox column or a general icon if preferred */}
+          <table className="min-w-full">
+            <thead>
+              <tr className="border-b border-gray-200 dark:border-gray-700">
+                <th scope="col" className="w-12 px-6 py-4">
+                  {/* Empty header for checkbox column */}
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-200"
                 >
                   <div
-                    className="flex items-center gap-1.5 cursor-pointer"
+                    className="flex items-center gap-2 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors"
                     onClick={() =>
                       setSorting({
                         field: "title",
@@ -258,10 +273,10 @@ const Tasks = () => {
                       })
                     }
                   >
-                    Title
+                    Task
                     {sorting.field === "title" && (
                       <svg
-                        className={`w-3.5 h-3.5 ${
+                        className={`w-4 h-4 transition-transform ${
                           sorting.direction === "asc"
                             ? ""
                             : "transform rotate-180"
@@ -283,25 +298,25 @@ const Tasks = () => {
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-200 hidden sm:table-cell"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-200 hidden lg:table-cell"
                 >
                   Priority
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell"
+                  className="px-6 py-4 text-left text-sm font-medium text-gray-700 dark:text-gray-200 hidden xl:table-cell"
                 >
                   <div
-                    className="flex items-center gap-1.5 cursor-pointer"
+                    className="flex items-center gap-2 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors"
                     onClick={() =>
                       setSorting({
-                        field: "dueDate", // Ensure this matches the data field, e.g., 'due_date'
+                        field: "dueDate",
                         direction:
                           sorting.field === "dueDate" &&
                           sorting.direction === "asc"
@@ -313,7 +328,7 @@ const Tasks = () => {
                     Due Date
                     {sorting.field === "dueDate" && (
                       <svg
-                        className={`w-3.5 h-3.5 ${
+                        className={`w-4 h-4 transition-transform ${
                           sorting.direction === "asc"
                             ? ""
                             : "transform rotate-180"
@@ -335,95 +350,132 @@ const Tasks = () => {
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-6 py-4 text-right text-sm font-medium text-gray-700 dark:text-gray-200"
                 >
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center">
-                    {" "}
-                    {/* Adjusted colSpan */}
+                  <td colSpan={6} className="px-6 py-12 text-center">
                     <div className="flex flex-col items-center justify-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-300 dark:border-gray-600 mb-2"></div>
-                      <p className="text-gray-500 dark:text-gray-400 text-sm">
+                      <div className="animate-spin rounded-full h-10 w-10 border-2 border-gray-200 border-t-blue-500 dark:border-gray-700 dark:border-t-blue-400 mb-4"></div>
+                      <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
                         Loading tasks...
                       </p>
                     </div>
                   </td>
                 </tr>
               ) : filteredAndSortedTasks.length > 0 ? (
-                filteredAndSortedTasks.map((task) => (
+                filteredAndSortedTasks.map((task, index) => (
                   <tr
                     key={task.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
+                    className="group hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 border-b border-gray-200 dark:border-gray-700 last:border-b-0"
                   >
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="px-6 py-4">
                       <input
                         type="checkbox"
-                        checked={task.status === "done"} // Bind to task.status
+                        checked={task.status === "done"}
                         onChange={() => handleToggleComplete(task.id)}
-                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800 cursor-pointer"
+                        className="h-5 w-5 text-blue-600 border-2 border-gray-300 bg-white rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-500 dark:bg-gray-900 dark:focus:ring-blue-400 cursor-pointer transition-all"
                       />
                     </td>
-                    <td
-                      className={`px-4 py-3 text-sm whitespace-nowrap font-medium ${
-                        task.status === "done" // Use task.status for styling
-                          ? "line-through text-gray-400 dark:text-gray-500"
-                          : "text-gray-900 dark:text-gray-100"
-                      }`}
-                    >
-                      {task.title}
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col gap-1">
+                        <span
+                          className={`text-sm font-medium transition-all ${
+                            task.status === "done"
+                              ? "line-through text-gray-500 dark:text-gray-500"
+                              : "text-gray-900 dark:text-gray-100"
+                          }`}
+                        >
+                          {task.title}
+                        </span>
+                        {/* Mobile-only status and priority */}
+                        <div className="flex items-center gap-2 sm:hidden">
+                          <span
+                            className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
+                              task.status === "done"
+                                ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-400"
+                                : task.status === "in-progress"
+                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-400"
+                                : "bg-gray-100 text-gray-800 dark:bg-gray-800/50 dark:text-gray-300"
+                            }`}
+                          >
+                            {task.status === "done"
+                              ? "Done"
+                              : task.status === "in-progress"
+                              ? "In Progress"
+                              : "To-Do"}
+                          </span>{" "}
+                          <span
+                            className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium lg:hidden ${
+                              task.priority === "Extreme"
+                                ? "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-400"
+                                : task.priority === "Medium"
+                                ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-400"
+                                : "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-400"
+                            }`}
+                          >
+                            {task.priority === "Extreme"
+                              ? "Extreme"
+                              : task.priority === "Medium"
+                              ? "Medium"
+                              : "Easy"}
+                          </span>
+                        </div>
+                      </div>
                     </td>
-                    <td className="px-4 py-3 text-sm whitespace-nowrap">
+                    <td className="px-6 py-4 hidden sm:table-cell">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 ${
-                          task.status === "done" // Use task.status for badge styling
-                            ? "bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100"
+                        className={`inline-flex items-center px-3 py-1 rounded-md text-sm font-medium ${
+                          task.status === "done"
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-400"
                             : task.status === "in-progress"
-                            ? "bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-100"
-                            : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300" // To-Do or other statuses
+                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-400"
+                            : "bg-gray-100 text-gray-800 dark:bg-gray-800/50 dark:text-gray-300"
                         }`}
                       >
-                        {task.status === "done" // Use task.status for badge text
+                        {task.status === "done"
                           ? "Done"
                           : task.status === "in-progress"
                           ? "In Progress"
                           : "To-Do"}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm whitespace-nowrap">
+                    <td className="px-6 py-4 hidden lg:table-cell">
+                      {" "}
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 capitalize ${
-                          task.priority === "high"
-                            ? "bg-red-100 text-red-700 dark:bg-red-600/40 dark:text-red-200"
-                            : task.priority === "medium"
-                            ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-600/40 dark:text-yellow-200"
-                            : "bg-green-100 text-green-700 dark:bg-green-600/40 dark:text-green-200"
+                        className={`inline-flex items-center px-3 py-1 rounded-md text-sm font-medium ${
+                          task.priority === "Extreme"
+                            ? "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-400"
+                            : task.priority === "Medium"
+                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-400"
+                            : "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-400"
                         }`}
                       >
-                        {task.priority === "high"
+                        {task.priority === "Extreme"
                           ? "Extreme"
-                          : task.priority === "medium"
+                          : task.priority === "Medium"
                           ? "Medium"
-                          : "Low"}
-                        {/* Adjusted display text */}
+                          : "Easy"}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap hidden md:table-cell">
+                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 hidden xl:table-cell">
                       {task.due_date
-                        ? new Date(task.due_date).toLocaleDateString()
-                        : "N/A"}
+                        ? new Date(task.due_date).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : "No due date"}
                     </td>
-                    <td className="px-4 py-3 text-sm whitespace-nowrap text-right">
-                      {" "}
-                      {/* Adjusted for right alignment */}
+                    <td className="px-6 py-4 text-right">
                       <button
-                        // onClick={() => handleDelete(task.id)} // Functionality to be added later
-                        className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 p-1 rounded-md hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors cursor-pointer"
+                        onClick={() => handleDeleteTask(task.id)}
+                        className="inline-flex items-center justify-center w-8 h-8 text-gray-500 hover:text-red-400 hover:bg-red-900/20 dark:hover:bg-red-900/30 transition-all duration-200 group-hover:opacity-100 opacity-60 border border-gray-700 hover:border-red-600"
                         title="Delete task"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -433,30 +485,38 @@ const Tasks = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="text-center">
-                    {" "}
-                    {/* Adjusted colSpan */}
-                    <div className="flex flex-col items-center justify-center py-10 px-4">
-                      <svg
-                        className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"
-                        ></path>
-                      </svg>
-                      <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">
+                  <td colSpan={6} className="text-center py-16">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-16 h-16 bg-gray-800 dark:bg-gray-900 flex items-center justify-center mb-4">
+                        <svg
+                          className="w-8 h-8 text-gray-500 dark:text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h4.125M8.25 8.25l13.5 0"
+                          ></path>
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-200 dark:text-gray-100 mb-2">
                         No tasks yet
+                      </h3>
+                      <p className="text-gray-400 dark:text-gray-500 text-sm max-w-sm text-center mb-6">
+                        Create your first task to start organizing your work and
+                        boost your productivity.
                       </p>
-                      <p className="text-gray-400 dark:text-gray-500 text-xs text-center max-w-xs">
-                        Create your first task to start organizing your work
-                      </p>
+                      <button
+                        onClick={() => setShowForm(true)}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium transition-colors border border-gray-700"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Create Task
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -466,18 +526,26 @@ const Tasks = () => {
         </div>
       </div>
       {/* Pagination */}
-      <div className="flex items-center justify-between mt-4 text-xs">
-        <div className="text-gray-500 dark:text-gray-400">
-          <span className="font-medium">{filteredAndSortedTasks.length}</span>{" "}
-          tasks
+      <div className="flex items-center justify-between mt-6 px-2">
+        <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500">
+          <span className="font-medium text-gray-200 dark:text-gray-100">
+            {filteredAndSortedTasks.length}
+          </span>
+          <span>{filteredAndSortedTasks.length === 1 ? "task" : "tasks"}</span>
+          {filters.status !== "all" || filters.priority !== "all" ? (
+            <span className="text-gray-500">
+              (filtered from {tasks.length} total)
+            </span>
+          ) : null}
         </div>
         <div className="flex items-center gap-1">
           <button
-            className="px-2 py-1 bg-transparent border border-gray-200 dark:border-gray-700 rounded text-gray-400 dark:text-gray-500 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-2 border border-gray-700 dark:border-gray-600 text-gray-400 dark:text-gray-500 hover:text-gray-300 dark:hover:text-gray-300 hover:bg-gray-800 dark:hover:bg-gray-800/50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             disabled={tasks.length === 0}
+            title="Previous page"
           >
             <svg
-              className="w-3.5 h-3.5"
+              className="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -492,11 +560,12 @@ const Tasks = () => {
             </svg>
           </button>
           <button
-            className="px-2 py-1 bg-transparent border border-gray-200 dark:border-gray-700 rounded text-gray-400 dark:text-gray-500 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-2 border border-gray-700 dark:border-gray-600 text-gray-400 dark:text-gray-500 hover:text-gray-300 dark:hover:text-gray-300 hover:bg-gray-800 dark:hover:bg-gray-800/50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             disabled={tasks.length === 0}
+            title="Next page"
           >
             <svg
-              className="w-3.5 h-3.5"
+              className="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

@@ -6,7 +6,7 @@ import ActivityBar from "@/components/ActivityBar";
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
   return (
-    <div className="flex h-screen w-screen bg-gray-100 dark:bg-black antialiased dashboard-container">
+    <div className="flex h-screen w-screen bg-gray-50 dark:bg-gray-900 antialiased dashboard-container">
       <Sidebar activePath={pathname} />
       <div className="flex flex-col h-screen w-full">
         <ActivityBar />

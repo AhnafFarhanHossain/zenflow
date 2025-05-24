@@ -33,7 +33,6 @@ export const Clock = ({ className = "" }) => {
       ></div>
     );
   }
-
   return (
     <div
       className={`text-sm md:text-base font-medium text-gray-600 dark:text-gray-300 ${className}`}
