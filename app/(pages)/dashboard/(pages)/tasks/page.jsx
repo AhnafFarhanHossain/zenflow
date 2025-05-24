@@ -9,54 +9,82 @@ import { supabase } from "@/utils/supabase";
 import { toast } from "sonner";
 import { updateTaskStatus } from "@/utils/updateTaskStatus";
 import { deleteTask } from "@/utils/deleteTask"; // Import deleteTask
+import { useUser } from "@clerk/nextjs";
 
 const Tasks = () => {
+  const { user, isLoaded } = useUser();
   const [sorting, setSorting] = useState({ field: "title", direction: "asc" });
   const [filters, setFilters] = useState({ status: "all", priority: "all" });
   const [showForm, setShowForm] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const fetchTasks = async () => {
+    if (!user?.id) {
+      console.log("No user ID available");
+      setTasks([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      console.log("Fetching tasks for user:", user.id);
+      const fetchedTasks = await getTasks(user.id);
+      const processedTasks = (fetchedTasks || []).map((task) => {
+        const priorityString = String(task.priority || "").trim(); // Trim once
+        let priorityValue = "Easy"; // Default to 'Easy'
+
+        if (priorityString === "Extreme") {
+          priorityValue = "Extreme";
+        } else if (priorityString === "Medium") {
+          priorityValue = "Medium";
+        } else if (priorityString === "Easy") {
+          priorityValue = "Easy";
+        }
+
+        // Ensure status has a default value if undefined/null
+        const currentStatus = task.status || "todo";
+
+        return {
+          ...task,
+          // Derive completed directly from status
+          completed: currentStatus === "done",
+          status: currentStatus,
+          priority: priorityValue,
+        };
+      });
+      setTasks(processedTasks);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      setTasks([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchTasks = async () => {
-      setLoading(true);
-      try {
-        const fetchedTasks = await getTasks();
-        const processedTasks = (fetchedTasks || []).map((task) => {
-          const priorityString = String(task.priority || "").trim(); // Trim once
-          let priorityValue = "Easy"; // Default to 'Easy'
+    if (isLoaded && user?.id) {
+      fetchTasks();
+    } else if (isLoaded && !user) {
+      setLoading(false);
+      setTasks([]);
+    }
+  }, [user?.id, isLoaded]);
 
-          if (priorityString === "Extreme") {
-            priorityValue = "Extreme";
-          } else if (priorityString === "Medium") {
-            priorityValue = "Medium";
-          } else if (priorityString === "Easy") {
-            priorityValue = "Easy";
-          }
-
-          // Ensure status has a default value if undefined/null
-          const currentStatus = task.status || "todo";
-
-          return {
-            ...task,
-            // Derive completed directly from status
-            completed: currentStatus === "done",
-            status: currentStatus,
-            priority: priorityValue,
-          };
-        });
-        setTasks(processedTasks);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-        setTasks([]); // Set to empty array on error to avoid undefined issues
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTasks();
-  }, []);
-
+  const handleFormClose = () => {
+    setShowForm(false);
+    // Refresh tasks after form closes (task creation)
+    if (user?.id) {
+      fetchTasks();
+    }
+  };
   const handleToggleComplete = async (taskId) => {
+    if (!user?.id) {
+      toast.error("User not authenticated");
+      return;
+    }
+
     const taskToUpdate = tasks.find((task) => task.id === taskId);
     if (!taskToUpdate) {
       toast.error("Task not found.");
@@ -67,7 +95,8 @@ const Tasks = () => {
     const { data, error } = await updateTaskStatus(
       supabase,
       taskId,
-      taskToUpdate.status
+      taskToUpdate.status,
+      user.id
     );
 
     if (error) {
@@ -240,10 +269,8 @@ const Tasks = () => {
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-black dark:bg-opacity-60 z-40 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-gray-900 shadow-xl w-full max-w-xl relative overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
-            <TaskForm
-              onClose={() => setShowForm(false)}
-              handleClose={() => setShowForm(false)}
-            />
+            {" "}
+            <TaskForm onClose={handleFormClose} handleClose={handleFormClose} />
           </div>
         </div>
       )}

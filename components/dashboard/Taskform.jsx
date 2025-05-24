@@ -5,8 +5,11 @@ import { X } from "lucide-react";
 import Button from "./Button";
 import { toast } from "sonner";
 import { createTask } from "@/utils/createTask";
+import { useUser } from "@clerk/nextjs";
 
 const TaskForm = ({ handleClose }) => {
+  const { user } = useUser();
+  const user_id = user?.id;
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("");
   const [due_date, setdue_date] = useState("");
@@ -16,64 +19,71 @@ const TaskForm = ({ handleClose }) => {
     due_date: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const taskdata = {
-      title,
-      priority,
-      due_date,
-    };
-
-    const result = await createTask({ taskdata });
-
-    if (result.error) {
-      toast.error("Error: " + result.error.message);
-    } else {
-      toast.success("Task created!");
-    }
-
+    // Reset errors first
     setErrors({
       title: "",
       priority: "",
       due_date: "",
     });
 
+    // Validate form fields
+    if (!title.trim()) {
+      setErrors((prev) => ({ ...prev, title: "Task title is required" }));
+      return;
+    }
+
+    if (!priority) {
+      setErrors((prev) => ({
+        ...prev,
+        priority: "Priority selection is required",
+      }));
+      return;
+    }
+
+    if (!due_date) {
+      setErrors((prev) => ({ ...prev, due_date: "Due date is required" }));
+      return;
+    }
+
+    if (!user_id) {
+      toast.error("User not authenticated");
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
-      // Validate form fields
-      if (!title.trim()) {
-        setErrors((prev) => ({ ...prev, title: "Task title is required" }));
-        return;
+      const taskdata = {
+        user_id,
+        title: title.trim(),
+        priority,
+        due_date,
+        status: "todo",
+      };
+
+      console.log("Creating task with data:", taskdata); // Debug log
+
+      const result = await createTask({ taskdata });
+
+      if (result.error) {
+        console.error("Task creation error:", result.error);
+        toast.error("Error: " + result.error.message);
+      } else {
+        toast.success("Task created successfully!");
+
+        // Reset form
+        setTitle("");
+        setPriority("");
+        setdue_date("");
+
+        // Close the form
+        handleClose();
       }
-
-      if (!priority) {
-        setErrors((prev) => ({
-          ...prev,
-          priority: "Priority selection is required",
-        }));
-        return;
-      }
-
-      if (!due_date) {
-        setErrors((prev) => ({ ...prev, due_date: "Due date is required" }));
-        return;
-      }
-
-      setIsSubmitting(true);
-
-      // Here you would typically send data to your API
-      // const response = await yourApiCall({ title, priority, due_date });
-
-      // Reset form
-      setTitle("");
-      setPriority("");
-      setdue_date("");
-
-      // Close the form
-      handleClose();
     } catch (err) {
-      setErrors(err.message || "Failed to create task");
+      console.error("Unexpected error:", err);
       toast.error(err.message || "Failed to create task");
     } finally {
       setIsSubmitting(false);
