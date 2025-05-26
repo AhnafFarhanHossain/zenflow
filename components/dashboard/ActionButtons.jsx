@@ -49,6 +49,8 @@ export const ActionButton = ({
       "bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white",
     secondary:
       "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700",
+    danger: 
+      "bg-none text-red-400 border border-red-400 hover:bg-red-950 transition dark:text-red-500 dark:border-red-500 dark:hover:bg-red-950",
   };
 
   return (

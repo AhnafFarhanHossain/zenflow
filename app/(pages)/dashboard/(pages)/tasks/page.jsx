@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ActionButton } from "@/components/dashboard/ActionButtons";
-import { Plus, Trash2 } from "lucide-react"; // Added Trash2 import
+import { Plus, Trash2, Trash } from "lucide-react"; // Added Trash2 and Trash import
 import { getTasks } from "@/utils/getTasks";
 import { supabase } from "@/utils/supabase";
 import { toast } from "sonner";
@@ -10,6 +10,7 @@ import { updateTaskStatus } from "@/utils/updateTaskStatus";
 import { deleteTask } from "@/utils/deleteTask"; // Import deleteTask
 import { useUser } from "@clerk/nextjs";
 import { useTaskForm } from "@/contexts/TaskFormContext";
+import { deleteAllTasks } from "@/utils/deleteAllTasks";
 
 const Tasks = () => {
   const { user, isLoaded } = useUser();
@@ -120,7 +121,6 @@ const Tasks = () => {
       // toast.success("Task status updated!"); // Optional: Consider if needed, as util might show toast
     }
   };
-
   const handleDeleteTask = async (taskId) => {
     // Optimistically update UI or show a confirmation dialog first (optional)
     // For example, you could set a temporary state to indicate deletion
@@ -136,6 +136,31 @@ const Tasks = () => {
         currentTasks.filter((task) => task.id !== taskId)
       );
       toast.success("Task deleted successfully!");
+    }
+  };
+
+  const handleDeleteAllTasks = async () => {
+    if (!user?.id) {
+      toast.error("User not authenticated");
+      return;
+    }
+
+    // Show confirmation dialog
+    if (
+      !window.confirm(
+        "Are you sure you want to delete all tasks? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    const { error } = await deleteAllTasks(user.id);
+
+    if (error) {
+      // Error toast is handled in deleteAllTasks function
+    } else {
+      // Clear all tasks from local state
+      setTasks([]);
     }
   };
 
@@ -247,21 +272,44 @@ const Tasks = () => {
             </div>
           </div>
         </div>{" "}
-        <ActionButton
-          variant="primary"
-          icon={<Plus className="w-4 h-4" />}
-          className="hidden sm:flex"
-          onClick={() => openTaskForm(handleTaskCreated)}
-        >
-          New Task
-        </ActionButton>
-        <button
-          className="sm:hidden p-2 bg-gray-900 hover:bg-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700 text-white shadow-sm border border-gray-700 dark:border-gray-600 rounded-md"
-          onClick={() => openTaskForm(handleTaskCreated)}
-          aria-label="New Task"
-        >
-          <Plus className="w-4 h-4" />{" "}
-        </button>
+        <div className="flex gap-4">
+          <ActionButton
+            variant="primary"
+            icon={<Plus className="w-4 h-4" />}
+            className="hidden sm:flex"
+            onClick={() => openTaskForm(handleTaskCreated)}
+          >
+            New Task
+          </ActionButton>
+          {tasks.length > 0 && (
+            <ActionButton
+              variant="danger"
+              icon={<Trash className="w-4 h-4" />}
+              className="hidden sm:flex"
+              onClick={handleDeleteAllTasks}
+            >
+              Delete All Tasks
+            </ActionButton>
+          )}{" "}
+        </div>
+        <div className="flex gap-2 sm:hidden">
+          <button
+            className="p-2 bg-gray-900 hover:bg-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700 text-white shadow-sm border border-gray-700 dark:border-gray-600 rounded-md"
+            onClick={() => openTaskForm(handleTaskCreated)}
+            aria-label="New Task"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+          {tasks.length > 0 && (
+            <button
+              className="p-2 bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white shadow-sm border border-red-500 dark:border-red-500 rounded-md"
+              onClick={handleDeleteAllTasks}
+              aria-label="Delete All Tasks"
+            >
+              <Trash className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
       {/* Tasks Table */}
       <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
@@ -525,14 +573,14 @@ const Tasks = () => {
                       <p className="text-gray-400 dark:text-gray-500 text-sm max-w-sm text-center mb-6">
                         Create your first task to start organizing your work and
                         boost your productivity.
-                      </p>{" "}
-                      <button
+                      </p>
+                      <ActionButton
                         onClick={() => openTaskForm(handleTaskCreated)}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium transition-colors border border-gray-700"
+                        variant="secondary"
                       >
                         <Plus className="w-4 h-4" />
                         Create Task
-                      </button>
+                      </ActionButton>
                     </div>
                   </td>
                 </tr>

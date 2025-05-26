@@ -16,7 +16,7 @@ export const deleteTask = async (id) => {
       return { error };
     }
 
-    // toast.success("Task deleted successfully!"); // It's often better to show success from the calling component
+    toast.success("Task deleted successfully!"); // It's often better to show success from the calling component
     return { data }; // data will be the deleted record if .select().single() is used
   } catch (err) {
     console.error("Unexpected error deleting task:", err);
