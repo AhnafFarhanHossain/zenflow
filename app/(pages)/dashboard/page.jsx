@@ -19,11 +19,11 @@ const Dashboard = () => {
     >
       {" "}
       {/* Welcome section */}
-      <header className="bg-white border border-gray-200 rounded-md p-4 dark:bg-gray-900 dark:border-gray-700">
-        <h1 className="text-base md:text-lg font-medium text-gray-900 dark:text-gray-100">
+      <header className="bg-white border border-gray-200 rounded-md p-4 sm:p-6 dark:bg-gray-900 dark:border-gray-700">
+        <h1 className="text-lg sm:text-xl lg:text-lg font-semibold text-gray-900 dark:text-gray-100">
           Welcome back, {user?.firstName || "User"}
         </h1>
-        <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 mt-1">
+        <p className="text-sm sm:text-base lg:text-sm text-gray-600 dark:text-gray-300 mt-1 leading-relaxed">
           Here's what's happening with your tasks today.
         </p>
       </header>
@@ -34,19 +34,19 @@ const Dashboard = () => {
           return (
             <div
               key={index}
-              className="bg-white border border-gray-200 rounded-md p-4 flex justify-between items-center dark:bg-gray-900 dark:border-gray-700"
+              className="bg-white border border-gray-200 rounded-md p-4 sm:p-5 flex justify-between items-center dark:bg-gray-900 dark:border-gray-700"
             >
               {" "}
               <div>
-                <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-300">
+                <p className="text-sm sm:text-sm lg:text-sm font-medium text-gray-600 dark:text-gray-300">
                   {stat.title}
                 </p>
-                <p className="text-lg md:text-xl font-semibold mt-1 text-gray-900 dark:text-gray-100">
+                <p className="text-xl sm:text-2xl lg:text-xl font-bold mt-1 text-gray-900 dark:text-gray-100">
                   {stat.value}
                 </p>
               </div>
-              <div className="w-8 h-8 rounded-md bg-gray-100 flex items-center justify-center dark:bg-gray-800">
-                <Icon className="h-4 w-4 text-gray-600 dark:text-gray-300 cursor-pointer" />
+              <div className="w-10 h-10 sm:w-8 sm:h-8 lg:w-8 lg:h-8 rounded-md bg-gray-100 flex items-center justify-center dark:bg-gray-800">
+                <Icon className="h-5 w-5 sm:h-4 sm:w-4 lg:h-4 lg:w-4 text-gray-600 dark:text-gray-300 cursor-pointer" />
               </div>
             </div>
           );

@@ -14,7 +14,7 @@ export const NotificationBell = ({ className = "", ...props }) => {
       {" "}
       <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />{" "}
       {count > 0 && (
-        <span className="absolute top-1 right-1 flex items-center justify-center w-4 h-4 text-xs md:text-[10px] font-bold text-white bg-red-500 dark:bg-red-600 rounded-full">
+        <span className="absolute top-1 right-1 flex items-center justify-center w-4 h-4 sm:w-4 sm:h-4 text-[10px] sm:text-xs font-bold text-white bg-red-500 dark:bg-red-600 rounded-full">
           {count}
         </span>
       )}
@@ -43,7 +43,7 @@ export const ActionButton = ({
   ...props
 }) => {
   const baseClasses =
-    "flex items-center gap-1.5 px-3 py-1.5 text-sm md:text-base font-medium rounded-md transition-colors";
+    "flex items-center gap-1.5 px-3 py-2 text-sm sm:text-base lg:text-sm font-medium rounded-md transition-colors min-h-[40px] sm:min-h-[36px]";
   const variants = {
     primary:
       "bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white",

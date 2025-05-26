@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
-import { Plus, FileText } from "lucide-react";
+import { Plus, FileText, Menu } from "lucide-react";
+import { useTaskForm } from "@/contexts/TaskFormContext";
 
 // Import the dashboard-specific components
 import { PageHeader } from "./dashboard/PageHeader";
@@ -13,8 +14,9 @@ import {
   HelpButton,
 } from "./dashboard/ActionButtons";
 
-const ActivityBar = ({ className = "" }) => {
+const ActivityBar = ({ className = "", onMobileMenuClick }) => {
   const pathname = usePathname();
+  const { openTaskForm } = useTaskForm();
 
   // Get current page title from path
   const pageTitle = useMemo(() => {
@@ -29,9 +31,20 @@ const ActivityBar = ({ className = "" }) => {
     <div
       className={`py-4 px-4 md:px-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 ${className}`}
     >
+      {" "}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        {/* Left side - Page title and breadcrumbs */}
-        <PageHeader title={pageTitle} />
+        {/* Left side - Mobile menu button and Page title */}
+        <div className="flex items-center gap-3">
+          {/* Mobile menu button */}{" "}
+          <button
+            onClick={onMobileMenuClick}
+            className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300 transition-all duration-200 hover:scale-105 active:scale-95"
+            aria-label="Open sidebar"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          <PageHeader title={pageTitle} />
+        </div>
         {/* Right side - Actions and utilities */}
         <div className="flex items-center gap-2 md:gap-3 self-end sm:self-center">
           {" "}
@@ -43,7 +56,7 @@ const ActivityBar = ({ className = "" }) => {
             variant="primary"
             icon={<Plus className="w-4 h-4" />}
             className="hidden sm:flex"
-            onClick={() => setShowForm(true)}
+            onClick={() => openTaskForm()}
           >
             Create Task
           </ActionButton>
@@ -51,6 +64,7 @@ const ActivityBar = ({ className = "" }) => {
             variant="primary"
             icon={<Plus className="w-4 h-4" />}
             className="sm:hidden"
+            onClick={() => openTaskForm()}
             aria-label="Create Task"
           />
           <ActionButton

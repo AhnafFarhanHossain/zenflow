@@ -4,18 +4,18 @@ import { useState, useEffect } from "react";
 import { ActionButton } from "@/components/dashboard/ActionButtons";
 import { Plus, Trash2 } from "lucide-react"; // Added Trash2 import
 import { getTasks } from "@/utils/getTasks";
-import TaskForm from "@/components/dashboard/Taskform";
 import { supabase } from "@/utils/supabase";
 import { toast } from "sonner";
 import { updateTaskStatus } from "@/utils/updateTaskStatus";
 import { deleteTask } from "@/utils/deleteTask"; // Import deleteTask
 import { useUser } from "@clerk/nextjs";
+import { useTaskForm } from "@/contexts/TaskFormContext";
 
 const Tasks = () => {
   const { user, isLoaded } = useUser();
+  const { openTaskForm } = useTaskForm();
   const [sorting, setSorting] = useState({ field: "title", direction: "asc" });
   const [filters, setFilters] = useState({ status: "all", priority: "all" });
-  const [showForm, setShowForm] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -71,10 +71,8 @@ const Tasks = () => {
       setTasks([]);
     }
   }, [user?.id, isLoaded]);
-
-  const handleFormClose = () => {
-    setShowForm(false);
-    // Refresh tasks after form closes (task creation)
+  const handleTaskCreated = (newTask) => {
+    // Refresh tasks after task creation
     if (user?.id) {
       fetchTasks();
     }
@@ -248,32 +246,23 @@ const Tasks = () => {
               </svg>
             </div>
           </div>
-        </div>
+        </div>{" "}
         <ActionButton
           variant="primary"
           icon={<Plus className="w-4 h-4" />}
           className="hidden sm:flex"
-          onClick={() => setShowForm(true)}
+          onClick={() => openTaskForm(handleTaskCreated)}
         >
           New Task
         </ActionButton>
         <button
           className="sm:hidden p-2 bg-gray-900 hover:bg-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700 text-white shadow-sm border border-gray-700 dark:border-gray-600 rounded-md"
-          onClick={() => setShowForm(true)}
+          onClick={() => openTaskForm(handleTaskCreated)}
           aria-label="New Task"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4" />{" "}
         </button>
       </div>
-      {/* Task Form Modal */}
-      {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-black dark:bg-opacity-60 z-40 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-900 shadow-xl w-full max-w-xl relative overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
-            {" "}
-            <TaskForm onClose={handleFormClose} handleClose={handleFormClose} />
-          </div>
-        </div>
-      )}
       {/* Tasks Table */}
       <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg">
         <div className="overflow-x-auto">
@@ -536,9 +525,9 @@ const Tasks = () => {
                       <p className="text-gray-400 dark:text-gray-500 text-sm max-w-sm text-center mb-6">
                         Create your first task to start organizing your work and
                         boost your productivity.
-                      </p>
+                      </p>{" "}
                       <button
-                        onClick={() => setShowForm(true)}
+                        onClick={() => openTaskForm(handleTaskCreated)}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium transition-colors border border-gray-700"
                       >
                         <Plus className="w-4 h-4" />

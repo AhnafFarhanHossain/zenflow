@@ -25,11 +25,10 @@ const Button = ({
     ghost:
       "hover:bg-gray-100 focus:ring-blue-500 text-gray-700 dark:hover:bg-gray-700 dark:focus:ring-blue-600 dark:text-gray-200",
   };
-
   const sizeStyles = {
-    sm: "px-3 py-1.5 text-xs",
-    md: "px-4 py-2 text-sm",
-    lg: "px-6 py-2.5 text-base",
+    sm: "px-3 py-1.5 text-sm sm:text-xs",
+    md: "px-4 py-2.5 sm:py-2 text-base sm:text-sm font-medium",
+    lg: "px-6 py-3 sm:py-2.5 text-lg sm:text-base font-medium",
   };
 
   const disabledStyles = disabled ? "opacity-50 cursor-not-allowed" : "";
