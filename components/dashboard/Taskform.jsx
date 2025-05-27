@@ -162,6 +162,7 @@ const TaskForm = ({ handleClose }) => {
               id="due-date"
               onChange={(e) => setdue_date(e.target.value)}
               value={due_date || ""}
+              min={new Date().toISOString().split('T')[0]} // Block past dates
               className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-base sm:text-base lg:text-sm"
             />
             {errors.due_date && (

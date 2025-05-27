@@ -136,11 +136,7 @@ const Sidebar = ({ activePath, mobileOpen = false, onMobileClose }) => {
                   />{" "}
                   {!collapsed && (
                     <span
-                      className={`${
-                        isDashboard
-                          ? "text-base sm:text-sm lg:text-sm"
-                          : "text-sm sm:text-sm lg:text-xs"
-                      } font-medium`}
+                      className={"text-base sm:text-sm lg:text-sm font-medium"}
                     >
                       {item.name}
                     </span>
