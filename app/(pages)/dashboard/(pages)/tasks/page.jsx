@@ -10,11 +10,13 @@ import { updateTaskStatus } from "@/utils/updateTaskStatus";
 import { deleteTask } from "@/utils/deleteTask"; // Import deleteTask
 import { useUser } from "@clerk/nextjs";
 import { useTaskForm } from "@/contexts/TaskFormContext";
+import { useAnalytics } from "@/contexts/AnalyticsContext";
 import { deleteAllTasks } from "@/utils/deleteAllTasks";
 
 const Tasks = () => {
   const { user, isLoaded } = useUser();
   const { openTaskForm } = useTaskForm();
+  const { refreshAnalytics } = useAnalytics();
   const [sorting, setSorting] = useState({ field: "title", direction: "asc" });
   const [filters, setFilters] = useState({ status: "all", priority: "all" });
   const [tasks, setTasks] = useState([]);
@@ -76,6 +78,7 @@ const Tasks = () => {
     // Refresh tasks after task creation
     if (user?.id) {
       fetchTasks();
+      refreshAnalytics(); // Refresh analytics when task is created
     }
   };
   const handleToggleComplete = async (taskId) => {
@@ -119,6 +122,7 @@ const Tasks = () => {
         )
       );
       // toast.success("Task status updated!"); // Optional: Consider if needed, as util might show toast
+      refreshAnalytics(); // Refresh analytics when task status is updated
     }
   };
   const handleDeleteTask = async (taskId) => {
@@ -129,13 +133,13 @@ const Tasks = () => {
 
     if (error) {
       // Error toast is handled in deleteTask, but you can add more specific UI updates here
-      // For example, re-enable a delete button if it was disabled
-    } else {
+      // For example, re-enable a delete button if it was disabled    } else {
       // Remove the task from the local state to update the UI
       setTasks((currentTasks) =>
         currentTasks.filter((task) => task.id !== taskId)
       );
       toast.success("Task deleted successfully!");
+      refreshAnalytics(); // Refresh analytics when task is deleted
     }
   };
 
@@ -157,10 +161,10 @@ const Tasks = () => {
     const { error } = await deleteAllTasks(user.id);
 
     if (error) {
-      // Error toast is handled in deleteAllTasks function
-    } else {
+      // Error toast is handled in deleteAllTasks function    } else {
       // Clear all tasks from local state
       setTasks([]);
+      refreshAnalytics(); // Refresh analytics when all tasks are deleted
     }
   };
 
