@@ -12,6 +12,7 @@ import { useUser } from "@clerk/nextjs";
 import { useTaskForm } from "@/contexts/TaskFormContext";
 import { useAnalytics } from "@/contexts/AnalyticsContext";
 import { deleteAllTasks } from "@/utils/deleteAllTasks";
+import SearchBar from "@/components/Searchbar";
 
 const Tasks = () => {
   const { user, isLoaded } = useUser();
@@ -21,6 +22,28 @@ const Tasks = () => {
   const [filters, setFilters] = useState({ status: "all", priority: "all" });
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const tasks = await getTasks();
+      setTasks(tasks);
+      setFilteredTasks(tasks);
+    };
+
+    fetchTasks();
+  }, []);
+
+  const handleSearch = (query) => {
+    if (query) {
+      const filtered = tasks.filter((task) =>
+        task.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredTasks(filtered);
+    } else {
+      setFilteredTasks(tasks);
+    }
+  };
 
   const fetchTasks = async () => {
     if (!user?.id) {
@@ -74,6 +97,7 @@ const Tasks = () => {
       setTasks([]);
     }
   }, [user?.id, isLoaded]);
+
   const handleTaskCreated = (newTask) => {
     // Refresh tasks after task creation
     if (user?.id) {
@@ -81,6 +105,7 @@ const Tasks = () => {
       refreshAnalytics(); // Refresh analytics when task is created
     }
   };
+
   const handleToggleComplete = async (taskId) => {
     if (!user?.id) {
       toast.error("User not authenticated");
@@ -115,7 +140,7 @@ const Tasks = () => {
             ? {
                 ...task,
                 status: data.status, // Update status from response
-                completed: data.status === "done", // Re-derive completed                // Ensure priority is preserved or defaulted if not in `data`
+                completed: data.status === "done", // Re-derive completed
                 priority: data.priority || taskToUpdate.priority || "Easy",
               }
             : task
@@ -125,6 +150,7 @@ const Tasks = () => {
       refreshAnalytics(); // Refresh analytics when task status is updated
     }
   };
+
   const handleDeleteTask = async (taskId) => {
     // Optimistically update UI or show a confirmation dialog first (optional)
     // For example, you could set a temporary state to indicate deletion
@@ -133,7 +159,8 @@ const Tasks = () => {
 
     if (error) {
       // Error toast is handled in deleteTask, but you can add more specific UI updates here
-      // For example, re-enable a delete button if it was disabled    } else {
+      // For example, re-enable a delete button if it was disabled
+    } else {
       // Remove the task from the local state to update the UI
       setTasks((currentTasks) =>
         currentTasks.filter((task) => task.id !== taskId)
@@ -161,43 +188,49 @@ const Tasks = () => {
     const { error } = await deleteAllTasks(user.id);
 
     if (error) {
-      // Error toast is handled in deleteAllTasks function    } else {
+      // Error toast is handled in deleteAllTasks function
+    } else {
       // Clear all tasks from local state
       setTasks([]);
       refreshAnalytics(); // Refresh analytics when all tasks are deleted
     }
   };
 
-  const filteredAndSortedTasks = tasks
-    .filter((task) => {
-      const statusMatch =
-        filters.status === "all" ||
-        (filters.status === "done" && task.status === "done") ||
-        (filters.status === "todo" && task.status === "todo") ||
-        (filters.status === "in-progress" && task.status === "in-progress");
-      const priorityMatch =
-        filters.priority === "all" || task.priority === filters.priority;
-      return statusMatch && priorityMatch;
-    })
-    .sort((a, b) => {
-      if (sorting.field) {
-        let fieldA = a[sorting.field];
-        let fieldB = b[sorting.field];
+  const filteredByStatusAndPriority = tasks.filter((task) => {
+    const statusMatch =
+      filters.status === "all" ||
+      (filters.status === "done" && task.status === "done") ||
+      (filters.status === "todo" && task.status === "todo") ||
+      (filters.status === "in-progress" && task.status === "in-progress");
 
-        if (sorting.field === "dueDate") {
-          fieldA = a.due_date ? new Date(a.due_date) : new Date(0); // Handle null/undefined due dates
-          fieldB = b.due_date ? new Date(b.due_date) : new Date(0);
-        }
+    const priorityMatch =
+      filters.priority === "all" || task.priority === filters.priority;
 
-        if (fieldA < fieldB) {
-          return sorting.direction === "asc" ? -1 : 1;
-        }
-        if (fieldA > fieldB) {
-          return sorting.direction === "asc" ? 1 : -1;
-        }
-      }
-      return 0;
-    });
+    return statusMatch && priorityMatch;
+  });
+  const sortedTasks = filteredByStatusAndPriority.sort((a, b) => {
+    if (!sorting.field) return 0;
+
+    let fieldA = a[sorting.field];
+    let fieldB = b[sorting.field];
+
+    if (sorting.field === "dueDate") {
+      fieldA = a.due_date ? new Date(a.due_date) : new Date(0); // Handle null/undefined due dates
+      fieldB = b.due_date ? new Date(b.due_date) : new Date(0);
+    }
+
+    if (fieldA < fieldB) {
+      return sorting.direction === "asc" ? -1 : 1;
+    }
+    if (fieldA > fieldB) {
+      return sorting.direction === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
+
+  const filteredAndSortedTasks = filteredByStatusAndPriority.filter((task) =>
+    filteredTasks.some((t) => t.id === task.id)
+  );
 
   return (
     <div className="w-full">
@@ -277,6 +310,10 @@ const Tasks = () => {
           </div>
         </div>{" "}
         <div className="flex gap-4">
+          <SearchBar
+            placeholder={"Search through your tasks..."}
+            onSearch={handleSearch}
+          />
           <ActionButton
             variant="primary"
             icon={<Plus className="w-4 h-4" />}
