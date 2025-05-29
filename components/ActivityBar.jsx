@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Plus, FileText, Menu } from "lucide-react";
 import { useTaskForm } from "@/contexts/TaskFormContext";
 
@@ -13,10 +13,46 @@ import {
   NotificationBell,
   HelpButton,
 } from "./dashboard/ActionButtons";
+import { useUser } from "@clerk/nextjs";
+import { supabase } from "@/utils/supabase";
 
 const ActivityBar = ({ className = "", onMobileMenuClick }) => {
   const pathname = usePathname();
   const { openTaskForm } = useTaskForm();
+  const { user } = useUser();
+  const [upcomingTasks, setUpcomingTasks] = useState([]);
+
+  useEffect(() => {
+    const fetchUpcomingTasks = async () => {
+      if (!user) return;
+
+      const now = new Date();
+      const tomorrow = new Date(now);
+      tomorrow.setDate(now.getDate() + 1);
+
+      const { data, error } = await supabase
+        .from("tasks")
+        .select("id, title, due_date")
+        .eq("user_id", user.id)
+        .lt("due_date", tomorrow.toISOString())
+        .gte("due_date", now.toISOString()) // Tasks due from now until tomorrow
+        .neq("status", "done") // Exclude completed tasks
+        .order("due_date", { ascending: true }); // Order by due date
+
+      if (error) {
+        console.error("Error fetching upcoming tasks:", error);
+        setUpcomingTasks([]); // Set to empty array on error
+        return;
+      }
+      setUpcomingTasks(data || []);
+    };
+
+    fetchUpcomingTasks();
+    // Optionally, set up a poller or real-time listener if tasks can change frequently
+    const intervalId = setInterval(fetchUpcomingTasks, 60000); // Refresh every minute
+
+    return () => clearInterval(intervalId);
+  }, [user]);
 
   // Get current page title from path
   const pageTitle = useMemo(() => {
@@ -81,7 +117,7 @@ const ActivityBar = ({ className = "", onMobileMenuClick }) => {
             aria-label="Create Note"
           />
           <div className="h-6 mx-1 border-l border-gray-200 dark:border-gray-700 hidden md:block" />
-          <NotificationBell />
+          <NotificationBell upcomingTasks={upcomingTasks} />
           <HelpButton className="hidden sm:block" />
         </div>
       </div>

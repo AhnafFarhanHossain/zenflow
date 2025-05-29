@@ -22,27 +22,10 @@ const Tasks = () => {
   const [filters, setFilters] = useState({ status: "all", priority: "all" });
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filteredTasks, setFilteredTasks] = useState([]);
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const tasks = await getTasks();
-      setTasks(tasks);
-      setFilteredTasks(tasks);
-    };
-
-    fetchTasks();
-  }, []);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (query) => {
-    if (query) {
-      const filtered = tasks.filter((task) =>
-        task.title.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredTasks(filtered);
-    } else {
-      setFilteredTasks(tasks);
-    }
+    setSearchQuery(query);
   };
 
   const fetchTasks = async () => {
@@ -81,6 +64,7 @@ const Tasks = () => {
         };
       });
       setTasks(processedTasks);
+      setSearchQuery(""); // Reset search when fetching new tasks
     } catch (error) {
       console.error("Error fetching tasks:", error);
       setTasks([]);
@@ -195,42 +179,45 @@ const Tasks = () => {
       refreshAnalytics(); // Refresh analytics when all tasks are deleted
     }
   };
+  const filteredAndSortedTasks = tasks
+    .filter((task) => {
+      // Search filter
+      const matchesSearch = searchQuery === "" || 
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase()));
 
-  const filteredByStatusAndPriority = tasks.filter((task) => {
-    const statusMatch =
-      filters.status === "all" ||
-      (filters.status === "done" && task.status === "done") ||
-      (filters.status === "todo" && task.status === "todo") ||
-      (filters.status === "in-progress" && task.status === "in-progress");
+      // Status filter
+      const statusMatch =
+        filters.status === "all" ||
+        (filters.status === "done" && task.status === "done") ||
+        (filters.status === "todo" && task.status === "todo") ||
+        (filters.status === "in-progress" && task.status === "in-progress");
 
-    const priorityMatch =
-      filters.priority === "all" || task.priority === filters.priority;
+      // Priority filter
+      const priorityMatch =
+        filters.priority === "all" || task.priority === filters.priority;
 
-    return statusMatch && priorityMatch;
-  });
-  const sortedTasks = filteredByStatusAndPriority.sort((a, b) => {
-    if (!sorting.field) return 0;
+      return matchesSearch && statusMatch && priorityMatch;
+    })
+    .sort((a, b) => {
+      if (sorting.field) {
+        let fieldA = a[sorting.field];
+        let fieldB = b[sorting.field];
 
-    let fieldA = a[sorting.field];
-    let fieldB = b[sorting.field];
+        if (sorting.field === "dueDate") {
+          fieldA = a.due_date ? new Date(a.due_date) : new Date(0); // Handle null/undefined due dates
+          fieldB = b.due_date ? new Date(b.due_date) : new Date(0);
+        }
 
-    if (sorting.field === "dueDate") {
-      fieldA = a.due_date ? new Date(a.due_date) : new Date(0); // Handle null/undefined due dates
-      fieldB = b.due_date ? new Date(b.due_date) : new Date(0);
-    }
-
-    if (fieldA < fieldB) {
-      return sorting.direction === "asc" ? -1 : 1;
-    }
-    if (fieldA > fieldB) {
-      return sorting.direction === "asc" ? 1 : -1;
-    }
-    return 0;
-  });
-
-  const filteredAndSortedTasks = filteredByStatusAndPriority.filter((task) =>
-    filteredTasks.some((t) => t.id === task.id)
-  );
+        if (fieldA < fieldB) {
+          return sorting.direction === "asc" ? -1 : 1;
+        }
+        if (fieldA > fieldB) {
+          return sorting.direction === "asc" ? 1 : -1;
+        }
+      }
+      return 0;
+    });
 
   return (
     <div className="w-full">
