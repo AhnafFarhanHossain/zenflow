@@ -1,9 +1,11 @@
 import { toast } from "sonner";
+import { getSupabaseWithAuth } from "./supabaseWithAuth";
 
-export const updateTaskStatus = async (supabase, taskId, currentStatus) => {
+export const updateTaskStatus = async (getToken, taskId, currentStatus) => {
   const newStatus = currentStatus === "done" ? "todo" : "done";
 
   try {
+    const supabase = await getSupabaseWithAuth(getToken);
     const { data, error } = await supabase
       .from("tasks")
       .update({ status: newStatus })

@@ -1,12 +1,12 @@
 import { getSupabaseWithAuth } from "./supabaseWithAuth";
 
-export const getTasks = async (getToken, userId = null) => {
+export const getNotes = async (getToken, userId = null) => {
   try {
-    console.log("Fetching tasks for user:", userId); // Debug log
+    console.log("Fetching notes for user:", userId); // Debug log
 
     const supabase = await getSupabaseWithAuth(getToken);
     let query = supabase
-      .from("tasks")
+      .from("notes")
       .select("*")
       .order("created_at", { ascending: false });
 
@@ -18,14 +18,14 @@ export const getTasks = async (getToken, userId = null) => {
     const { data, error } = await query;
 
     if (error) {
-      console.error("Error fetching tasks:", error);
+      console.error("Error fetching notes:", error);
       return [];
     }
 
-    console.log("Fetched tasks:", data); // Debug log
+    console.log("Fetched notes:", data); // Debug log
     return data || [];
   } catch (err) {
-    console.error("Unexpected error fetching tasks:", err);
+    console.error("Unexpected error fetching notes:", err);
     return [];
   }
 };

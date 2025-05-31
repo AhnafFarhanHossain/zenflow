@@ -1,8 +1,9 @@
-import { supabase } from "./supabase";
+import { getSupabaseWithAuth } from "./supabaseWithAuth";
 import { toast } from "sonner"; // Added toast import
 
-export const deleteTask = async (id) => {
+export const deleteTask = async (getToken, id) => {
   try {
+    const supabase = await getSupabaseWithAuth(getToken);
     const { data, error } = await supabase
       .from("tasks")
       .delete()

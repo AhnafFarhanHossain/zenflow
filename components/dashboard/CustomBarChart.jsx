@@ -9,7 +9,15 @@ import {
   Legend,
 } from "recharts";
 
-const CustomBarChart = ({ data, title, height = 300 }) => {
+const CustomBarChart = ({
+  data,
+  title,
+  height = 300,
+  dataKey = "tasks",
+  secondaryDataKey = "completed",
+  dataLabel = "Total Tasks",
+  secondaryLabel = "Completed",
+}) => {
   if (!data || data.length === 0) {
     return (
       <div className="flex items-center justify-center h-64 text-gray-500 dark:text-gray-400">
@@ -76,17 +84,17 @@ const CustomBarChart = ({ data, title, height = 300 }) => {
               paddingTop: "20px",
               fontSize: "14px",
             }}
-          />
+          />{" "}
           <Bar
-            dataKey="tasks"
+            dataKey={dataKey}
             fill="#3B82F6"
-            name="Total Tasks"
+            name={dataLabel}
             radius={[4, 4, 0, 0]}
           />
           <Bar
-            dataKey="completed"
+            dataKey={secondaryDataKey}
             fill="#10B981"
-            name="Completed"
+            name={secondaryLabel}
             radius={[4, 4, 0, 0]}
           />
         </BarChart>

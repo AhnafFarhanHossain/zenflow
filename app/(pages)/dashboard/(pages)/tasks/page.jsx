@@ -4,11 +4,10 @@ import { useState, useEffect } from "react";
 import { ActionButton } from "@/components/dashboard/ActionButtons";
 import { Plus, Trash2, Trash } from "lucide-react"; // Added Trash2 and Trash import
 import { getTasks } from "@/utils/getTasks";
-import { supabase } from "@/utils/supabase";
 import { toast } from "sonner";
 import { updateTaskStatus } from "@/utils/updateTaskStatus";
 import { deleteTask } from "@/utils/deleteTask"; // Import deleteTask
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
 import { useTaskForm } from "@/contexts/TaskFormContext";
 import { useAnalytics } from "@/contexts/AnalyticsContext";
 import { deleteAllTasks } from "@/utils/deleteAllTasks";
@@ -16,6 +15,7 @@ import SearchBar from "@/components/Searchbar";
 
 const Tasks = () => {
   const { user, isLoaded } = useUser();
+  const { getToken } = useAuth();
   const { openTaskForm } = useTaskForm();
   const { refreshAnalytics } = useAnalytics();
   const [sorting, setSorting] = useState({ field: "title", direction: "asc" });
@@ -27,7 +27,6 @@ const Tasks = () => {
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
-
   const fetchTasks = async () => {
     if (!user?.id) {
       console.log("No user ID available");
@@ -39,7 +38,7 @@ const Tasks = () => {
     setLoading(true);
     try {
       console.log("Fetching tasks for user:", user.id);
-      const fetchedTasks = await getTasks(user.id);
+      const fetchedTasks = await getTasks(getToken, user.id);
       const processedTasks = (fetchedTasks || []).map((task) => {
         const priorityString = String(task.priority || "").trim(); // Trim once
         let priorityValue = "Easy"; // Default to 'Easy'
@@ -100,14 +99,11 @@ const Tasks = () => {
     if (!taskToUpdate) {
       toast.error("Task not found.");
       return;
-    }
-
-    // Call the utility function to update task status
+    } // Call the utility function to update task status
     const { data, error } = await updateTaskStatus(
-      supabase,
+      getToken,
       taskId,
-      taskToUpdate.status,
-      user.id
+      taskToUpdate.status
     );
 
     if (error) {
@@ -134,12 +130,11 @@ const Tasks = () => {
       refreshAnalytics(); // Refresh analytics when task status is updated
     }
   };
-
   const handleDeleteTask = async (taskId) => {
     // Optimistically update UI or show a confirmation dialog first (optional)
     // For example, you could set a temporary state to indicate deletion
 
-    const { error } = await deleteTask(taskId);
+    const { error } = await deleteTask(getToken, taskId);
 
     if (error) {
       // Error toast is handled in deleteTask, but you can add more specific UI updates here
@@ -169,7 +164,7 @@ const Tasks = () => {
       return;
     }
 
-    const { error } = await deleteAllTasks(user.id);
+    const { error } = await deleteAllTasks(getToken);
 
     if (error) {
       // Error toast is handled in deleteAllTasks function
@@ -182,9 +177,11 @@ const Tasks = () => {
   const filteredAndSortedTasks = tasks
     .filter((task) => {
       // Search filter
-      const matchesSearch = searchQuery === "" || 
+      const matchesSearch =
+        searchQuery === "" ||
         task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase()));
+        (task.description &&
+          task.description.toLowerCase().includes(searchQuery.toLowerCase()));
 
       // Status filter
       const statusMatch =

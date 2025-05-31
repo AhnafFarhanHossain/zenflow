@@ -5,10 +5,11 @@ import { X } from "lucide-react";
 import Button from "./Button";
 import { toast } from "sonner";
 import { createTask } from "@/utils/createTask";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
 
 const TaskForm = ({ handleClose }) => {
   const { user } = useUser();
+  const { getToken } = useAuth();
   const user_id = user?.id;
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("");
@@ -63,10 +64,9 @@ const TaskForm = ({ handleClose }) => {
         due_date,
         status: "todo",
       };
-
       console.log("Creating task with data:", taskdata); // Debug log
 
-      const result = await createTask({ taskdata });
+      const result = await createTask({ taskdata }, getToken);
 
       if (result.error) {
         console.error("Task creation error:", result.error);
@@ -162,7 +162,7 @@ const TaskForm = ({ handleClose }) => {
               id="due-date"
               onChange={(e) => setdue_date(e.target.value)}
               value={due_date || ""}
-              min={new Date().toISOString().split('T')[0]} // Block past dates
+              min={new Date().toISOString().split("T")[0]} // Block past dates
               className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-base sm:text-base lg:text-sm"
             />
             {errors.due_date && (

@@ -7,6 +7,10 @@ import {
   BarChartHorizontal,
   AlertTriangle,
   TrendingUp,
+  FileText,
+  PenTool,
+  BookOpen,
+  Edit3,
 } from "lucide-react";
 import { useAnalytics } from "@/contexts/AnalyticsContext";
 import MetricCard from "@/components/dashboard/MetricCard";
@@ -20,7 +24,6 @@ const Dashboard = () => {
 
   // Calculate time tracked based on completed tasks (mock calculation)
   const timeTracked = analytics.completedTasks * 0.9; // Assume 0.9 hours per completed task
-
   const stats = [
     {
       title: "Tasks Pending",
@@ -34,10 +37,15 @@ const Dashboard = () => {
           : null,
     },
     {
-      title: "Calendar Events",
-      value: "3",
-      icon: Calendar,
-      color: "green",
+      title: "Total Notes",
+      value: analytics.totalNotes,
+      icon: FileText,
+      color: "purple",
+      trend: analytics.thisWeekNotes > 0 ? "up" : "neutral",
+      trendValue:
+        analytics.thisWeekNotes > 0
+          ? `+${analytics.thisWeekNotes} this week`
+          : null,
     },
     {
       title: "Time Tracked",
@@ -72,12 +80,11 @@ const Dashboard = () => {
       <header className="bg-white border border-gray-200 rounded-md p-4 sm:p-6 dark:bg-gray-900 dark:border-gray-700">
         <h1 className="text-lg sm:text-xl lg:text-lg font-semibold text-gray-900 dark:text-gray-100">
           Welcome back, {user?.firstName || "User"}
-        </h1>
+        </h1>{" "}
         <p className="text-sm sm:text-base lg:text-sm text-gray-600 dark:text-gray-300 mt-1 leading-relaxed">
-          Here's what's happening with your tasks today.
+          Here's what's happening with your tasks and notes today.
         </p>
       </header>
-
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
@@ -93,7 +100,6 @@ const Dashboard = () => {
           />
         ))}
       </div>
-
       {/* Analytics Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Productivity Ring */}
@@ -131,7 +137,6 @@ const Dashboard = () => {
             </p>
           </div>
         </div>
-
         {/* Task Priority Distribution */}
         <div className="bg-white border border-gray-200 rounded-lg p-6 dark:bg-gray-900 dark:border-gray-700">
           <CustomPieChart
@@ -140,7 +145,6 @@ const Dashboard = () => {
             height={250}
           />
         </div>
-
         {/* Task Status Distribution */}
         <div className="bg-white border border-gray-200 rounded-lg p-6 dark:bg-gray-900 dark:border-gray-700">
           <CustomPieChart
@@ -148,9 +152,57 @@ const Dashboard = () => {
             title="Tasks by Status"
             height={250}
           />
+        </div>{" "}
+      </div>
+      {/* Note Analytics Section */}
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+          <BookOpen className="w-5 h-5" />
+          Note Analytics
+        </h2>
+        {/* Note Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <MetricCard
+            title="Total Notes"
+            value={analytics.totalNotes}
+            icon={FileText}
+            color="purple"
+            loading={loading}
+          />
+          <MetricCard
+            title="Notes Created Today"
+            value={analytics.notesCreatedToday}
+            icon={Edit3}
+            color="green"
+            loading={loading}
+          />
+          <MetricCard
+            title="Active Notes"
+            value={analytics.recentlyModifiedNotes}
+            icon={PenTool}
+            color="indigo"
+            loading={loading}
+          />
+          <MetricCard
+            title="Updated Today"
+            value={analytics.notesUpdatedToday}
+            icon={BarChartHorizontal}
+            color="blue"
+            loading={loading}
+          />
+        </div>{" "}
+        {/* Note Weekly Progress */}
+        <div className="bg-white border border-gray-200 rounded-lg p-6 dark:bg-gray-900 dark:border-gray-700">
+          <CustomBarChart
+            data={analytics.notesWeeklyData}
+            title="Weekly Note Activity"
+            height={250}
+            dataKey="notes"
+            secondaryDataKey="modified"
+            secondaryLabel="Modified"
+          />
         </div>
       </div>
-
       {/* Weekly Progress Chart */}
       <div className="bg-white border border-gray-200 rounded-lg p-6 dark:bg-gray-900 dark:border-gray-700">
         <CustomBarChart
@@ -159,7 +211,6 @@ const Dashboard = () => {
           height={300}
         />
       </div>
-
       {/* Additional Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
@@ -190,33 +241,70 @@ const Dashboard = () => {
           color="red"
           loading={loading}
         />
-      </div>
-
+      </div>{" "}
       {/* Quick Insights */}
-      {!loading && analytics.totalTasks > 0 && (
+      {!loading && (analytics.totalTasks > 0 || analytics.totalNotes > 0) && (
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
             📊 Quick Insights
           </h3>
           <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-            <p>
-              • You have completed <strong>{analytics.completionRate}%</strong>{" "}
-              of your tasks
-            </p>
-            <p>
-              • <strong>{analytics.thisWeekTasks}</strong> tasks created this
-              week, <strong>{analytics.thisWeekCompleted}</strong> completed
-            </p>
-            {analytics.overdueTasks > 0 && (
-              <p className="text-red-600 dark:text-red-400">
-                • ⚠️ You have <strong>{analytics.overdueTasks}</strong> overdue
-                task{analytics.overdueTasks > 1 ? "s" : ""} that need attention
-              </p>
-            )}
-            {analytics.productivity >= 80 && (
-              <p className="text-green-600 dark:text-green-400">
-                • 🎉 Great job! Your productivity is excellent
-              </p>
+            {analytics.totalTasks > 0 && (
+              <>
+                <p>
+                  • You have completed{" "}
+                  <strong>{analytics.completionRate}%</strong> of your tasks
+                </p>
+                <p>
+                  • <strong>{analytics.thisWeekTasks}</strong> tasks created
+                  this week, <strong>{analytics.thisWeekCompleted}</strong>{" "}
+                  completed
+                </p>
+                {analytics.overdueTasks > 0 && (
+                  <p className="text-red-600 dark:text-red-400">
+                    • ⚠️ You have <strong>{analytics.overdueTasks}</strong>{" "}
+                    overdue task{analytics.overdueTasks > 1 ? "s" : ""} that
+                    need attention
+                  </p>
+                )}
+                {analytics.productivity >= 80 && (
+                  <p className="text-green-600 dark:text-green-400">
+                    • 🎉 Great job! Your productivity is excellent
+                  </p>
+                )}
+              </>
+            )}{" "}
+            {analytics.totalNotes > 0 && (
+              <>
+                <p>
+                  • You have <strong>{analytics.totalNotes}</strong> note
+                  {analytics.totalNotes > 1 ? "s" : ""} in your collection
+                </p>
+                <p>
+                  • <strong>{analytics.thisWeekNotes}</strong> notes created
+                  this week
+                </p>
+                {analytics.notesCreatedToday > 0 && (
+                  <p className="text-green-600 dark:text-green-400">
+                    • ✍️ You've been productive today with{" "}
+                    <strong>{analytics.notesCreatedToday}</strong> new note
+                    {analytics.notesCreatedToday > 1 ? "s" : ""}
+                  </p>
+                )}
+                {analytics.notesUpdatedToday > 0 && (
+                  <p className="text-blue-600 dark:text-blue-400">
+                    • 📝 <strong>{analytics.notesUpdatedToday}</strong> note
+                    {analytics.notesUpdatedToday > 1 ? "s" : ""} updated today
+                  </p>
+                )}
+                {analytics.recentlyModifiedNotes > 0 && (
+                  <p className="text-purple-600 dark:text-purple-400">
+                    • 🔄 <strong>{analytics.recentlyModifiedNotes}</strong> note
+                    {analytics.recentlyModifiedNotes > 1 ? "s" : ""} recently
+                    modified (last 3 days)
+                  </p>
+                )}
+              </>
             )}
           </div>
         </div>

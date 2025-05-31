@@ -1,6 +1,6 @@
-import { supabase } from "./supabase";
+import { getSupabaseWithAuth } from "./supabaseWithAuth";
 
-export async function createTask({ taskdata }) {
+export async function createTask({ taskdata }, getToken) {
   try {
     // Validate required fields
     if (!taskdata.user_id) {
@@ -17,6 +17,7 @@ export async function createTask({ taskdata }) {
 
     console.log("Inserting task data:", taskdata); // Debug log
 
+    const supabase = await getSupabaseWithAuth(getToken);
     const { data, error } = await supabase
       .from("tasks")
       .insert([

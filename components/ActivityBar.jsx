@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useMemo, useState, useEffect } from "react";
 import { Plus, FileText, Menu } from "lucide-react";
 import { useTaskForm } from "@/contexts/TaskFormContext";
+import { useNoteForm } from "@/contexts/NoteFormContext";
 
 // Import the dashboard-specific components
 import { PageHeader } from "./dashboard/PageHeader";
@@ -13,38 +14,45 @@ import {
   NotificationBell,
   HelpButton,
 } from "./dashboard/ActionButtons";
-import { useUser } from "@clerk/nextjs";
-import { supabase } from "@/utils/supabase";
+import { useUser, useAuth } from "@clerk/nextjs";
+import { getSupabaseWithAuth } from "@/utils/supabaseWithAuth";
 
 const ActivityBar = ({ className = "", onMobileMenuClick }) => {
   const pathname = usePathname();
   const { openTaskForm } = useTaskForm();
+  const { openNoteForm } = useNoteForm();
   const { user } = useUser();
+  const { getToken } = useAuth();
   const [upcomingTasks, setUpcomingTasks] = useState([]);
-
   useEffect(() => {
     const fetchUpcomingTasks = async () => {
       if (!user) return;
 
-      const now = new Date();
-      const tomorrow = new Date(now);
-      tomorrow.setDate(now.getDate() + 1);
+      try {
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(now.getDate() + 1);
 
-      const { data, error } = await supabase
-        .from("tasks")
-        .select("id, title, due_date")
-        .eq("user_id", user.id)
-        .lt("due_date", tomorrow.toISOString())
-        .gte("due_date", now.toISOString()) // Tasks due from now until tomorrow
-        .neq("status", "done") // Exclude completed tasks
-        .order("due_date", { ascending: true }); // Order by due date
+        const supabase = await getSupabaseWithAuth(getToken);
+        const { data, error } = await supabase
+          .from("tasks")
+          .select("id, title, due_date")
+          .eq("user_id", user.id)
+          .lt("due_date", tomorrow.toISOString())
+          .gte("due_date", now.toISOString()) // Tasks due from now until tomorrow
+          .neq("status", "done") // Exclude completed tasks
+          .order("due_date", { ascending: true }); // Order by due date
 
-      if (error) {
-        console.error("Error fetching upcoming tasks:", error);
-        setUpcomingTasks([]); // Set to empty array on error
-        return;
+        if (error) {
+          console.error("Error fetching upcoming tasks:", error);
+          setUpcomingTasks([]); // Set to empty array on error
+          return;
+        }
+        setUpcomingTasks(data || []);
+      } catch (error) {
+        console.error("Error in fetchUpcomingTasks:", error);
+        setUpcomingTasks([]);
       }
-      setUpcomingTasks(data || []);
     };
 
     fetchUpcomingTasks();
@@ -102,11 +110,12 @@ const ActivityBar = ({ className = "", onMobileMenuClick }) => {
             className="sm:hidden"
             onClick={() => openTaskForm()}
             aria-label="Create Task"
-          />
+          />{" "}
           <ActionButton
             variant="secondary"
             icon={<FileText className="w-4 h-4" />}
             className="hidden sm:flex"
+            onClick={() => openNoteForm()}
           >
             Create Note
           </ActionButton>
@@ -114,6 +123,7 @@ const ActivityBar = ({ className = "", onMobileMenuClick }) => {
             variant="secondary"
             icon={<FileText className="w-4 h-4" />}
             className="sm:hidden"
+            onClick={() => openNoteForm()}
             aria-label="Create Note"
           />
           <div className="h-6 mx-1 border-l border-gray-200 dark:border-gray-700 hidden md:block" />
