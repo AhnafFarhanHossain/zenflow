@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const maxDuration = 60; // Set to 60 seconds; adjust as needed (up to Vercel plan limits)
+
 export async function POST(request) {
   try {
     const { question } = await request.json();
@@ -20,7 +22,7 @@ export async function POST(request) {
           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "deepseek/deepseek-chat-v3-0324:free",
+          model: "meta-llama/llama-3.3-8b-instruct:free",
           messages: [
             {
               role: "system",
