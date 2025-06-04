@@ -31,6 +31,7 @@ export async function POST(request) {
             },
             { role: "user", content: question },
           ],
+          stream: true, // Enable streaming
         }),
       }
     );
@@ -48,9 +49,55 @@ export async function POST(request) {
       );
     }
 
-    const data = await response.json();
+    // Create a readable stream to forward the response
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
 
-    return NextResponse.json({ answer: data.choices[0].message.content });
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n');
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6);
+                if (data === '[DONE]') {
+                  controller.close();
+                  return;
+                }
+                
+                try {
+                  const parsed = JSON.parse(data);
+                  const content = parsed.choices?.[0]?.delta?.content;
+                  if (content) {
+                    controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ content })}\n\n`));
+                  }
+                } catch (e) {
+                  // Skip malformed JSON
+                }
+              }
+            }
+          }
+        } catch (error) {
+          controller.error(error);
+        } finally {
+          reader.releaseLock();
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
+    });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error" },
