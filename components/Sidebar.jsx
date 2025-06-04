@@ -6,7 +6,7 @@ import {
   CheckSquare,
   Calendar,
   StickyNote,
-  BarChart,
+  BotIcon,
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -48,9 +48,10 @@ const Sidebar = ({ activePath, mobileOpen = false, onMobileClose }) => {
       icon: StickyNote,
     },
     {
-      name: "Analytics",
-      href: "/dashboard/analytics",
-      icon: BarChart,
+      name: "AI Chatbot",
+      href: "/dashboard/chat",
+      icon: BotIcon,
+      hot: true, // Add hot tag
     },
   ];
   return (
@@ -80,7 +81,7 @@ const Sidebar = ({ activePath, mobileOpen = false, onMobileClose }) => {
             onClick={onMobileClose}
           >
             {" "}
-            {/* The logo placeholder */}{" "}
+            {/* The logo placeholder */} {" "}
             <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center text-gray-900 dark:text-gray-100 text-xs sm:text-sm font-bold">
               Z
             </div>
@@ -135,10 +136,15 @@ const Sidebar = ({ activePath, mobileOpen = false, onMobileClose }) => {
                     }`}
                   />{" "}
                   {!collapsed && (
-                    <span
-                      className={"text-base sm:text-sm lg:text-sm font-medium"}
-                    >
-                      {item.name}
+                    <span className="flex items-center justify-between w-full">
+                      <span className={"text-base sm:text-sm lg:text-sm font-medium"}>
+                        {item.name}
+                      </span>
+                      {item.hot && (
+                        <span className="px-2 py-0.5 bg-yellow-500 text-black text-xs font-semibold rounded-full">
+                          Hot
+                        </span>
+                      )}
                     </span>
                   )}
                 </Link>
@@ -149,7 +155,7 @@ const Sidebar = ({ activePath, mobileOpen = false, onMobileClose }) => {
       </nav>
 
       <div className="mt-auto border-t border-gray-200 pt-4 px-2 space-y-2 dark:border-gray-700">
-        {/* Settings link */}{" "}
+        {/* Settings link */} {" "}
         <Link
           href="/dashboard/settings"
           onClick={onMobileClose}
@@ -185,7 +191,7 @@ const Sidebar = ({ activePath, mobileOpen = false, onMobileClose }) => {
               collapsed ? "flex-col space-y-2 mt-2" : "items-center gap-1.5"
             }`}
           >
-            {/* Dark mode toggle */}{" "}
+            {/* Dark mode toggle */} {" "}
             <button
               onClick={() =>
                 mounted && setTheme(theme === "dark" ? "light" : "dark")
@@ -201,7 +207,7 @@ const Sidebar = ({ activePath, mobileOpen = false, onMobileClose }) => {
                   <Moon className="h-3.5 w-3.5" />
                 ))}
             </button>
-            {/* Sidebar toggle */}{" "}
+            {/* Sidebar toggle */} {" "}
             <button
               onClick={() => setCollapsed(!collapsed)}
               className="p-1 rounded-md border border-gray-200 hover:bg-gray-50 text-gray-600 hover:text-gray-900 dark:border-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 dark:hover:text-white"

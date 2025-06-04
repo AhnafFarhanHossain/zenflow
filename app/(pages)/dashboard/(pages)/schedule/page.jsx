@@ -432,21 +432,21 @@ const SchedulePage = () => {
               </div>
             </div>{" "}
             {/* Charts Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {/* Task Status Distribution */}
-              <div className="bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:border-gray-700 h-full flex flex-col">
-                <div className="p-4 sm:p-6 flex-grow flex flex-col">
-                  <div className="flex items-center gap-3 mb-4">
+              <div className="bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:border-gray-700">
+                <div className="p-4 sm:p-6">
+                  <div className="flex items-center gap-3 mb-6">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                       Task Status
                     </h3>
-                  </div>
-                  <div className="flex-grow flex items-center justify-center">
-                    <div className="w-full h-full flex items-center justify-center">
+                  </div>{" "}
+                  <div className="flex justify-center">
+                    <div className="w-full">
                       <CustomPieChart
                         data={getTaskStatusData()}
                         title="Task Status Distribution"
-                        height={350}
+                        height={300}
                       />
                     </div>
                   </div>
@@ -454,19 +454,19 @@ const SchedulePage = () => {
               </div>
 
               {/* Upcoming Tasks Timeline */}
-              <div className="bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:border-gray-700 h-full flex flex-col">
-                <div className="p-4 sm:p-6 flex-grow flex flex-col">
-                  <div className="flex items-center gap-3 mb-4">
+              <div className="bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:border-gray-700">
+                <div className="p-4 sm:p-6">
+                  <div className="flex items-center gap-3 mb-6">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                       Task Timeline
                     </h3>
-                  </div>
-                  <div className="flex-grow flex items-center justify-center">
-                    <div className="w-full h-full flex items-center justify-center">
+                  </div>{" "}
+                  <div className="flex justify-center">
+                    <div className="w-full">
                       <CustomPieChart
                         data={getUpcomingTasksData()}
                         title="Upcoming Tasks"
-                        height={350}
+                        height={300}
                       />
                     </div>
                   </div>
