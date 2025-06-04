@@ -49,20 +49,23 @@ export default function ChatBot() {
   useEffect(() => {
     if (chatContainerRef.current) {
       const container = chatContainerRef.current;
-      const isNearBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 100;
-      
+      const isNearBottom =
+        container.scrollHeight - container.scrollTop <=
+        container.clientHeight + 100;
+
       // Auto-scroll if user is near the bottom or if there's a streaming message
-      const hasStreamingMessage = chatLog.some(msg => msg.isStreaming);
+      const hasStreamingMessage = chatLog.some((msg) => msg.isStreaming);
       if (isNearBottom || hasStreamingMessage) {
         container.scrollTop = container.scrollHeight;
       }
     }
-  }, [chatLog]);  async function handleSend() {
+  }, [chatLog]);
+  async function handleSend() {
     if (!question.trim() || isLoading) return;
 
     const userMessage = { sender: user?.firstName || "You", text: question };
     const currentQuestion = question;
-    
+
     setQuestion("");
     setIsLoading(true);
 
@@ -105,10 +108,10 @@ export default function ChatBot() {
         if (done) break;
 
         const chunk = decoder.decode(value);
-        const lines = chunk.split('\n');
+        const lines = chunk.split("\n");
 
         for (const line of lines) {
-          if (line.startsWith('data: ')) {
+          if (line.startsWith("data: ")) {
             const data = line.slice(6);
             try {
               const parsed = JSON.parse(data);
@@ -174,8 +177,12 @@ export default function ChatBot() {
         <div className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
           AI
         </div>
-      </div>      {/* Chat Messages */}
-      <div ref={chatContainerRef} className="flex-grow overflow-y-auto overflow-x-hidden p-4 space-y-4">
+      </div>{" "}
+      {/* Chat Messages */}
+      <div
+        ref={chatContainerRef}
+        className="flex-grow overflow-y-auto overflow-x-hidden p-4 space-y-4"
+      >
         {chatLog.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
             <BotIcon className="h-8 w-8 mb-2 text-gray-300 dark:text-gray-600" />
@@ -183,7 +190,8 @@ export default function ChatBot() {
           </div>
         ) : (
           <div className="space-y-4">
-            {" "}            {chatLog.map((msg, i) => (
+            {" "}
+            {chatLog.map((msg, i) => (
               <div
                 key={i}
                 className={`mb-4 flex ${
@@ -204,18 +212,28 @@ export default function ChatBot() {
                     ) : (
                       <UserAvatar className="h-5 w-5 mr-2" />
                     )}
-                    <span className="font-medium text-xs">{msg.sender}</span>                  </div>{" "}                  {msg.sender === "AI" ? (
+                    <span className="font-medium text-xs">{msg.sender}</span>{" "}
+                  </div>{" "}
+                  {msg.sender === "AI" ? (
                     <div className="prose prose-gray dark:prose-invert prose-sm max-w-none overflow-hidden [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_code]:break-all [&_code]:overflow-wrap-break-word [&_table]:overflow-x-auto [&_table]:block [&_table]:whitespace-nowrap">
                       {msg.isStreaming ? (
                         // Show streaming text immediately with cursor
                         <div className="flex items-end">
                           <div className="flex-1 overflow-hidden">
-                            <ReactMarkdown 
+                            <ReactMarkdown
                               components={{
                                 ...renderers,
                                 // Override code component for better responsive handling
-                                code({ node, inline, className, children, ...props }) {
-                                  const match = /language-(\w+)/.exec(className || "");
+                                code({
+                                  node,
+                                  inline,
+                                  className,
+                                  children,
+                                  ...props
+                                }) {
+                                  const match = /language-(\w+)/.exec(
+                                    className || ""
+                                  );
                                   return !inline && match ? (
                                     <div className="overflow-x-auto">
                                       <SyntaxHighlighter
@@ -225,8 +243,8 @@ export default function ChatBot() {
                                         wrapLongLines={true}
                                         customStyle={{
                                           margin: 0,
-                                          borderRadius: '0.375rem',
-                                          fontSize: '0.875rem'
+                                          borderRadius: "0.375rem",
+                                          fontSize: "0.875rem",
                                         }}
                                         {...props}
                                       >
@@ -234,7 +252,7 @@ export default function ChatBot() {
                                       </SyntaxHighlighter>
                                     </div>
                                   ) : (
-                                    <code 
+                                    <code
                                       className="bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded text-sm break-all"
                                       {...props}
                                     >
@@ -251,7 +269,7 @@ export default function ChatBot() {
                                       </table>
                                     </div>
                                   );
-                                }
+                                },
                               }}
                             >
                               {msg.text}
@@ -262,12 +280,20 @@ export default function ChatBot() {
                       ) : (
                         // Show completed text immediately without animation
                         <div className="overflow-hidden">
-                          <ReactMarkdown 
+                          <ReactMarkdown
                             components={{
                               ...renderers,
                               // Override code component for better responsive handling
-                              code({ node, inline, className, children, ...props }) {
-                                const match = /language-(\w+)/.exec(className || "");
+                              code({
+                                node,
+                                inline,
+                                className,
+                                children,
+                                ...props
+                              }) {
+                                const match = /language-(\w+)/.exec(
+                                  className || ""
+                                );
                                 return !inline && match ? (
                                   <div className="overflow-x-auto">
                                     <SyntaxHighlighter
@@ -277,8 +303,8 @@ export default function ChatBot() {
                                       wrapLongLines={true}
                                       customStyle={{
                                         margin: 0,
-                                        borderRadius: '0.375rem',
-                                        fontSize: '0.875rem'
+                                        borderRadius: "0.375rem",
+                                        fontSize: "0.875rem",
                                       }}
                                       {...props}
                                     >
@@ -286,7 +312,7 @@ export default function ChatBot() {
                                     </SyntaxHighlighter>
                                   </div>
                                 ) : (
-                                  <code 
+                                  <code
                                     className="bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded text-sm break-all"
                                     {...props}
                                   >
@@ -303,7 +329,7 @@ export default function ChatBot() {
                                     </table>
                                   </div>
                                 );
-                              }
+                              },
                             }}
                           >
                             {msg.text}
@@ -312,13 +338,16 @@ export default function ChatBot() {
                       )}
                     </div>
                   ) : (
-                    <div className="whitespace-pre-wrap break-words overflow-wrap-anywhere">{msg.text}</div>
+                    <div className="whitespace-pre-wrap break-words overflow-wrap-anywhere">
+                      {msg.text}
+                    </div>
                   )}
-                </div>              </div>            ))}
+                </div>{" "}
+              </div>
+            ))}
           </div>
         )}
       </div>
-
       {/* Input Area */}
       <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800">
         <div className="flex">
