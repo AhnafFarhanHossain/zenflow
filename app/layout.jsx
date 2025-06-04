@@ -24,7 +24,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <ClerkProvider>
+      <ClerkProvider appearance={{
+        layout: {
+          unsafe_disableDevelopmentModeWarnings: true, // Disable development mode warnings
+        }
+      }}>
         <body
           className={`${plusJakartaSans.variable} ${baiJamjuree.variable} antialiased`}
         >

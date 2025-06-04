@@ -593,35 +593,12 @@ const SchedulePage = () => {
       {showTaskForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-w-md w-full max-h-[90vh] overflow-hidden">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                {" "}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    {editingTask ? "Edit Task" : "Create Task"}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    {editingTask
-                      ? "Update your existing task"
-                      : "Add a new task to your schedule"}
-                  </p>
-                </div>
-                <button
-                  onClick={handleCloseAllForms}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
-                >
-                  <span className="text-xl text-gray-400">×</span>
-                </button>
-              </div>{" "}
-              <div className="overflow-y-auto max-h-[calc(90vh-8rem)]">
-                <TaskForm
-                  selectedDate={selectedDate}
-                  editTask={editingTask}
-                  onSuccess={handleFormSuccess}
-                  onClose={handleCloseAllForms}
-                />
-              </div>
-            </div>
+            <TaskForm
+              selectedDate={selectedDate}
+              editTask={editingTask}
+              onSuccess={handleFormSuccess}
+              onClose={handleCloseAllForms}
+            />
           </div>
         </div>
       )}
