@@ -66,9 +66,11 @@ const UpcomingEvents = ({
 
   // Sort tasks and schedules by date
   const sortedTasks = [...tasks]
+    .filter(task => new Date(task.due_date) >= new Date() || task.status === "done")
     .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
     .slice(0, 8);
   const sortedSchedules = [...schedules]
+    .filter(schedule => new Date(schedule.date) >= new Date())
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .slice(0, 8);
 

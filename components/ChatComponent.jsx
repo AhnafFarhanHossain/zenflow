@@ -6,6 +6,9 @@ import { useUser } from "@clerk/nextjs";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { useChat } from "@/contexts/ChatContext";
+import { ActionButton } from "./dashboard/ActionButtons";
+import { Plus } from "lucide-react";
 
 // Move renderers outside component to avoid recreation
 const renderers = {
@@ -28,10 +31,13 @@ const renderers = {
 
 export default function ChatBot() {
   const [question, setQuestion] = useState("");
-  const [chatLog, setChatLog] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const chatContainerRef = useRef(null);
   const { user } = useUser();
+
+  // Get chat context
+  const { chatLog, setChatLog, startNewChat } = useChat();
+
   // Component to render user avatar or fallback icon
   const UserAvatar = ({ className = "h-5 w-5" }) => {
     if (user?.imageUrl) {
@@ -45,6 +51,7 @@ export default function ChatBot() {
     }
     return <User className={className} />;
   };
+
   // Auto-scroll to bottom when new messages arrive or when streaming updates
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -60,42 +67,26 @@ export default function ChatBot() {
       }
     }
   }, [chatLog]);
+
   async function handleSend() {
     if (!question.trim() || isLoading) return;
 
     const userMessage = { sender: user?.firstName || "You", text: question };
-    const currentQuestion = question;
-
+    setChatLog((prev) => [...prev, userMessage]);
     setQuestion("");
     setIsLoading(true);
-
-    // Add user message and empty AI message
-    setChatLog((prev) => [
-      ...prev,
-      userMessage,
-      { sender: "AI", text: "", isStreaming: true },
-    ]);
 
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: currentQuestion }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question }),
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        setChatLog((prev) => {
-          const newChatLog = [...prev];
-          newChatLog[newChatLog.length - 1] = {
-            sender: "AI",
-            text: data.error || "Something went wrong.",
-            isStreaming: false,
-          };
-          return newChatLog;
-        });
-        setIsLoading(false);
-        return;
+        throw new Error("Network response was not ok");
       }
 
       // Handle streaming response
@@ -158,6 +149,7 @@ export default function ChatBot() {
       setIsLoading(false);
     }
   }
+
   // Handle Enter key press (with Shift for new line)
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -169,15 +161,24 @@ export default function ChatBot() {
   return (
     <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
       {/* Chat Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center">
-        <BotIcon className="h-5 w-5 text-blue-600 mr-2" />
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Task Assistant
-        </h2>
-        <div className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-          AI
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
+        <div className="flex items-center">
+          <BotIcon className="h-5 w-5 text-blue-600 mr-2" />
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Task Assistant
+          </h2>
+          <div className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+            AI
+          </div>
         </div>
-      </div>{" "}
+        <ActionButton
+          onClick={startNewChat}
+          variant="primary"
+          icon={<Plus className="w-5 h-5"/>}
+        >
+          New Chat
+        </ActionButton>
+      </div>
       {/* Chat Messages */}
       <div
         ref={chatContainerRef}
@@ -190,7 +191,6 @@ export default function ChatBot() {
           </div>
         ) : (
           <div className="space-y-4">
-            {" "}
             {chatLog.map((msg, i) => (
               <div
                 key={i}

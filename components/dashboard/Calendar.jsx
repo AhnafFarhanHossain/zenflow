@@ -93,6 +93,12 @@ const Calendar = ({ onDateSelect, markedDates = [], selectedDate = null }) => {
 
   const handleDateClick = (date) => {
     if (!date) return;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time part to avoid time-based comparison issues
+    if (date < today) {
+      // Don't allow selection of past dates
+      return;
+    }
     onDateSelect(date);
   };
 
@@ -198,6 +204,9 @@ const Calendar = ({ onDateSelect, markedDates = [], selectedDate = null }) => {
                     ? "text-gray-400 dark:text-gray-600"
                     : "text-gray-900 dark:text-gray-100"
                 }
+                ${date < new Date().setHours(0, 0, 0, 0)
+                    ? "cursor-not-allowed opacity-50"
+                    : ""}
               `}
             >
               <span className="block">{date.getDate()}</span>
