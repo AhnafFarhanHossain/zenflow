@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import Calendar from "@/components/dashboard/Calendar";
 import ActionSelector from "@/components/dashboard/ActionSelector";
 import UpcomingEvents from "@/components/dashboard/UpcomingEvents";
@@ -16,19 +16,9 @@ import {
   TrendingUp,
   AlertCircle,
 } from "lucide-react";
-import { getTasks } from "@/utils/getTasks";
-import { getSchedules } from "@/utils/getSchedules";
-import { deleteAllTasks } from "@/utils/deleteAllTasks";
-import { deleteAllSchedules } from "@/utils/deleteAllSchedules";
-import { deleteTask } from "@/utils/deleteTask";
-import { deleteSchedule } from "@/utils/deleteSchedule";
-import { updateTaskCompletion } from "@/utils/updateTaskCompletion";
-import { updateTask } from "@/utils/updateTask";
-import { updateSchedule } from "@/utils/updateSchedule";
 
 const SchedulePage = () => {
   const { user, isLoaded } = useUser();
-  const { getToken } = useAuth();
   const [selectedDate, setSelectedDate] = useState(null);
   const [showActionSelector, setShowActionSelector] = useState(false);
   const [showTaskForm, setShowTaskForm] = useState(false);
@@ -39,29 +29,56 @@ const SchedulePage = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [editingSchedule, setEditingSchedule] = useState(null);
 
-  // Load tasks and schedules on component mount
+  // Static mock data
+  const mockTasks = [
+    {
+      id: 1,
+      title: "Complete project proposal",
+      priority: "Extreme",
+      status: "todo",
+      due_date: "2025-08-15T10:00:00",
+      completed: false,
+      user_id: user?.id,
+    },
+    {
+      id: 2,
+      title: "Review team feedback",
+      priority: "Medium",
+      status: "in-progress",
+      due_date: "2025-08-10T14:30:00",
+      completed: false,
+      user_id: user?.id,
+    },
+  ];
+
+  const mockSchedules = [
+    {
+      id: 1,
+      title: "Team Meeting",
+      date: "2025-08-08T09:00:00",
+      user_id: user?.id,
+    },
+    {
+      id: 2,
+      title: "Project Review",
+      date: "2025-08-12T15:00:00",
+      user_id: user?.id,
+    },
+  ];
+
+  // Load static data on component mount
   useEffect(() => {
     const loadData = async () => {
       if (!isLoaded || !user) return;
 
       setIsLoading(true);
       try {
-        // Add debugging for getToken
-        console.log("getToken type:", typeof getToken);
-        console.log("user:", user?.id);
+        // Simulate API call delay
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-        if (typeof getToken !== "function") {
-          console.error("getToken is not a function");
-          setIsLoading(false);
-          return;
-        }
-
-        const [tasksData, schedulesData] = await Promise.all([
-          getTasks(getToken, user.id),
-          getSchedules(getToken, user.id),
-        ]);
-        setTasks(tasksData || []);
-        setSchedules(schedulesData || []);
+        console.log("Loading mock data for user:", user?.id);
+        setTasks(mockTasks);
+        setSchedules(mockSchedules);
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -70,7 +87,7 @@ const SchedulePage = () => {
     };
 
     loadData();
-  }, [isLoaded, user, getToken]); // Handle date selection from calendar
+  }, [isLoaded, user]); // Handle date selection from calendar
   const handleDateSelect = (date, event) => {
     console.log("Date selected from calendar:", date);
     console.log("Date string:", date?.toISOString?.());
@@ -95,106 +112,46 @@ const SchedulePage = () => {
     setSelectedDate(null);
     setEditingTask(null);
     setEditingSchedule(null);
-  }; // Handle successful form submissions - refresh data
+  }; // Handle successful form submissions - static behavior
   const handleFormSuccess = async () => {
     handleCloseAllForms();
-
-    // Refresh data
-    if (user && typeof getToken === "function") {
-      try {
-        const [tasksData, schedulesData] = await Promise.all([
-          getTasks(getToken, user.id),
-          getSchedules(getToken, user.id),
-        ]);
-
-        setTasks(tasksData || []);
-        setSchedules(schedulesData || []);
-      } catch (error) {
-        console.error("Error refreshing data:", error);
-      }
-    }
+    console.log("Form submitted successfully (static)");
   };
 
-  // Handle clearing all tasks
+  // Handle clearing all tasks - static behavior
   const handleClearTasks = async () => {
-    if (!user || typeof getToken !== "function") return;
-
-    try {
-      const result = await deleteAllTasks(getToken);
-      if (!result.error) {
-        setTasks([]);
-      }
-    } catch (error) {
-      console.error("Error clearing tasks:", error);
-    }
+    if (!user) return;
+    console.log("All tasks cleared (static)");
   };
-  // Handle clearing all schedules
+
+  // Handle clearing all schedules - static behavior
   const handleClearSchedules = async () => {
-    if (!user || typeof getToken !== "function") return;
-
-    try {
-      const result = await deleteAllSchedules(getToken);
-      if (!result.error) {
-        setSchedules([]);
-      }
-    } catch (error) {
-      console.error("Error clearing schedules:", error);
-    }
+    if (!user) return;
+    console.log("All schedules cleared (static)");
   };
 
-  // Handle task completion toggle
+  // Handle task completion toggle - static behavior
   const handleTaskComplete = async (taskId, completed) => {
-    if (!user || typeof getToken !== "function") return;
-
-    try {
-      const result = await updateTaskCompletion(getToken, taskId, completed);
-      if (!result.error) {
-        // Update the task in the local state
-        setTasks((prev) =>
-          prev.map((task) =>
-            task.id === taskId
-              ? { ...task, status: completed ? "done" : "todo" }
-              : task
-          )
-        );
-      }
-    } catch (error) {
-      console.error("Error updating task completion:", error);
-    }
+    if (!user) return;
+    console.log("Task completion toggled (static):", taskId, completed);
   };
 
-  // Handle individual task deletion
+  // Handle individual task deletion - static behavior
   const handleDeleteTask = async (taskId) => {
-    if (!user || typeof getToken !== "function") return;
+    if (!user) return;
 
     if (!confirm("Are you sure you want to delete this task?")) return;
 
-    try {
-      const result = await deleteTask(getToken, taskId);
-      if (!result.error) {
-        setTasks((prev) => prev.filter((task) => task.id !== taskId));
-      }
-    } catch (error) {
-      console.error("Error deleting task:", error);
-    }
+    console.log("Task deleted (static):", taskId);
   };
 
-  // Handle individual schedule deletion
+  // Handle individual schedule deletion - static behavior
   const handleDeleteSchedule = async (scheduleId) => {
-    if (!user || typeof getToken !== "function") return;
+    if (!user) return;
 
     if (!confirm("Are you sure you want to delete this event?")) return;
 
-    try {
-      const result = await deleteSchedule(getToken, scheduleId);
-      if (!result.error) {
-        setSchedules((prev) =>
-          prev.filter((schedule) => schedule.id !== scheduleId)
-        );
-      }
-    } catch (error) {
-      console.error("Error deleting schedule:", error);
-    }
+    console.log("Schedule deleted (static):", scheduleId);
   };
 
   // Handle task editing

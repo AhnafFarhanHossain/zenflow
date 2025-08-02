@@ -1,9 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { useUser, useAuth } from "@clerk/nextjs";
-import { getTasks } from "@/utils/getTasks";
-import { getNotes } from "@/utils/getNotes";
+import { useUser } from "@clerk/nextjs";
 
 const AnalyticsContext = createContext();
 
@@ -17,7 +15,6 @@ export const useAnalytics = () => {
 
 export const AnalyticsProvider = ({ children }) => {
   const { user, isLoaded } = useUser();
-  const { getToken } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [notes, setNotes] = useState([]);
   const [analytics, setAnalytics] = useState({
@@ -63,39 +60,62 @@ export const AnalyticsProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      // Fetch both tasks and notes
-      const [fetchedTasks, fetchedNotes] = await Promise.all([
-        getTasks(getToken, user.id),
-        getNotes(getToken, user.id),
-      ]);
+      // Static mock data
+      const mockTasks = [
+        {
+          id: 1,
+          title: "Complete project proposal",
+          priority: "Extreme",
+          status: "todo",
+          due_date: "2025-08-15T10:00:00",
+          completed: false,
+          user_id: user?.id,
+        },
+        {
+          id: 2,
+          title: "Review team feedback",
+          priority: "Medium",
+          status: "in-progress",
+          due_date: "2025-08-10T14:30:00",
+          completed: false,
+          user_id: user?.id,
+        },
+        {
+          id: 3,
+          title: "Update documentation",
+          priority: "Easy",
+          status: "done",
+          due_date: "2025-08-05T09:00:00",
+          completed: true,
+          user_id: user?.id,
+        },
+      ];
 
-      const processedTasks = (fetchedTasks || []).map((task) => {
-        const priorityString = String(task.priority || "").trim();
-        let priorityValue = "Easy";
+      const mockNotes = [
+        {
+          id: 1,
+          title: "Project Ideas",
+          body: "Here are some ideas for the next project...",
+          created_at: "2025-08-01T10:00:00",
+          user_id: user?.id,
+        },
+        {
+          id: 2,
+          title: "Meeting Notes",
+          body: "Team meeting notes from today...",
+          created_at: "2025-08-02T14:30:00",
+          user_id: user?.id,
+        },
+      ];
 
-        if (priorityString === "Extreme") {
-          priorityValue = "Extreme";
-        } else if (priorityString === "Medium") {
-          priorityValue = "Medium";
-        } else if (priorityString === "Easy") {
-          priorityValue = "Easy";
-        }
+      // Simulate API call delay
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
-        const currentStatus = task.status || "todo";
-
-        return {
-          ...task,
-          completed: currentStatus === "done",
-          status: currentStatus,
-          priority: priorityValue,
-        };
-      });
-
-      setTasks(processedTasks);
-      setNotes(fetchedNotes || []);
-      calculateAnalytics(processedTasks, fetchedNotes || []);
+      setTasks(mockTasks);
+      setNotes(mockNotes);
+      calculateAnalytics(mockTasks, mockNotes);
     } catch (error) {
-      console.error("Error fetching data for analytics:", error);
+      console.error("Error loading static data for analytics:", error);
       setTasks([]);
       setNotes([]);
     } finally {

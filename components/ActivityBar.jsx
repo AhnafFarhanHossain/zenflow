@@ -14,45 +14,34 @@ import {
   NotificationBell,
   HelpButton,
 } from "./dashboard/ActionButtons";
-import { useUser, useAuth } from "@clerk/nextjs";
-import { getSupabaseWithAuth } from "@/utils/supabaseWithAuth";
+import { useUser } from "@clerk/nextjs";
 
 const ActivityBar = ({ className = "", onMobileMenuClick }) => {
   const pathname = usePathname();
   const { openTaskForm } = useTaskForm();
   const { openNoteForm } = useNoteForm();
   const { user } = useUser();
-  const { getToken } = useAuth();
   const [upcomingTasks, setUpcomingTasks] = useState([]);
+
   useEffect(() => {
     const fetchUpcomingTasks = async () => {
       if (!user) return;
 
-      try {
-        const now = new Date();
-        const tomorrow = new Date(now);
-        tomorrow.setDate(now.getDate() + 1);
+      // Static mock data for upcoming tasks
+      const mockUpcomingTasks = [
+        {
+          id: 1,
+          title: "Complete project proposal",
+          due_date: "2025-08-15T10:00:00",
+        },
+        {
+          id: 2,
+          title: "Review team feedback",
+          due_date: "2025-08-10T14:30:00",
+        },
+      ];
 
-        const supabase = await getSupabaseWithAuth(getToken);
-        const { data, error } = await supabase
-          .from("tasks")
-          .select("id, title, due_date")
-          .eq("user_id", user.id)
-          .lt("due_date", tomorrow.toISOString())
-          .gte("due_date", now.toISOString()) // Tasks due from now until tomorrow
-          .neq("status", "done") // Exclude completed tasks
-          .order("due_date", { ascending: true }); // Order by due date
-
-        if (error) {
-          console.error("Error fetching upcoming tasks:", error);
-          setUpcomingTasks([]); // Set to empty array on error
-          return;
-        }
-        setUpcomingTasks(data || []);
-      } catch (error) {
-        console.error("Error in fetchUpcomingTasks:", error);
-        setUpcomingTasks([]);
-      }
+      setUpcomingTasks(mockUpcomingTasks);
     };
 
     fetchUpcomingTasks();

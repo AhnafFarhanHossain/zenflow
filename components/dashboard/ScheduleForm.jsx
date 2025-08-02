@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import Button from "./Button";
 import { toast } from "sonner";
-import { createSchedule } from "@/utils/createSchedule";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 const ScheduleForm = ({
   handleClose,
@@ -15,7 +14,6 @@ const ScheduleForm = ({
   editSchedule = null,
 }) => {
   const { user } = useUser();
-  const { getToken } = useAuth();
   // Use onClose if provided, otherwise fallback to handleClose
   const closeForm = onClose || handleClose;
   const [title, setTitle] = useState("");
@@ -98,57 +96,36 @@ const ScheduleForm = ({
         // description: description.trim() || null, // Temporarily disabled until DB column is added
       };
 
-      console.log(
+      // Simulate form submission for static frontend
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      toast.success(
         editSchedule
-          ? "Updating schedule with data:"
-          : "Creating schedule with data:",
-        scheduleData
+          ? "Schedule updated successfully!"
+          : "Schedule created successfully!"
       );
-      console.log("getToken function:", typeof getToken);
 
-      // Check if getToken is available
-      if (typeof getToken !== "function") {
-        toast.error(
-          "Authentication not available. Please refresh and try again."
-        );
-        return;
+      // Reset form
+      setTitle("");
+      setDate("");
+      setTime("");
+
+      // Trigger callback with new schedule if provided
+      if (onScheduleCreated) {
+        onScheduleCreated({
+          id: Date.now(),
+          title: title.trim(),
+          date: finalDateTime,
+          user_id: user.id,
+        });
       }
 
-      let result;
-      if (editSchedule) {
-        // Import updateSchedule utility
-        const { updateSchedule } = await import("@/utils/updateSchedule");
-        result = await updateSchedule(getToken, editSchedule.id, scheduleData);
+      // Call success callback if provided
+      if (onSuccess) {
+        onSuccess();
       } else {
-        result = await createSchedule({ scheduleData }, getToken);
-      }
-
-      if (result.error) {
-        console.error("Schedule operation error:", result.error);
-        toast.error("Error: " + result.error.message);
-      } else {
-        toast.success(
-          editSchedule
-            ? "Schedule updated successfully!"
-            : "Schedule created successfully!"
-        ); // Reset form
-        setTitle("");
-        setDate("");
-        setTime("");
-        // setDescription(""); // Temporarily disabled
-
-        // Trigger callback with new schedule
-        if (onScheduleCreated) {
-          onScheduleCreated(result.data[0]);
-        }
-
-        // Call success callback if provided
-        if (onSuccess) {
-          onSuccess();
-        } else {
-          // Close the form (fallback)
-          closeForm();
-        }
+        // Close the form (fallback)
+        closeForm();
       }
     } catch (err) {
       console.error("Unexpected error:", err);

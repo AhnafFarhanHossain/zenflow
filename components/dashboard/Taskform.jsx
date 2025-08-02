@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import Button from "./Button";
 import { toast } from "sonner";
-import { createTask } from "@/utils/createTask";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 const TaskForm = ({
   handleClose,
@@ -17,7 +16,6 @@ const TaskForm = ({
   // Use onClose if provided, otherwise fallback to handleClose
   const closeForm = onClose || handleClose;
   const { user } = useUser();
-  const { getToken } = useAuth();
   const user_id = user?.id;
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("");
@@ -92,59 +90,29 @@ const TaskForm = ({
     setIsSubmitting(true);
 
     try {
-      // Combine date and time if time is provided
-      let finalDueDate = due_date;
-      if (due_time) {
-        finalDueDate = `${due_date}T${due_time}:00`;
-      }
+      // Simulate form submission for static frontend
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const taskdata = {
-        user_id,
-        title: title.trim(),
-        priority,
-        due_date: finalDueDate,
-        status: editTask?.status || "todo",
-      };
-
-      console.log(
-        editTask ? "Updating task with data:" : "Creating task with data:",
-        taskdata
+      toast.success(
+        editTask ? "Task updated successfully!" : "Task created successfully!"
       );
 
-      let result;
-      if (editTask) {
-        // Import updateTask utility
-        const { updateTask } = await import("@/utils/updateTask");
-        result = await updateTask(getToken, editTask.id, taskdata);
+      // Reset form
+      setTitle("");
+      setPriority("");
+      setdue_date("");
+      setDueTime("");
+
+      // Call success callback if provided
+      if (onSuccess) {
+        onSuccess();
       } else {
-        result = await createTask({ taskdata }, getToken);
-      }
-
-      if (result.error) {
-        console.error("Task operation error:", result.error);
-        toast.error("Error: " + result.error.message);
-      } else {
-        toast.success(
-          editTask ? "Task updated successfully!" : "Task created successfully!"
-        );
-
-        // Reset form
-        setTitle("");
-        setPriority("");
-        setdue_date("");
-        setDueTime("");
-
-        // Call success callback if provided
-        if (onSuccess) {
-          onSuccess();
-        } else {
-          // Close the form (fallback)
-          closeForm();
-        }
+        // Close the form (fallback)
+        closeForm();
       }
     } catch (err) {
       console.error("Unexpected error:", err);
-      toast.error(err.message || "Failed to create task");
+      toast.error("Failed to create task");
     } finally {
       setIsSubmitting(false);
     }
@@ -159,8 +127,19 @@ const TaskForm = ({
           onClick={closeForm}
           className="text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
@@ -172,97 +151,97 @@ const TaskForm = ({
           >
             Task Title
           </label>
-        <input
-          type="text"
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
-          id="task-title"
-          className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-base sm:text-base lg:text-sm"
-          placeholder="Enter task title"
-        />
-        {errors.title && (
-          <p className="mt-2 text-sm sm:text-sm font-medium text-red-600 dark:text-red-400 px-2 py-1 bg-red-50 dark:bg-red-900/20 rounded-md">
-            {errors.title}
-          </p>
-        )}
-      </div>
-      <div>
-        <label
-          htmlFor="priority"
-          className="block text-sm sm:text-base lg:text-base font-medium text-gray-900 dark:text-gray-100 mb-1"
-        >
-          Priority
-        </label>
-        <select
-          onChange={(e) => setPriority(e.target.value)}
-          value={priority}
-          id="priority"
-          className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-base sm:text-base lg:text-sm"
-        >
-          <option value="">Select priority</option>
-          <option value="Easy">Easy</option>
-          <option value="Medium">Medium</option>
-          <option value="Extreme">Extreme</option>
-        </select>
-        {errors.priority && (
-          <p className="mt-2 text-sm sm:text-sm font-medium text-red-600 dark:text-red-400 px-2 py-1 bg-red-50 dark:bg-red-900/20 rounded-md">
-            {errors.priority}
-          </p>
-        )}
-      </div>
-      <div>
-        <label
-          htmlFor="due-date"
-          className="block text-sm sm:text-base lg:text-base font-medium text-gray-900 dark:text-gray-100 mb-1"
-        >
-          Due Date
-        </label>
-        <input
-          type="date"
-          id="due-date"
-          onChange={(e) => setdue_date(e.target.value)}
-          value={due_date || ""}
-          min={new Date().toISOString().split("T")[0]} // Block past dates
-          className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-base sm:text-base lg:text-sm"
-        />
-        {errors.due_date && (
-          <p className="mt-2 text-sm sm:text-sm font-medium text-red-600 dark:text-red-400 px-2 py-1 bg-red-50 dark:bg-red-900/20 rounded-md">
-            {errors.due_date}
-          </p>
-        )}{" "}
-      </div>
+          <input
+            type="text"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+            id="task-title"
+            className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-base sm:text-base lg:text-sm"
+            placeholder="Enter task title"
+          />
+          {errors.title && (
+            <p className="mt-2 text-sm sm:text-sm font-medium text-red-600 dark:text-red-400 px-2 py-1 bg-red-50 dark:bg-red-900/20 rounded-md">
+              {errors.title}
+            </p>
+          )}
+        </div>
+        <div>
+          <label
+            htmlFor="priority"
+            className="block text-sm sm:text-base lg:text-base font-medium text-gray-900 dark:text-gray-100 mb-1"
+          >
+            Priority
+          </label>
+          <select
+            onChange={(e) => setPriority(e.target.value)}
+            value={priority}
+            id="priority"
+            className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-base sm:text-base lg:text-sm"
+          >
+            <option value="">Select priority</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Extreme">Extreme</option>
+          </select>
+          {errors.priority && (
+            <p className="mt-2 text-sm sm:text-sm font-medium text-red-600 dark:text-red-400 px-2 py-1 bg-red-50 dark:bg-red-900/20 rounded-md">
+              {errors.priority}
+            </p>
+          )}
+        </div>
+        <div>
+          <label
+            htmlFor="due-date"
+            className="block text-sm sm:text-base lg:text-base font-medium text-gray-900 dark:text-gray-100 mb-1"
+          >
+            Due Date
+          </label>
+          <input
+            type="date"
+            id="due-date"
+            onChange={(e) => setdue_date(e.target.value)}
+            value={due_date || ""}
+            min={new Date().toISOString().split("T")[0]} // Block past dates
+            className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-base sm:text-base lg:text-sm"
+          />
+          {errors.due_date && (
+            <p className="mt-2 text-sm sm:text-sm font-medium text-red-600 dark:text-red-400 px-2 py-1 bg-red-50 dark:bg-red-900/20 rounded-md">
+              {errors.due_date}
+            </p>
+          )}{" "}
+        </div>
 
-      <div>
-        <label
-          htmlFor="due-time"
-          className="block text-sm sm:text-base lg:text-base font-medium text-gray-900 dark:text-gray-100 mb-1"
-        >
-          Due Time (Optional)
-        </label>
-        <input
-          type="time"
-          id="due-time"
-          onChange={(e) => setDueTime(e.target.value)}
-          value={due_time || ""}
-          className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-base sm:text-base lg:text-sm"
-        />
-      </div>
+        <div>
+          <label
+            htmlFor="due-time"
+            className="block text-sm sm:text-base lg:text-base font-medium text-gray-900 dark:text-gray-100 mb-1"
+          >
+            Due Time (Optional)
+          </label>
+          <input
+            type="time"
+            id="due-time"
+            onChange={(e) => setDueTime(e.target.value)}
+            value={due_time || ""}
+            className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-base sm:text-base lg:text-sm"
+          />
+        </div>
 
-      <Button
-        variant="primary"
-        size="md"
-        type="submit"
-        disabled={isSubmitting}
-        className="flex-1 w-full mt-2 cursor-pointer"
-      >
-        {isSubmitting
-          ? editTask
-            ? "Updating..."
-            : "Creating..."
-          : editTask
-          ? "Update Task"
-          : "Create Task"}
-      </Button>
+        <Button
+          variant="primary"
+          size="md"
+          type="submit"
+          disabled={isSubmitting}
+          className="flex-1 w-full mt-2 cursor-pointer"
+        >
+          {isSubmitting
+            ? editTask
+              ? "Updating..."
+              : "Creating..."
+            : editTask
+            ? "Update Task"
+            : "Create Task"}
+        </Button>
       </form>
     </div>
   );

@@ -77,52 +77,45 @@ export default function ChatBot() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      // Static responses for demo
+      const staticResponses = [
+        "Thank you for your question! This is a static response to demonstrate the chat interface.",
+        "I'm currently in demo mode. In a real application, I would connect to an AI service to provide helpful responses.",
+        "This chat interface is working properly! All backend functionality has been removed for this static version.",
+        "Hello! I'm running in static mode. The chat UI is fully functional but responses are predefined.",
+        "Your message has been received! In production, this would be processed by an AI assistant.",
+      ];
+
+      const randomResponse =
+        staticResponses[Math.floor(Math.random() * staticResponses.length)];
+
+      // Add AI response placeholder immediately
+      setChatLog((prev) => [
+        ...prev,
+        {
+          sender: "AI",
+          text: "",
+          isStreaming: true,
         },
-        body: JSON.stringify({ question }),
-      });
+      ]);
 
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      // Handle streaming response
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
+      // Simulate streaming response
       let accumulatedText = "";
+      const words = randomResponse.split(" ");
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      for (let i = 0; i < words.length; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate typing delay
+        accumulatedText += (i > 0 ? " " : "") + words[i];
 
-        const chunk = decoder.decode(value);
-        const lines = chunk.split("\n");
-
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const data = line.slice(6);
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.content) {
-                accumulatedText += parsed.content;
-                setChatLog((prev) => {
-                  const newChatLog = [...prev];
-                  newChatLog[newChatLog.length - 1] = {
-                    sender: "AI",
-                    text: accumulatedText,
-                    isStreaming: true,
-                  };
-                  return newChatLog;
-                });
-              }
-            } catch (e) {
-              // Skip malformed JSON
-            }
-          }
-        }
+        setChatLog((prev) => {
+          const newChatLog = [...prev];
+          newChatLog[newChatLog.length - 1] = {
+            sender: "AI",
+            text: accumulatedText,
+            isStreaming: true,
+          };
+          return newChatLog;
+        });
       }
 
       // Mark streaming as complete
@@ -140,7 +133,7 @@ export default function ChatBot() {
         const newChatLog = [...prev];
         newChatLog[newChatLog.length - 1] = {
           sender: "AI",
-          text: "Network error. Please try again later.",
+          text: "Error: This is a static demo. No backend services are available.",
           isStreaming: false,
         };
         return newChatLog;
@@ -174,7 +167,7 @@ export default function ChatBot() {
         <ActionButton
           onClick={startNewChat}
           variant="primary"
-          icon={<Plus className="w-5 h-5"/>}
+          icon={<Plus className="w-5 h-5" />}
         >
           New Chat
         </ActionButton>

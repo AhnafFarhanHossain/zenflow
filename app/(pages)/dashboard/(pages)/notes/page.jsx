@@ -3,30 +3,55 @@
 import { useState, useEffect } from "react";
 import { ActionButton } from "@/components/dashboard/ActionButtons";
 import { Plus, Trash2, Edit3, FileText } from "lucide-react";
-import { getNotes } from "@/utils/getNotes";
-import { deleteNote } from "@/utils/deleteNote";
-import { deleteAllNotes } from "@/utils/deleteAllNotes";
 import { toast } from "sonner";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { useNoteForm } from "@/contexts/NoteFormContext";
 import SearchBar from "@/components/Searchbar";
 
 const Notes = () => {
   const { user, isLoaded } = useUser();
-  const { getToken } = useAuth();
   const { openNoteForm } = useNoteForm();
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+
+  // Static mock data for notes
+  const mockNotes = [
+    {
+      id: 1,
+      title: "Project Ideas",
+      body: "Here are some ideas for the next project: 1. Mobile app for task management 2. Web dashboard for analytics 3. API for data integration",
+      created_at: "2025-08-01T10:00:00",
+      user_id: user?.id,
+    },
+    {
+      id: 2,
+      title: "Meeting Notes",
+      body: "Team meeting notes from today: - Discussed project timeline - Assigned tasks to team members - Scheduled next review meeting",
+      created_at: "2025-08-02T14:30:00",
+      user_id: user?.id,
+    },
+    {
+      id: 3,
+      title: "Research Notes",
+      body: "Research findings on user interface design patterns and best practices for modern web applications.",
+      created_at: "2025-07-30T09:15:00",
+      user_id: user?.id,
+    },
+  ];
+
   const fetchNotes = async () => {
     if (!isLoaded || !user?.id) return;
 
     try {
       setLoading(true);
-      const fetchedNotes = await getNotes(getToken, user.id);
-      setNotes(fetchedNotes || []);
+      // Simulate API call delay
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      console.log("Loading mock notes for user:", user.id);
+      setNotes(mockNotes);
       setSearchQuery(""); // Reset search when fetching new notes
     } catch (error) {
       console.error("Error fetching notes:", error);
@@ -46,24 +71,18 @@ const Notes = () => {
   }, [user?.id, isLoaded]);
 
   const handleNoteCreated = (newNote) => {
-    // Refresh notes after note creation/update
-    if (user?.id) {
-      fetchNotes();
-    }
+    // Static behavior - just log the note creation
+    console.log("Note created (static):", newNote);
   };
+
   const handleDeleteNote = async (noteId) => {
     if (!user?.id) {
       toast.error("User not authenticated");
       return;
     }
 
-    const result = await deleteNote(noteId, getToken);
-    if (result.data) {
-      // Remove note from local state
-      setNotes((currentNotes) =>
-        currentNotes.filter((note) => note.id !== noteId)
-      );
-    }
+    // Static behavior - just show success message
+    toast.success("Note deleted successfully!");
   };
 
   const handleDeleteAllNotes = async () => {
@@ -85,11 +104,9 @@ const Notes = () => {
     ) {
       return;
     }
-    const result = await deleteAllNotes(getToken);
-    if (result.data) {
-      setNotes([]);
-      setCurrentPage(1);
-    }
+
+    // Static behavior - just show success message
+    toast.success("All notes deleted successfully!");
   };
 
   const handleSearch = (query) => {

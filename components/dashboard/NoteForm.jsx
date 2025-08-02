@@ -4,13 +4,10 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import Button from "./Button";
 import { toast } from "sonner";
-import { createNote } from "@/utils/createNote";
-import { updateNote } from "@/utils/updateNote";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 const NoteForm = ({ handleClose, editingNote = null, onNoteCreated }) => {
   const { user } = useUser();
-  const { getToken } = useAuth();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [errors, setErrors] = useState({
@@ -55,51 +52,32 @@ const NoteForm = ({ handleClose, editingNote = null, onNoteCreated }) => {
     setIsSubmitting(true);
 
     try {
-      const noteData = {
-        user_id: user.id,
-        title: title.trim(),
-        body: body.trim(),
-      };
+      // Simulate form submission for static frontend
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      let result;
-      if (editingNote) {
-        // Update existing note
-        result = await updateNote(editingNote.id, noteData, getToken);
-        if (result.error) {
-          console.error("Note update error:", result.error);
-          toast.error("Error: " + result.error.message);
-        } else {
-          toast.success("Note updated successfully!");
-          // Reset form
-          setTitle("");
-          setBody("");
-          // Trigger callback with updated note
-          if (onNoteCreated) {
-            onNoteCreated(result.data[0]);
-          }
-          handleClose();
-        }
-      } else {
-        // Create new note
-        result = await createNote({ noteData }, getToken);
-        if (result.error) {
-          console.error("Note creation error:", result.error);
-          toast.error("Error: " + result.error.message);
-        } else {
-          toast.success("Note created successfully!");
-          // Reset form
-          setTitle("");
-          setBody("");
-          // Trigger callback with new note
-          if (onNoteCreated) {
-            onNoteCreated(result.data[0]);
-          }
-          handleClose();
-        }
+      toast.success(
+        editingNote
+          ? "Note updated successfully!"
+          : "Note created successfully!"
+      );
+
+      // Reset form
+      setTitle("");
+      setBody("");
+
+      // Trigger callback if provided
+      if (onNoteCreated) {
+        onNoteCreated({
+          id: Date.now(),
+          title: title.trim(),
+          body: body.trim(),
+          user_id: user.id,
+        });
       }
+      handleClose();
     } catch (err) {
       console.error("Unexpected error:", err);
-      toast.error(err.message || "Failed to save note");
+      toast.error("Failed to save note");
     } finally {
       setIsSubmitting(false);
     }

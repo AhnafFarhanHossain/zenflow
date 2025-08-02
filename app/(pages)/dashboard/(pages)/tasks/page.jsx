@@ -2,20 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { ActionButton } from "@/components/dashboard/ActionButtons";
-import { Plus, Trash2, Trash } from "lucide-react"; // Added Trash2 and Trash import
-import { getTasks } from "@/utils/getTasks";
+import { Plus, Trash2, Trash } from "lucide-react";
 import { toast } from "sonner";
-import { updateTaskStatus } from "@/utils/updateTaskStatus";
-import { deleteTask } from "@/utils/deleteTask"; // Import deleteTask
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { useTaskForm } from "@/contexts/TaskFormContext";
 import { useAnalytics } from "@/contexts/AnalyticsContext";
-import { deleteAllTasks } from "@/utils/deleteAllTasks";
 import SearchBar from "@/components/Searchbar";
 
 const Tasks = () => {
   const { user, isLoaded } = useUser();
-  const { getToken } = useAuth();
   const { openTaskForm } = useTaskForm();
   const { refreshAnalytics } = useAnalytics();
   const [sorting, setSorting] = useState({ field: "title", direction: "asc" });
@@ -27,6 +22,37 @@ const Tasks = () => {
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
+  // Static mock data for tasks
+  const mockTasks = [
+    {
+      id: 1,
+      title: "Complete project proposal",
+      priority: "Extreme",
+      status: "todo",
+      due_date: "2025-08-15T10:00:00",
+      completed: false,
+      user_id: user?.id,
+    },
+    {
+      id: 2,
+      title: "Review team feedback",
+      priority: "Medium",
+      status: "in-progress",
+      due_date: "2025-08-10T14:30:00",
+      completed: false,
+      user_id: user?.id,
+    },
+    {
+      id: 3,
+      title: "Update documentation",
+      priority: "Easy",
+      status: "done",
+      due_date: "2025-08-05T09:00:00",
+      completed: true,
+      user_id: user?.id,
+    },
+  ];
+
   const fetchTasks = async () => {
     if (!user?.id) {
       console.log("No user ID available");
@@ -37,32 +63,11 @@ const Tasks = () => {
 
     setLoading(true);
     try {
-      console.log("Fetching tasks for user:", user.id);
-      const fetchedTasks = await getTasks(getToken, user.id);
-      const processedTasks = (fetchedTasks || []).map((task) => {
-        const priorityString = String(task.priority || "").trim(); // Trim once
-        let priorityValue = "Easy"; // Default to 'Easy'
+      // Simulate API call delay
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
-        if (priorityString === "Extreme") {
-          priorityValue = "Extreme";
-        } else if (priorityString === "Medium") {
-          priorityValue = "Medium";
-        } else if (priorityString === "Easy") {
-          priorityValue = "Easy";
-        }
-
-        // Ensure status has a default value if undefined/null
-        const currentStatus = task.status || "todo";
-
-        return {
-          ...task,
-          // Derive completed directly from status
-          completed: currentStatus === "done",
-          status: currentStatus,
-          priority: priorityValue,
-        };
-      });
-      setTasks(processedTasks);
+      console.log("Loading mock tasks for user:", user.id);
+      setTasks(mockTasks);
       setSearchQuery(""); // Reset search when fetching new tasks
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -82,11 +87,8 @@ const Tasks = () => {
   }, [user?.id, isLoaded]);
 
   const handleTaskCreated = (newTask) => {
-    // Refresh tasks after task creation
-    if (user?.id) {
-      fetchTasks();
-      refreshAnalytics(); // Refresh analytics when task is created
-    }
+    // Static behavior - show success message but don't actually update tasks
+    console.log("Task created (static):", newTask);
   };
 
   const handleToggleComplete = async (taskId) => {
@@ -99,54 +101,15 @@ const Tasks = () => {
     if (!taskToUpdate) {
       toast.error("Task not found.");
       return;
-    } // Call the utility function to update task status
-    const { data, error } = await updateTaskStatus(
-      getToken,
-      taskId,
-      taskToUpdate.status
-    );
-
-    if (error) {
-      // Error handling is largely done within updateTaskStatus,
-      // but you can add component-specific error handling here if needed.
-      return;
     }
 
-    if (data) {
-      // Update local state with the confirmed data from Supabase
-      setTasks((currentTasks) =>
-        currentTasks.map((task) =>
-          task.id === taskId
-            ? {
-                ...task,
-                status: data.status, // Update status from response
-                completed: data.status === "done", // Re-derive completed
-                priority: data.priority || taskToUpdate.priority || "Easy",
-              }
-            : task
-        )
-      );
-      // toast.success("Task status updated!"); // Optional: Consider if needed, as util might show toast
-      refreshAnalytics(); // Refresh analytics when task status is updated
-    }
+    // Static behavior - just show success message
+    toast.success("Task status updated successfully!");
   };
+
   const handleDeleteTask = async (taskId) => {
-    // Optimistically update UI or show a confirmation dialog first (optional)
-    // For example, you could set a temporary state to indicate deletion
-
-    const { error } = await deleteTask(getToken, taskId);
-
-    if (error) {
-      // Error toast is handled in deleteTask, but you can add more specific UI updates here
-      // For example, re-enable a delete button if it was disabled
-    } else {
-      // Remove the task from the local state to update the UI
-      setTasks((currentTasks) =>
-        currentTasks.filter((task) => task.id !== taskId)
-      );
-      toast.success("Task deleted successfully!");
-      refreshAnalytics(); // Refresh analytics when task is deleted
-    }
+    // Static behavior - just show success message
+    toast.success("Task deleted successfully!");
   };
 
   const handleDeleteAllTasks = async () => {
@@ -164,15 +127,8 @@ const Tasks = () => {
       return;
     }
 
-    const { error } = await deleteAllTasks(getToken);
-
-    if (error) {
-      // Error toast is handled in deleteAllTasks function
-    } else {
-      // Clear all tasks from local state
-      setTasks([]);
-      refreshAnalytics(); // Refresh analytics when all tasks are deleted
-    }
+    // Static behavior - just show success message
+    toast.success("All tasks deleted successfully!");
   };
   const filteredAndSortedTasks = tasks
     .filter((task) => {
