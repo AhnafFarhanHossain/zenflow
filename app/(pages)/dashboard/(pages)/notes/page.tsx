@@ -7,11 +7,12 @@ import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 import { useNoteForm } from "@/contexts/NoteFormContext";
 import SearchBar from "@/components/Searchbar";
+import { Note } from "@/types";
 
 const Notes = () => {
   const { user, isLoaded } = useUser();
   const { openNoteForm } = useNoteForm();
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,12 +71,12 @@ const Notes = () => {
     }
   }, [user?.id, isLoaded]);
 
-  const handleNoteCreated = (newNote) => {
+  const handleNoteCreated = (newNote: Note) => {
     // Static behavior - just log the note creation
     console.log("Note created (static):", newNote);
   };
 
-  const handleDeleteNote = async (noteId) => {
+  const handleDeleteNote = async (noteId: number) => {
     if (!user?.id) {
       toast.error("User not authenticated");
       return;
@@ -109,7 +110,7 @@ const Notes = () => {
     toast.success("All notes deleted successfully!");
   };
 
-  const handleSearch = (query) => {
+  const handleSearch = (query: string) => {
     setSearchQuery(query);
     setCurrentPage(1); // Reset to first page when searching
   };
@@ -127,7 +128,7 @@ const Notes = () => {
   const endIndex = startIndex + itemsPerPage;
   const currentNotes = filteredNotes.slice(startIndex, endIndex);
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",

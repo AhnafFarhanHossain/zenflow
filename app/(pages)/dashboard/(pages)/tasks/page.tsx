@@ -8,6 +8,7 @@ import { useUser } from "@clerk/nextjs";
 import { useTaskForm } from "@/contexts/TaskFormContext";
 import { useAnalytics } from "@/contexts/AnalyticsContext";
 import SearchBar from "@/components/Searchbar";
+import { Task } from "@/types";
 
 const Tasks = () => {
   const { user, isLoaded } = useUser();
@@ -15,7 +16,7 @@ const Tasks = () => {
   const { refreshAnalytics } = useAnalytics();
   const [sorting, setSorting] = useState({ field: "title", direction: "asc" });
   const [filters, setFilters] = useState({ status: "all", priority: "all" });
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 

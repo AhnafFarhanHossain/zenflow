@@ -1,8 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import React from "react";
 
-const Button = ({
+interface ButtonProps {
+  href?: string;
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "white";
+  size?: "sm" | "md" | "lg";
+  className?: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+}
+
+const Button: React.FC<ButtonProps> = ({
   href,
   variant = "primary",
   size = "md",

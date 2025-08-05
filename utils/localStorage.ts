@@ -7,7 +7,7 @@ export const STORAGE_KEYS = {
 };
 
 // Generic storage functions
-export const getFromStorage = (key, defaultValue = []) => {
+export const getFromStorage = <T = any>(key: string, defaultValue: T = [] as T): T => {
   if (typeof window === "undefined") return defaultValue;
 
   try {
@@ -19,7 +19,7 @@ export const getFromStorage = (key, defaultValue = []) => {
   }
 };
 
-export const saveToStorage = (key, data) => {
+export const saveToStorage = (key: string, data: any): boolean => {
   if (typeof window === "undefined") return false;
 
   try {
@@ -31,7 +31,7 @@ export const saveToStorage = (key, data) => {
   }
 };
 
-export const removeFromStorage = (key) => {
+export const removeFromStorage = (key: string): boolean => {
   if (typeof window === "undefined") return false;
 
   try {
@@ -44,11 +44,11 @@ export const removeFromStorage = (key) => {
 };
 
 // Generate unique ID
-export const generateId = () => {
+export const generateId = (): string => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 };
 
 // Get user-specific storage key
-export const getUserStorageKey = (baseKey, userId) => {
+export const getUserStorageKey = (baseKey: string, userId: string | undefined): string => {
   return userId ? `${baseKey}_${userId}` : baseKey;
 };

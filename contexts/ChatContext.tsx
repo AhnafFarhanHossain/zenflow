@@ -1,11 +1,18 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { Message, ChildrenProps } from "@/types";
 
-const ChatContext = createContext();
+interface ChatContextType {
+  chatLog: Message[];
+  setChatLog: React.Dispatch<React.SetStateAction<Message[]>>;
+  startNewChat: () => void;
+}
 
-export const ChatProvider = ({ children }) => {
-  const [chatLog, setChatLog] = useState([]);
+const ChatContext = createContext<ChatContextType | undefined>(undefined);
+
+export const ChatProvider = ({ children }: ChildrenProps) => {
+  const [chatLog, setChatLog] = useState<Message[]>([]);
   const hasMounted = useRef(false);
 
   // Load chat log from local storage after mount
@@ -34,14 +41,20 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
+  const value: ChatContextType = {
+    chatLog,
+    setChatLog,
+    startNewChat,
+  };
+
   return (
-    <ChatContext.Provider value={{ chatLog, setChatLog, startNewChat }}>
+    <ChatContext.Provider value={value}>
       {children}
     </ChatContext.Provider>
   );
 };
 
-export const useChat = () => {
+export const useChat = (): ChatContextType => {
   const context = useContext(ChatContext);
   if (!context) {
     throw new Error("useChat must be used within a ChatProvider");

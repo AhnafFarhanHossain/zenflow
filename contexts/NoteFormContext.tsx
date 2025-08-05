@@ -1,10 +1,11 @@
 "use client";
 
 import { createContext, useContext, useState, useRef } from "react";
+import { Note, NoteFormContextType, ChildrenProps } from "@/types";
 
-const NoteFormContext = createContext();
+const NoteFormContext = createContext<NoteFormContextType | undefined>(undefined);
 
-export const useNoteForm = () => {
+export const useNoteForm = (): NoteFormContextType => {
   const context = useContext(NoteFormContext);
   if (!context) {
     throw new Error("useNoteForm must be used within a NoteFormProvider");
@@ -12,12 +13,12 @@ export const useNoteForm = () => {
   return context;
 };
 
-export const NoteFormProvider = ({ children }) => {
+export const NoteFormProvider = ({ children }: ChildrenProps) => {
   const [showNoteForm, setShowNoteForm] = useState(false);
-  const [editingNote, setEditingNote] = useState(null);
-  const noteCreatedCallbackRef = useRef(null);
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const noteCreatedCallbackRef = useRef<((note: Note) => void) | null>(null);
 
-  const openNoteForm = (onNoteCreated, noteToEdit = null) => {
+  const openNoteForm = (onNoteCreated?: (note: Note) => void, noteToEdit: Note | null = null) => {
     if (onNoteCreated) {
       noteCreatedCallbackRef.current = onNoteCreated;
     }
@@ -31,14 +32,14 @@ export const NoteFormProvider = ({ children }) => {
     noteCreatedCallbackRef.current = null;
   };
 
-  const handleNoteCreated = (newNote) => {
+  const handleNoteCreated = (newNote: Note) => {
     if (noteCreatedCallbackRef.current) {
       noteCreatedCallbackRef.current(newNote);
     }
     closeNoteForm();
   };
 
-  const value = {
+  const value: NoteFormContextType = {
     showNoteForm,
     editingNote,
     openNoteForm,

@@ -16,14 +16,14 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormState({
       ...formState,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -344,7 +344,7 @@ export default function Contact() {
                       name="message"
                       value={formState.message}
                       onChange={handleChange}
-                      rows="5"
+                      rows={5}
                       required
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-[#15803d] focus:border-[#15803d] transition-colors duration-200 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-[#bbf7d0] dark:focus:border-[#bbf7d0]"
                       placeholder="Your message"

@@ -16,18 +16,19 @@ import {
   TrendingUp,
   AlertCircle,
 } from "lucide-react";
+import { Task, Event } from "@/types";
 
 const SchedulePage = () => {
   const { user, isLoaded } = useUser();
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showActionSelector, setShowActionSelector] = useState(false);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [showScheduleForm, setShowScheduleForm] = useState(false);
-  const [tasks, setTasks] = useState([]);
-  const [schedules, setSchedules] = useState([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [schedules, setSchedules] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [editingTask, setEditingTask] = useState(null);
-  const [editingSchedule, setEditingSchedule] = useState(null);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [editingSchedule, setEditingSchedule] = useState<Event | null>(null);
 
   // Static mock data
   const mockTasks = [
@@ -88,7 +89,7 @@ const SchedulePage = () => {
 
     loadData();
   }, [isLoaded, user]); // Handle date selection from calendar
-  const handleDateSelect = (date, event) => {
+  const handleDateSelect = (date: Date, event?: any) => {
     console.log("Date selected from calendar:", date);
     console.log("Date string:", date?.toISOString?.());
     setSelectedDate(date);
@@ -96,7 +97,7 @@ const SchedulePage = () => {
   };
 
   // Handle action selection (task or schedule)
-  const handleActionSelect = (action) => {
+  const handleActionSelect = (action: string) => {
     setShowActionSelector(false);
     if (action === "task") {
       setShowTaskForm(true);
@@ -131,13 +132,13 @@ const SchedulePage = () => {
   };
 
   // Handle task completion toggle - static behavior
-  const handleTaskComplete = async (taskId, completed) => {
+  const handleTaskComplete = async (taskId: number, completed: boolean) => {
     if (!user) return;
     console.log("Task completion toggled (static):", taskId, completed);
   };
 
   // Handle individual task deletion - static behavior
-  const handleDeleteTask = async (taskId) => {
+  const handleDeleteTask = async (taskId: number) => {
     if (!user) return;
 
     if (!confirm("Are you sure you want to delete this task?")) return;
@@ -146,7 +147,7 @@ const SchedulePage = () => {
   };
 
   // Handle individual schedule deletion - static behavior
-  const handleDeleteSchedule = async (scheduleId) => {
+  const handleDeleteSchedule = async (scheduleId: number) => {
     if (!user) return;
 
     if (!confirm("Are you sure you want to delete this event?")) return;
@@ -155,19 +156,19 @@ const SchedulePage = () => {
   };
 
   // Handle task editing
-  const handleEditTask = (task) => {
+  const handleEditTask = (task: Task) => {
     setEditingTask(task);
     setShowTaskForm(true);
   };
 
   // Handle schedule editing
-  const handleEditSchedule = (schedule) => {
+  const handleEditSchedule = (schedule: Event) => {
     setEditingSchedule(schedule);
     setShowScheduleForm(true);
   };
   // Get events for calendar display
   const getCalendarEvents = () => {
-    const events = [];
+    const events: any[] = [];
 
     // Add tasks as events
     tasks.forEach((task) => {

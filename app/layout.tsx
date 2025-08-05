@@ -21,7 +21,7 @@ export const metadata = {
     "Zenflow is a task management app that helps you stay organized and focused.",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <ClerkProvider>
