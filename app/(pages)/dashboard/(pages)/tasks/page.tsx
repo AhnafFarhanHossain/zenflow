@@ -24,7 +24,7 @@ const Tasks = () => {
     setSearchQuery(query);
   };
   // Static mock data for tasks
-  const mockTasks = [
+  const mockTasks: Task[] = [
     {
       id: 1,
       title: "Complete project proposal",
@@ -87,12 +87,12 @@ const Tasks = () => {
     }
   }, [user?.id, isLoaded]);
 
-  const handleTaskCreated = (newTask) => {
+  const handleTaskCreated = (newTask: Task) => {
     // Static behavior - show success message but don't actually update tasks
     console.log("Task created (static):", newTask);
   };
 
-  const handleToggleComplete = async (taskId) => {
+  const handleToggleComplete = async (taskId: number) => {
     if (!user?.id) {
       toast.error("User not authenticated");
       return;

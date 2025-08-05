@@ -10,6 +10,19 @@ import {
   Edit3,
   X,
 } from "lucide-react";
+import { Task, Schedule } from "@/types";
+
+interface UpcomingEventsProps {
+  tasks?: Task[];
+  schedules?: Schedule[];
+  onClearSchedules: () => void;
+  onClearTasks: () => void;
+  onTaskComplete: (taskId: number, completed: boolean) => void;
+  onDeleteTask: (taskId: number) => void;
+  onDeleteSchedule: (scheduleId: number) => void;
+  onEditTask: (task: Task) => void;
+  onEditSchedule: (schedule: Schedule) => void;
+}
 
 const UpcomingEvents = ({
   tasks = [],
@@ -21,8 +34,8 @@ const UpcomingEvents = ({
   onDeleteSchedule,
   onEditTask,
   onEditSchedule,
-}) => {
-  const formatDate = (date) => {
+}: UpcomingEventsProps) => {
+  const formatDate = (date: string) => {
     const eventDate = new Date(date);
     const today = new Date();
     const tomorrow = new Date(today);

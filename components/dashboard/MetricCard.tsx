@@ -1,4 +1,15 @@
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import React from "react";
+
+interface MetricCardProps {
+  title: string;
+  value: string | number;
+  icon: React.ComponentType<{ className?: string }>;
+  trend?: "up" | "down" | "neutral";
+  trendValue?: string | number;
+  color?: "gray" | "blue" | "green" | "red" | "yellow";
+  loading?: boolean;
+}
 
 const MetricCard = ({
   title,
@@ -8,7 +19,7 @@ const MetricCard = ({
   trendValue,
   color = "gray",
   loading = false,
-}) => {
+}: MetricCardProps) => {
   const colorClasses = {
     gray: {
       bg: "bg-gray-100 dark:bg-gray-800",

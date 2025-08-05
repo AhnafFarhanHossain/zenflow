@@ -3,7 +3,13 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const Calendar = ({ onDateSelect, markedDates = [], selectedDate = null }) => {
+interface CalendarProps {
+  onDateSelect: (date: Date, event?: any) => void;
+  markedDates?: any[];
+  selectedDate?: Date | null;
+}
+
+const Calendar = ({ onDateSelect, markedDates = [], selectedDate = null }: CalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const monthNames = [
@@ -23,7 +29,7 @@ const Calendar = ({ onDateSelect, markedDates = [], selectedDate = null }) => {
 
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  const getDaysInMonth = (date) => {
+  const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1);
@@ -46,17 +52,17 @@ const Calendar = ({ onDateSelect, markedDates = [], selectedDate = null }) => {
     return days;
   };
 
-  const isToday = (date) => {
+  const isToday = (date: Date | null) => {
     if (!date) return false;
     const today = new Date();
     return date.toDateString() === today.toDateString();
   };
 
-  const isSelected = (date) => {
+  const isSelected = (date: Date | null) => {
     if (!date || !selectedDate) return false;
     return date.toDateString() === new Date(selectedDate).toDateString();
   };
-  const isMarked = (date) => {
+  const isMarked = (date: Date | null) => {
     if (!date) return false;
     // Fix timezone issue by using local date formatting
     const year = date.getFullYear();
@@ -73,7 +79,7 @@ const Calendar = ({ onDateSelect, markedDates = [], selectedDate = null }) => {
       return markedDateStr === dateStr;
     });
   };
-  const getMarkedData = (date) => {
+  const getMarkedData = (date: Date | null) => {
     if (!date) return null;
     // Fix timezone issue by using local date formatting
     const year = date.getFullYear();
@@ -91,7 +97,7 @@ const Calendar = ({ onDateSelect, markedDates = [], selectedDate = null }) => {
     });
   };
 
-  const handleDateClick = (date) => {
+  const handleDateClick = (date: Date | null) => {
     if (!date) return;
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Reset time part to avoid time-based comparison issues

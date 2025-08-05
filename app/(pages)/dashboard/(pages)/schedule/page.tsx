@@ -284,7 +284,7 @@ const SchedulePage = () => {
         tasksByDate[category] = (tasksByDate[category] || 0) + 1;
       });
 
-    const colors = {
+    const colors: Record<string, string> = {
       Overdue: "#EF4444",
       Today: "#F59E0B",
       "Next 3 Days": "#3B82F6",
@@ -295,7 +295,7 @@ const SchedulePage = () => {
     return Object.entries(tasksByDate).map(([name, value]) => ({
       name,
       value,
-      color: colors[name],
+      color: colors[name] || "#6B7280", // fallback color
     }));
   };
 
@@ -361,6 +361,8 @@ const SchedulePage = () => {
                     value={getTaskAnalytics().total}
                     icon={Target}
                     color="blue"
+                    trend="neutral"
+                    trendValue=""
                   />
                   <MetricCard
                     title="Completion Rate"
@@ -373,18 +375,24 @@ const SchedulePage = () => {
                         ? "yellow"
                         : "red"
                     }
+                    trend="neutral"
+                    trendValue=""
                   />
                   <MetricCard
                     title="Upcoming Events"
                     value={getScheduleAnalytics().upcoming}
                     icon={CalendarIcon}
                     color="yellow"
+                    trend="neutral"
+                    trendValue=""
                   />
                   <MetricCard
                     title="Overdue Tasks"
                     value={getTaskAnalytics().overdue}
                     icon={AlertCircle}
                     color={getTaskAnalytics().overdue > 0 ? "red" : "green"}
+                    trend="neutral"
+                    trendValue=""
                   />
                 </div>
               </div>
@@ -464,7 +472,7 @@ const SchedulePage = () => {
                               if (task.status !== "done") return false;
                               const today = new Date();
                               const taskDate = new Date(
-                                task.updated_at || task.created_at
+                                task.updated_at || task.created_at || new Date().toISOString()
                               );
                               return (
                                 taskDate.toDateString() === today.toDateString()
