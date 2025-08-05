@@ -12,7 +12,13 @@ import { Plus } from "lucide-react";
 
 // Move renderers outside component to avoid recreation
 const renderers = {
-  code({ node, inline, className, children, ...props }) {
+  code({ node, inline, className, children, ...props }: {
+    node?: any;
+    inline?: boolean;
+    className?: string;
+    children?: React.ReactNode;
+    [key: string]: any;
+  }) {
     const match = /language-(\w+)/.exec(className || "");
     return !inline && match ? (
       <SyntaxHighlighter
@@ -32,7 +38,7 @@ const renderers = {
 export default function ChatBot() {
   const [question, setQuestion] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const chatContainerRef = useRef(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
 
   // Get chat context
@@ -93,7 +99,7 @@ export default function ChatBot() {
       setChatLog((prev) => [
         ...prev,
         {
-          sender: "AI",
+          sender: "ai",
           text: "",
           isStreaming: true,
         },
@@ -110,7 +116,7 @@ export default function ChatBot() {
         setChatLog((prev) => {
           const newChatLog = [...prev];
           newChatLog[newChatLog.length - 1] = {
-            sender: "AI",
+            sender: "ai",
             text: accumulatedText,
             isStreaming: true,
           };
@@ -122,7 +128,7 @@ export default function ChatBot() {
       setChatLog((prev) => {
         const newChatLog = [...prev];
         newChatLog[newChatLog.length - 1] = {
-          sender: "AI",
+          sender: "ai",
           text: accumulatedText,
           isStreaming: false,
         };
@@ -132,7 +138,7 @@ export default function ChatBot() {
       setChatLog((prev) => {
         const newChatLog = [...prev];
         newChatLog[newChatLog.length - 1] = {
-          sender: "AI",
+          sender: "ai",
           text: "Error: This is a static demo. No backend services are available.",
           isStreaming: false,
         };
@@ -144,7 +150,7 @@ export default function ChatBot() {
   }
 
   // Handle Enter key press (with Shift for new line)
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
@@ -188,26 +194,26 @@ export default function ChatBot() {
               <div
                 key={i}
                 className={`mb-4 flex ${
-                  msg.sender === "AI" ? "justify-start" : "justify-end"
+                  msg.sender === "ai" ? "justify-start" : "justify-end"
                 }`}
               >
                 <div
                   className={`w-full max-w-none px-4 py-3 rounded-lg break-words ${
-                    msg.sender === "AI"
+                    msg.sender === "ai"
                       ? "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200"
                       : "bg-blue-600 text-white max-w-[85%]"
                   }`}
                 >
                   {" "}
                   <div className="flex items-center mb-2">
-                    {msg.sender === "AI" ? (
+                    {msg.sender === "ai" ? (
                       <BotIcon className="h-5 w-5 mr-2 text-blue-600" />
                     ) : (
                       <UserAvatar className="h-5 w-5 mr-2" />
                     )}
                     <span className="font-medium text-xs">{msg.sender}</span>{" "}
                   </div>{" "}
-                  {msg.sender === "AI" ? (
+                  {msg.sender === "ai" ? (
                     <div className="prose prose-gray dark:prose-invert prose-sm max-w-none overflow-hidden [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_code]:break-all [&_code]:overflow-wrap-break-word [&_table]:overflow-x-auto [&_table]:block [&_table]:whitespace-nowrap">
                       {msg.isStreaming ? (
                         // Show streaming text immediately with cursor

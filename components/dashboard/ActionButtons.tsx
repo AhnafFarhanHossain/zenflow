@@ -2,19 +2,26 @@
 
 import { Bell, HelpCircle, Plus } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import React from "react";
+
+interface NotificationBellProps {
+  className?: string;
+  upcomingTasks?: any[];
+  [key: string]: any;
+}
 
 export const NotificationBell = ({
   className = "",
   upcomingTasks = [],
   ...props
-}) => {
+}: NotificationBellProps) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const panelRef = useRef(null);
 
   // Close panel when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (panelRef.current && !panelRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
         setIsPanelOpen(false);
       }
     };
@@ -95,6 +102,15 @@ export const HelpButton = ({ className = "", ...props }) => {
   );
 };
 
+interface ActionButtonProps {
+  children?: React.ReactNode;
+  variant?: "primary" | "secondary" | "danger";
+  icon?: React.ReactNode;
+  onClick?: () => void;
+  className?: string;
+  [key: string]: any;
+}
+
 export const ActionButton = ({
   children,
   variant = "primary",
@@ -102,10 +118,10 @@ export const ActionButton = ({
   onClick,
   className = "",
   ...props
-}) => {
+}: ActionButtonProps) => {
   const baseClasses =
     "flex items-center gap-1.5 px-3 py-2 text-sm sm:text-base lg:text-sm font-medium rounded-md transition-colors min-h-[40px] sm:min-h-[36px]";
-  const variants = {
+  const variants: Record<string, string> = {
     primary:
       "bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white",
     secondary:

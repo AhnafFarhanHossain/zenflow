@@ -16,7 +16,7 @@ import {
   TrendingUp,
   AlertCircle,
 } from "lucide-react";
-import { Task, Event } from "@/types";
+import { Task, Schedule } from "@/types";
 
 const SchedulePage = () => {
   const { user, isLoaded } = useUser();
@@ -25,13 +25,13 @@ const SchedulePage = () => {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [showScheduleForm, setShowScheduleForm] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [schedules, setSchedules] = useState<Event[]>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const [editingSchedule, setEditingSchedule] = useState<Event | null>(null);
+  const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
 
   // Static mock data
-  const mockTasks = [
+  const mockTasks: Task[] = [
     {
       id: 1,
       title: "Complete project proposal",
@@ -52,7 +52,7 @@ const SchedulePage = () => {
     },
   ];
 
-  const mockSchedules = [
+  const mockSchedules: Schedule[] = [
     {
       id: 1,
       title: "Team Meeting",
@@ -162,7 +162,7 @@ const SchedulePage = () => {
   };
 
   // Handle schedule editing
-  const handleEditSchedule = (schedule: Event) => {
+  const handleEditSchedule = (schedule: Schedule) => {
     setEditingSchedule(schedule);
     setShowScheduleForm(true);
   };
@@ -266,13 +266,13 @@ const SchedulePage = () => {
 
   const getUpcomingTasksData = () => {
     const today = new Date();
-    const tasksByDate = {};
+    const tasksByDate: Record<string, number> = {};
 
     tasks
       .filter((task) => task.status !== "done" && task.due_date)
       .forEach((task) => {
-        const dueDate = new Date(task.due_date);
-        const daysDiff = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+        const dueDate = new Date(task.due_date!);
+        const daysDiff = Math.ceil((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
         let category;
         if (daysDiff < 0) category = "Overdue";

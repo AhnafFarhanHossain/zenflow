@@ -22,6 +22,14 @@ export interface Note {
   user_id: string | undefined;
 }
 
+export interface Schedule {
+  id: number;
+  title: string;
+  date: string;
+  user_id: string | undefined;
+  description?: string;
+}
+
 export interface Event {
   id: number;
   title: string;
@@ -36,6 +44,7 @@ export interface Message {
   text: string;
   sender: 'user' | 'ai';
   timestamp: string;
+  isStreaming?: boolean;
 }
 
 // React component prop types

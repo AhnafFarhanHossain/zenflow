@@ -5,6 +5,7 @@ import { useMemo, useState, useEffect } from "react";
 import { Plus, FileText, Menu } from "lucide-react";
 import { useTaskForm } from "@/contexts/TaskFormContext";
 import { useNoteForm } from "@/contexts/NoteFormContext";
+import { Task } from "@/types";
 
 // Import the dashboard-specific components
 import { PageHeader } from "./dashboard/PageHeader";
@@ -16,28 +17,41 @@ import {
 } from "./dashboard/ActionButtons";
 import { useUser } from "@clerk/nextjs";
 
-const ActivityBar = ({ className = "", onMobileMenuClick }) => {
+interface ActivityBarProps {
+  className?: string;
+  onMobileMenuClick: () => void;
+}
+
+const ActivityBar = ({ className = "", onMobileMenuClick }: ActivityBarProps) => {
   const pathname = usePathname();
   const { openTaskForm } = useTaskForm();
   const { openNoteForm } = useNoteForm();
   const { user } = useUser();
-  const [upcomingTasks, setUpcomingTasks] = useState([]);
+  const [upcomingTasks, setUpcomingTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     const fetchUpcomingTasks = async () => {
       if (!user) return;
 
       // Static mock data for upcoming tasks
-      const mockUpcomingTasks = [
+      const mockUpcomingTasks: Task[] = [
         {
           id: 1,
           title: "Complete project proposal",
           due_date: "2025-08-15T10:00:00",
+          priority: "Extreme",
+          status: "todo",
+          completed: false,
+          user_id: user?.id,
         },
         {
           id: 2,
           title: "Review team feedback",
           due_date: "2025-08-10T14:30:00",
+          priority: "Medium",
+          status: "in-progress",
+          completed: false,
+          user_id: user?.id,
         },
       ];
 
