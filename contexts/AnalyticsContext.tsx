@@ -3,7 +3,84 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 
-const AnalyticsContext = createContext();
+interface Task {
+  id: number;
+  title: string;
+  priority: "Extreme" | "Medium" | "Easy";
+  status: "todo" | "in-progress" | "done";
+  due_date?: string;
+  completed: boolean;
+  user_id: string;
+  created_at?: string;
+}
+
+interface Note {
+  id: number;
+  title: string;
+  body: string;
+  created_at: string;
+  updated_at?: string;
+  user_id: string;
+}
+
+interface AnalyticsData {
+  // Task analytics
+  totalTasks: number;
+  completedTasks: number;
+  pendingTasks: number;
+  inProgressTasks: number;
+  overdueTasks: number;
+  tasksByPriority: {
+    Extreme: number;
+    Medium: number;
+    Easy: number;
+  };
+  tasksByStatus: {
+    todo: number;
+    "in-progress": number;
+    done: number;
+  };
+  completionRate: number;
+  thisWeekTasks: number;
+  thisWeekCompleted: number;
+  productivity: number;
+  weeklyData: Array<{
+    day: string;
+    tasks: number;
+    completed: number;
+  }>;
+  priorityData: Array<{
+    name: string;
+    value: number;
+    color: string;
+  }>;
+  statusData: Array<{
+    name: string;
+    value: number;
+    color: string;
+  }>;
+  // Note analytics
+  totalNotes: number;
+  thisWeekNotes: number;
+  notesCreatedToday: number;
+  notesUpdatedToday: number;
+  recentlyModifiedNotes: number;
+  notesWeeklyData: Array<{
+    day: string;
+    notes: number;
+    modified: number;
+  }>;
+}
+
+interface AnalyticsContextType {
+  tasks: Task[];
+  notes: Note[];
+  analytics: AnalyticsData;
+  loading: boolean;
+  refreshAnalytics: () => Promise<void>;
+}
+
+const AnalyticsContext = createContext<AnalyticsContextType | undefined>(undefined);
 
 export const useAnalytics = () => {
   const context = useContext(AnalyticsContext);
@@ -13,11 +90,15 @@ export const useAnalytics = () => {
   return context;
 };
 
-export const AnalyticsProvider = ({ children }) => {
+export const AnalyticsProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const { user, isLoaded } = useUser();
-  const [tasks, setTasks] = useState([]);
-  const [notes, setNotes] = useState([]);
-  const [analytics, setAnalytics] = useState({
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [analytics, setAnalytics] = useState<AnalyticsData>({
     // Task analytics
     totalTasks: 0,
     completedTasks: 0,
@@ -49,6 +130,7 @@ export const AnalyticsProvider = ({ children }) => {
     notesWeeklyData: [],
   });
   const [loading, setLoading] = useState(true);
+
   const fetchAndAnalyzeTasks = async () => {
     if (!user?.id) {
       setTasks([]);
@@ -61,7 +143,7 @@ export const AnalyticsProvider = ({ children }) => {
       setLoading(true);
 
       // Static mock data
-      const mockTasks = [
+      const mockTasks: Task[] = [
         {
           id: 1,
           title: "Complete project proposal",
@@ -70,6 +152,7 @@ export const AnalyticsProvider = ({ children }) => {
           due_date: "2025-08-15T10:00:00",
           completed: false,
           user_id: user?.id,
+          created_at: "2025-08-01T09:00:00",
         },
         {
           id: 2,
@@ -79,6 +162,7 @@ export const AnalyticsProvider = ({ children }) => {
           due_date: "2025-08-10T14:30:00",
           completed: false,
           user_id: user?.id,
+          created_at: "2025-08-02T10:30:00",
         },
         {
           id: 3,
@@ -88,10 +172,11 @@ export const AnalyticsProvider = ({ children }) => {
           due_date: "2025-08-05T09:00:00",
           completed: true,
           user_id: user?.id,
+          created_at: "2025-08-03T11:00:00",
         },
       ];
 
-      const mockNotes = [
+      const mockNotes: Note[] = [
         {
           id: 1,
           title: "Project Ideas",
@@ -122,7 +207,8 @@ export const AnalyticsProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  const calculateAnalytics = (taskList, notesList) => {
+
+  const calculateAnalytics = (taskList: Task[], notesList: Note[]) => {
     const now = new Date();
     const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
     startOfWeek.setHours(0, 0, 0, 0);
@@ -163,12 +249,12 @@ export const AnalyticsProvider = ({ children }) => {
 
     // This week's tasks
     const thisWeekTasks = taskList.filter((task) => {
-      const taskDate = new Date(task.created_at);
+      const taskDate = new Date(task.created_at || new Date());
       return taskDate >= startOfWeek;
     }).length;
 
     const thisWeekCompleted = taskList.filter((task) => {
-      const taskDate = new Date(task.created_at);
+      const taskDate = new Date(task.created_at || new Date());
       return taskDate >= startOfWeek && task.status === "done";
     }).length;
 
@@ -194,7 +280,7 @@ export const AnalyticsProvider = ({ children }) => {
       const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
 
       const dayTasks = taskList.filter((task) => {
-        const taskDate = new Date(task.created_at);
+        const taskDate = new Date(task.created_at || new Date());
         return (
           taskDate.getFullYear() === date.getFullYear() &&
           taskDate.getMonth() === date.getMonth() &&
@@ -244,7 +330,9 @@ export const AnalyticsProvider = ({ children }) => {
     const notesCreatedToday = notesList.filter((note) => {
       const noteDate = new Date(note.created_at);
       return noteDate >= startOfDay;
-    }).length; // Notes updated today
+    }).length;
+
+    // Notes updated today
     const notesUpdatedToday = notesList.filter((note) => {
       const updatedDate = new Date(note.updated_at || note.created_at);
       return (
@@ -315,7 +403,8 @@ export const AnalyticsProvider = ({ children }) => {
       fetchAndAnalyzeTasks();
     }
   }, [user?.id, isLoaded]);
-  const value = {
+
+  const value: AnalyticsContextType = {
     tasks,
     notes,
     analytics,
