@@ -14,7 +14,7 @@ const Tasks = () => {
   const { user, isLoaded } = useUser();
   const { openTaskForm } = useTaskForm();
   const { refreshAnalytics } = useAnalytics();
-  const [sorting, setSorting] = useState({ field: "title", direction: "asc" });
+  const [sorting, setSorting] = useState<{field: keyof Task | "dueDate", direction: "asc" | "desc"}>({ field: "title", direction: "asc" });
   const [filters, setFilters] = useState({ status: "all", priority: "all" });
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
@@ -108,7 +108,7 @@ const Tasks = () => {
     toast.success("Task status updated successfully!");
   };
 
-  const handleDeleteTask = async (taskId) => {
+  const handleDeleteTask = async (taskId: number) => {
     // Static behavior - just show success message
     toast.success("Task deleted successfully!");
   };
@@ -155,8 +155,8 @@ const Tasks = () => {
     })
     .sort((a, b) => {
       if (sorting.field) {
-        let fieldA = a[sorting.field];
-        let fieldB = b[sorting.field];
+        let fieldA: any = sorting.field === "dueDate" ? a.due_date : a[sorting.field as keyof Task];
+        let fieldB: any = sorting.field === "dueDate" ? b.due_date : b[sorting.field as keyof Task];
 
         if (sorting.field === "dueDate") {
           fieldA = a.due_date ? new Date(a.due_date) : new Date(0); // Handle null/undefined due dates

@@ -10,7 +10,7 @@ import GlobalTaskForm from "@/components/GlobalTaskForm";
 import GlobalNoteForm from "@/components/GlobalNoteForm";
 import { ChatProvider } from "@/contexts/ChatContext";
 
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

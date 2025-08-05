@@ -245,6 +245,10 @@ export default function Features() {
 
   const currentTabContent = featureTabs.find((tab) => tab.id === activeTab);
 
+  if (!currentTabContent) {
+    return null; // or some fallback UI
+  }
+
   return (
     <>
       <Navbar />

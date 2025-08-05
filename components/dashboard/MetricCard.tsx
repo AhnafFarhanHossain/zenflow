@@ -7,7 +7,7 @@ interface MetricCardProps {
   icon: React.ComponentType<{ className?: string }>;
   trend?: "up" | "down" | "neutral";
   trendValue?: string | number;
-  color?: "gray" | "blue" | "green" | "red" | "yellow";
+  color?: "gray" | "blue" | "green" | "red" | "yellow" | "purple" | "indigo";
   loading?: boolean;
 }
 
@@ -45,6 +45,16 @@ const MetricCard = ({
       bg: "bg-yellow-100 dark:bg-yellow-900/30",
       text: "text-yellow-600 dark:text-yellow-400",
       icon: "text-yellow-600 dark:text-yellow-400",
+    },
+    purple: {
+      bg: "bg-purple-100 dark:bg-purple-900/30",
+      text: "text-purple-600 dark:text-purple-400",
+      icon: "text-purple-600 dark:text-purple-400",
+    },
+    indigo: {
+      bg: "bg-indigo-100 dark:bg-indigo-900/30",
+      text: "text-indigo-600 dark:text-indigo-400",
+      icon: "text-indigo-600 dark:text-indigo-400",
     },
   };
 
